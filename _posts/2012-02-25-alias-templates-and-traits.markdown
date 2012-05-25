@@ -7,7 +7,7 @@ title: Alias templates and traits
 
 <p>Anyone that has ever tried to do some template meta-programming, has likely run into the need for the <a href="http://stackoverflow.com/a/613132/46642"><code>typename</code> keyword</a>. Using type traits often involves this keyword.</p>
 
-{{ highlight cpp }}
+{{ highlight c++ }}
     // examples
     typename std::remove_const<T>::type
     typename std::add_lvalue_reference<T>::type
@@ -18,14 +18,14 @@ title: Alias templates and traits
 
 <p>One can capture this <code>typename T::type</code> pattern with a template alias that can be used to replace it:</p>
 
-{{ highlight cpp }}
+{{ highlight c++ }}
     template <typename T>
     using Invoke = typename T::type;
 {{ endhighlight }}
 
 And rewrite the previous examples as:
 
-{{ highlight cpp }}
+{{ highlight c++ }}
     Invoke<std::remove_const<T>>
     Invoke<std::add_lvalue_reference<T>>
     Invoke<std::conditional<std::is_const<T>::value, Invoke<std::add_const<U>>, T>>
@@ -33,7 +33,7 @@ And rewrite the previous examples as:
 
 <p>This already helps, but one can also go one step further by making specialised aliases for each trait.</p>
 
-{{ highlight cpp }}
+{{ highlight c++ }}
     template <typename T>
     using RemoveConst = Invoke<std::remove_const<T>>
     template <typename T>
@@ -44,9 +44,9 @@ And rewrite the previous examples as:
     using Conditional = Invoke<std::conditional<If::value, Then, Else>>
 {{ endhighlight }}
 
-<p>And the previous examples becomes a lot more readable:</a>
+<p>And the previous examples becomes a lot more readable:</p>
 
-{{ highlight cpp }}
+{{ highlight c++ }}
     RemoveConst<T>
     AddLvalueReference<T>
     Conditional<std::is_const<T>, AddConst<U>, T>>
