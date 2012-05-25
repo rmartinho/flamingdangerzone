@@ -3,8 +3,8 @@ layout: default
 title: Flaming Dangerzone
 ---
 
-{% for post in site.posts limit:5 %}
-<h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-<em>Posted on {{ post.date | date_to_long_string }}.</em>
+<ul class="posts">
+{% for post in site.posts %}
+  <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
-
+</ul>
