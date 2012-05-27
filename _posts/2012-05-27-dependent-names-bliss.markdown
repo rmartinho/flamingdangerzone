@@ -45,25 +45,13 @@ underlying type.
 {% endhighlight %}
 
 But if we try to compile this... it does not compile. Ooops. Clang produces the
-following errors:
+following error:
 
-    foo.cpp:3:1: error: missing 'typename' prior to dependent type name 'std::underlying_type<Enum>::type'
+    foo.cpp:3:1: fatal error: missing 'typename' prior to dependent type name 'std::underlying_type<Enum>::type'
     std::underlying_type<Enum>::type to_underlying(Enum enum) {
     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     typename 
-    foo.cpp:3:57: error: expected identifier or '{'
-    std::underlying_type<Enum>::type to_underlying(Enum enum) {
-                                                            ^
-    foo.cpp:7:34: error: expected ')'
-    enum class foo : int { bar = 42 };
-                                     ^
-    foo.cpp:3:47: note: to match this '('
-    std::underlying_type<Enum>::type to_underlying(Enum enum) {
-                                                  ^
-    foo.cpp:10:37: error: use of undeclared identifier 'foo'
-        auto underlying = to_underlying(foo::bar);
-                                        ^
-    4 errors generated.
+    1 error generated.
 
 The code is missing [the `typename` disambiguator][typename]. C++ needs that so
 the compiler knows that the *dependent names* we used are type names.
