@@ -29,6 +29,7 @@ underlying type.
 
 {% highlight cpp %}
     #include <type_traits>
+    #include <cassert>
 
     template <typename Enum>
     std::underlying_type<Enum>::type to_underlying(Enum enum) {
