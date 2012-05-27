@@ -47,7 +47,6 @@ underlying type.
 But if we try to compile this... it does not compile. Ooops. Clang produces the
 following errors:
 
-{% highlight plain %}
     foo.cpp:3:1: error: missing 'typename' prior to dependent type name 'std::underlying_type<Enum>::type'
     std::underlying_type<Enum>::type to_underlying(Enum enum) {
     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,7 +64,6 @@ following errors:
         auto underlying = to_underlying(foo::bar);
                                         ^
     4 errors generated.
-{% endhighlight %}
 
 The code is missing [the `typename` disambiguator][typename]. C++ needs that so
 the compiler knows that the *dependent names* we used are type names.
