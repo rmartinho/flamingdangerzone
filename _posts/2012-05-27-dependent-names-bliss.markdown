@@ -128,12 +128,16 @@ Perhaps doing so would trigger infinite recursion as in the following example:
 
 {% highlight cpp %}
     template <typename T>
-    struct foo : std::conditional<
-        std::is_something<T>::value,
-        something<T>,
-        foo<typename change<T>::type>
-        // if we accessed ::type here, it would result in infinite recursion
-    >::type::type // so we only access ::type on the result of std::conditional
+    struct foo {
+        using type = std::conditional<
+            std::is_something<T>::value,
+            something<T>,
+            // if we accessed ::type here,
+            // it would result in infinite recursion
+            foo<typename change<T>::type>
+        >::type::type; // so we only access ::type
+                       // on the result of std::conditional
+    }
 {% endhighlight %}
 
 In such situations one needs the "lazy" metafunction that doesn't actually get
