@@ -219,6 +219,41 @@ trait avoids this potential mistake.
     using Bare = RemoveCv<RemoveReference<T>>;
 {% endhighlight %}
 
+### Reference and cv-qualifier propagators
+
+The standard library has `std::is_const`, `std::remove_const`, `std::add_const`,
+and similar traits for `volatile` and references, that test, add, or remove
+those qualifications from a type. I find it lacks one other type of operation
+with those qualifications: copying the qualifications from one type to another.
+Implementing this for cv-qualifiers is quite trivial: use the testing trait, and
+if it yields true, use the adding trait.
+
+{% highlight cpp %}
+    // Produces Destination as const if Source is const
+    template <typename Source, typename Destination>
+    using WithConstOf = Conditional<std::is_const<Source>, AddConst<Destination>, Destination>;
+    // Produces Destination as volatile if Source is volatile
+    template <typename Source, typename Destination>
+    using WithVolatileOf = Conditional<std::is_volatile<Source>, AddVolatile<Destination>, Destination>;
+    // Produces Destination as const if Source is const, and volatile if Source is volatile
+    template <typename Source, typename Destination>
+    using WithCvOf = WithConstOf<Source, WithVolatileOf<Source, Destination>>;
+{% endhighlight %}
+
+Implementing them for the value category (i.e. object, lvalue reference, rvalue
+reference) is a bit more involved, but nothing too complicated: two nested
+conditionals.
+
+{% highlight cpp %}
+    // Produces Destination with the same value category of Source
+    template <typename Source, typename Destination>
+    using WithValueCategoryOf = Conditional<std::is_lvalue_reference<Source>,
+                                    AddLvalueReference<Destination>,
+                                    Conditional<std::is_rvalue_reference<Source>,
+                                        AddRvalueReference<Destination>,
+                                        Destination>>;
+{% endhighlight %}
+
  [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html
  [temporary-array]: http://stackoverflow.com/a/10624677/46642
 
