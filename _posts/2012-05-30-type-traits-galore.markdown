@@ -1,14 +1,13 @@
 ---
 layout: post
-title: <type_traits> extended
+title: More <type_traits>
 ---
 
 The C++11 standard library provides us with several type traits, many of which
 need compiler magic and thus cannot be reproduced within the language. These
 type traits are very useful, but, at least for me, they still don't cover a lot
-of common uses. This article will cover some of these useful traits that are not
-found in the standard library. Many of them are purely conveniences to make
-template meta-programming constructs easier to build and/or read.
+of common uses. This article will cover some useful traits that are not found in
+the standard library.
 
 ### Identity metafunction
 
