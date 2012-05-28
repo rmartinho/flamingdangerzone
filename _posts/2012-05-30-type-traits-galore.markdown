@@ -7,7 +7,8 @@ The C++11 standard library provides us with several type traits, many of which
 need compiler magic and thus cannot be reproduced within the language. These
 type traits are very useful, but, at least for me, they still don't cover a lot
 of common uses. This article will cover some of these useful traits that are not
-found in the standard library.
+found in the standard library. Many of them are purely conveniences to make
+template meta-programming constructs easier to build and/or read.
 
 ### Identity metafunction
 
@@ -89,7 +90,7 @@ We can also use it to work around the quirks of the C declarator syntax:
     // instead of int (&f())[10]
 {% endhighlight %}
 
-And this is already too much talking about nothing.
+And this is already too much talking about constructs that do nothing.
 
 ### Dependent boolean
 
@@ -133,7 +134,73 @@ With it the primary template can be made to work now.
 {% endhighlight %}
 
 This can also be used for writing SFINAE-based traits, but I'm leaving that for another
-post.
+article.
+
+### Conditions and logical meta-ops
+
+Several of the standard library traits provide a boolean `value` member. And
+some like `std::conditional` and `std::enable_if` take a boolean as a parameter.
+`std::enable_if` is a special case, so I will leave it for a future article.
+
+One could write a simple `Conditional` alias as follows.
+
+{% highlight cpp %}
+    template <bool If, typename Then, typename Else>
+    using Conditional = typename std::conditional<If, Then, Else>::type;
+{% endhighlight %}
+
+More often than not, the boolean parameter will be the `value` member of some
+type trait. In order to reduce boilerplate, I prefer to have `Conditional`
+simply take a type trait and automatically access its `value`.
+
+{% highlight cpp %}
+    template <typename If, typename Then, typename Else>
+    using Conditional = typename std::conditional<If::value, Then, Else>::type;
+
+    // usage becomes
+    Conditional<std::is_const<T>, A, B>
+{% endhighlight %}
+
+This is dandy if the condition is a simple type trait. But when the condition
+is, for example, a conjunction of two traits, it does not work very well. Using
+the first definition of `Conditional`, code would look like this:
+
+{% highlight cpp %}
+    Conditional<
+        std::is_const<RemovePointer<T>>::value && std::is_pointer<T>::value,
+        A, B>
+{% endhighlight %}
+
+With the second definition, we can't write this. Unless we make metafunctions
+that work on boolean traits just like the logical operators do for boolean
+values!
+
+Making the *and* and *or* meta-operations binary would again make it hard to
+read when there are more than two conditions involved, so let us make them
+variadic templates.
+
+{% highlight cpp %}
+    // Meta-logical negation
+    template <typename T>
+    using Not = Bool<!T::value>;
+
+    // Meta-logical disjunction
+    template <typename... T>
+    struct any : Bool<false> {};
+    template <typename Head, typename... Tail>
+    struct any<Head, Tail...> : Conditional<Head, Bool<true>, any<Tail...>> {};
+
+    // Meta-logical conjunction
+    template <typename... T>
+    struct all : Bool<true> {};
+    template <typename Head, typename... Tail>
+    struct all<Head, Tail...> : Conditional<Head, all<Tail...>, Bool<false>> {};
+
+    // And usage looks like this:
+    Conditional<
+        all< std::is_const<RemovePointer<T>>, std::is_pointer<T> >
+        A, B>
+{% endhighlight %}
 
  [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html
  [temporary-array]: http://stackoverflow.com/a/10624677/46642
