@@ -108,6 +108,10 @@ footer p {
   color: #f2f2f2;
 }
 
+footer p.post_date {
+  font-style: italic;
+}
+
 a {
   text-decoration: none;
   color: #007edf;
