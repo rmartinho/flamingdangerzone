@@ -115,7 +115,7 @@ rewritten as follows:
 {% endhighlight %}
 
 That looks almost readable now. We just need to get better names for our "better
-traits". Ideally, we would be to keep the same names. Those from the standard
+traits". Ideally, we would like to keep the same names. Those from the standard
 library we will have to keep in our own namespace anyway, so they won't conflict
 with the ones from `std`. But what about our own traits like `qux_trait`?
 
