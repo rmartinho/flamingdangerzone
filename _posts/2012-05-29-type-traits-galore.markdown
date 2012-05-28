@@ -1,6 +1,6 @@
 ---
 layout: post
-title: More <type_traits>
+title: More type traits
 ---
 
 The C++11 standard library provides us with several type traits, many of which
