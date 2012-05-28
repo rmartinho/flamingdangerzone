@@ -202,6 +202,23 @@ variadic templates.
         A, B>
 {% endhighlight %}
 
+### Bare types
+
+Sometimes I need to strip a type of any references and cv-qualifiers, usually to
+compare it to a known non-reference, non-cv type. I call these *bare types*.
+
+Transforming a type into a bare type can be achieved with a combination of
+`RemoveReference` and `RemoveCv`, but I prefer to have a specialized trait
+anyway, especially since the two must be combined in a specific order:
+`RemoveCv< RemoveReference< int const& > >` is `int`, while
+`RemoveReference< RemoveCv< int const& > >` is `int const`. Having a specific
+trait avoids this potential mistake.
+
+{% highlight cpp %}
+    template <typename T>
+    using Bare = RemoveCv<RemoveReference<T>>;
+{% endhighlight %}
+
  [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html
  [temporary-array]: http://stackoverflow.com/a/10624677/46642
 
