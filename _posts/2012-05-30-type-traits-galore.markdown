@@ -95,10 +95,45 @@ And this is already too much talking about nothing.
 
 `static_assert` is a new language feature that allows us to produce errors when
 a certain compile-time boolean expression is false. One use case of this feature
-is providing custom error messages when using templates.
+is providing custom error messages when using templates. Take for example,
+`std::result_of`. Could it be implemented as follows?
 
 {% highlight cpp %}
+    template <typename T>
+    struct result_of {
+        static_assert(false, "T must be a signature");
+    };
+    template <typename F, typename... A>
+    struct result<F(A...)> {
+        // actual implementation goes here
+    };
 {% endhighlight %}
+
+It could not. The problem with this is that the static assert will *always*
+trigger, even if the primary template is not instantiated. To prevent it from
+triggering we need to make it use a dependent name. I use something like
+`std::false_type`, but with a type parameter. Or better, a variadic parameter
+pack, for when we're writing variadic templates.
+
+{% highlight cpp %}
+    template <bool B, typename...>
+    struct dependent_bool_type : std::integral_constant<bool, B> {};
+    // and an alias, just for kicks :)
+    template <bool B, typename... T>
+    using Bool = typename dependent_bool_type<B, T...>::type;
+{% endhighlight %}
+
+With it the primary template can be made to work now.
+
+{% highlight cpp %}
+    template <typename T>
+    struct result_of {
+        static_assert(Bool<false, T>, "T must be a signature");
+    };
+{% endhighlight %}
+
+This can also be used for writing SFINAE-based traits, but I'm leaving that for another
+post.
 
  [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html
  [temporary-array]: http://stackoverflow.com/a/10624677/46642
