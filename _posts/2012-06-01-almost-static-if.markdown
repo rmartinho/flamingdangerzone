@@ -30,7 +30,7 @@ often takes advantage of particular overload resolutions rules.
 
 ### Interlude: A brief SFINAE rehash
 
-The idea is very simple: if substituing a template parameter
+The idea is very simple: if substituting a template parameter
 during overload resolution produces invalid code, the compiler simply ignores
 the offending overload instead of generating an error. This is commonly know as
 "*substitution failure is not an error*", usually abbreviated to SFINAE.
