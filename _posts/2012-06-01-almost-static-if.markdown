@@ -96,7 +96,7 @@ condition is true, it is substituted by the second template parameter.
 But where can we place it in a function template declaration?
 
 In C++03, it was often placed in the return type of the function, or as an extra
-defaulted parameter. None if these is no universal optional: the first one is
+defaulted parameter. None if these is an universal option: the first one is
 not usable in most operator overloads, because the number of arguments is fixed;
 and the second one is not usable in constructors, because they don't have a
 return type.
@@ -113,7 +113,7 @@ T twice(T t, typename std::enable_if<!is_scalable<T>::value>::type* = 0) { retur
 {% endhighlight %}
 
 We need the two overloads to have disjoint conditions because to avoid
-ambiguities, only one can be selected.
+ambiguities, only one can be viable.
 
 This style looks very arcane and makes it hard to read the return type in the
 middle of all that. The extra parameter approach isn't really much better in
