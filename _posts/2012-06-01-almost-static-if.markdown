@@ -129,10 +129,10 @@ And since we often need a condition on one overload and its negation on another,
 I'm making a `DisableIf` alias as well.
 
 {% highlight cpp %}
-template <typename Condition, typename T>
+template <typename Condition, typename T = void>
 using EnableIf = typename std::enable_if<Condition::value, T>::type;
 
-template <typename Condition, typename T>
+template <typename Condition, typename T = void>
 using DisableIf = typename std::enable_if<!Condition::value, T>::type;
 {% endhighlight %}
 
