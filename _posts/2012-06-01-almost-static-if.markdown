@@ -88,7 +88,7 @@ template <typename T>
 struct enable_if<true, T> { using type = T; }; // type member
 {% endhighlight %}
 
-This metafunction is used by placing it an access to the `type` member somewhere
+This metafunction is used by placing an access to its `type` member somewhere
 in a function template declaration. When the condition is false, substitution
 fails (because there's no `type`) and the overload is ignored. When the
 condition is true, it is substituted by the second template parameter.
