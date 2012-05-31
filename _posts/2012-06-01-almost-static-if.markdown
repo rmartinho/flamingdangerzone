@@ -295,7 +295,7 @@ T twice(T t) { return 2*t; }
 
 ### And an extra tweak
 
-Since sometimes more than once condition is needed, I like to use a slightly
+Since sometimes more than one condition is needed, I like to use a slightly
 tweaked version.
 
 {% highlight cpp %}
