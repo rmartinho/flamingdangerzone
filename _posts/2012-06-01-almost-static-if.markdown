@@ -185,11 +185,11 @@ their number, or change their kind.
 Changing their number is simple: we just add an extra dummy defaulted parameter
 to one of them.
 
-If we did so with functions, we would still be in trouble, because, while the
-compiler would accept the two declarations as different functions, we wouldn't
-be able to call them without ambiguity. But in the case of the templates, we are
-trying to get one of them to be dropped because of substitution failure, so
-that won't be a problem.
+If we did so with the `foo` functions above, we would still be in
+trouble, because, while the compiler would accept the two declarations as
+different functions, we wouldn't be able to call them without ambiguity. But in
+the case of the templates, we are trying to get one of them to be dropped
+because of substitution failure, so that won't be a problem.
 
 {% highlight cpp %}
 template <typename T,
