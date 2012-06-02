@@ -96,10 +96,10 @@ condition is true, it is substituted by the second template parameter.
 But where can we place it in a function template declaration?
 
 In C++03, it was often placed in the return type of the function, or as an extra
-defaulted parameter. None if these is an universal option: the first one is
-not usable in most operator overloads, because the number of arguments is fixed;
-and the second one is not usable in constructors, because they don't have a
-return type.
+defaulted parameter. None if these is an universal option: the first one is not
+usable in constructors, because they don't have a return type; and the second
+one is not usable in most operator overloads, because the number of arguments is
+fixed.
 
 We could thus have something like the following:
 
