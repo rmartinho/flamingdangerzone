@@ -89,7 +89,29 @@ Now we can use `DisableIf` to cause the substitution failure:
 {% highlight cpp %}
     // forwarding constructor
     template <typename... U,
-              DisableIf<is_related<U, optional<T>>...>
+              DisableIf<is_related<U, optional<T>> // oops...
+{% endhighlight %}
+
+But there's a problem. `U` is a parameter pack. This raises issues: we only want
+this check to be true if the pack has size one. If it has size zero substitution
+will fail because `is_related` expects two arguments; this is undesirable. A
+solution would be to have `is_related` take one type parameter and a type
+parameter pack, along with a specialization for when two parameters are given.
+
+{% highlight cpp %}
+template <typename T, typename... U>
+struct is_related : std::false_type {};
+
+template <typename T, typename U>
+struct is_related<T, U> : std::is_same<Bare<T>, Bare<U>> {};
+{% endhighlight %}
+
+And now the forwarding constructor can be written as follows:
+
+{% highlight cpp %}
+    // forwarding constructor
+    template <typename... U,
+              DisableIf<is_related<optional<T>, U...>>...>
     optional(U&&... u);
 {% endhighlight %}
 
