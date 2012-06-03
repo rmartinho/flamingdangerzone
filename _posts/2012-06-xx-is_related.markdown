@@ -16,10 +16,13 @@ class optional {
 public:
     // forwarding constructor
     template <typename... U>
-    optional(U&&...);
+    optional(U&&... u);
 
     // copy constructor
-    optional(optional<T> const&);
+    optional(optional<T> const& that);
+
+    // move constructor
+    optional(optional<T>&& that);
 
     // rest of implementation omitted
 };
@@ -62,5 +65,34 @@ construct an `int` from an `optional<int>`.
 
 How can this be solved?
 
+### Enter SFINAE
+
+We want to prevent the forwarding constructor from being selected by the
+overload resolution process when we want the "normal" copy constructor instead.
+We can achieve this by causing a substitution failure in that situation. All we
+need is to specify a trait that detects that situation.
+
+We want the copy constructor to be picked any time the type involved is
+`optional<T>`, regardless of references or const-qualification. In other words,
+any time the [bare type][bare types] involved is `optional<T>`.
+
+{% highlight cpp %}
+template <typename T, typename U>
+struct is_related : std::is_same<Bare<T>, Bare<U>> {};
+{% endhighlight %}
+
+(I'm not very fond of the current name I use for this trait, but I haven't seen
+a better one yet.)
+
+Now we can use `DisableIf` to cause the substitution failure:
+
+{% highlight cpp %}
+    // forwarding constructor
+    template <typename... U,
+              DisableIf<is_related<U, optional<T>>...>
+    optional(U&&... u);
+{% endhighlight %}
+
  [boost-optional]: http://www.boost.org/libs/optional/index.html 
+ [bare types]: /2012/05/29/type-traits-galore.html
 
