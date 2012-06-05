@@ -8,7 +8,7 @@ Let's say we're implementing a class template similar to
 implemented with C++03 features, we're adding a constructor that forwards
 arguments to the constructor of the value type.
 
-A naïve initial definition of that class template could look like this:
+A naÃ¯ve initial definition of that class template could look like this:
 
 {% highlight cpp %}
 template <typename T>
