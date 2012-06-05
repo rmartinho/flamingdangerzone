@@ -43,7 +43,6 @@ It should be marked `explicit` to avoid accidental conversions.
 {% highlight cpp %}
     template <typename... U>
     explicit optional(U&&...);
-};
 {% endhighlight %}
 
 ### Copy construction
