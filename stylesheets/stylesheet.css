@@ -395,7 +395,7 @@ ul.posts span {
   font-size: 80%;
 }
 
-header a:link {
+#project_title a {
     color: inherit;
     text-decoration: none;
 }
