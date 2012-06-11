@@ -391,7 +391,12 @@ ul.posts li {
 
 ul.posts span {
   color: #aaa;
-  font-family: Monaco, Consolas, "Courier New", monospace;
+  font-family: Monaco, Consolas, monospace;
   font-size: 80%;
+}
+
+header a:link {
+    color: inherit;
+    text-decoration: none;
 }
 
