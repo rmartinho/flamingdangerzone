@@ -261,7 +261,7 @@ form {
   padding: 20px;
 }
 
-img {
+*:not(#disqus_thread) img {
   width: 100%;
   max-width: 100%;
 }
