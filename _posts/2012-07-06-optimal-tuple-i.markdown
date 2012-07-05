@@ -24,8 +24,8 @@ specifying types with known layout. We can use `std::aligned_storage` for that,
 but I'll use an alias for readability.
 
 {% highlight cpp %}
-    template <std::size_t Size, std::size_t Align = Size>
-    using layout = std::aligned_storage<Size, Align>;
+template <std::size_t Size, std::size_t Align = Size>
+using layout = std::aligned_storage<Size, Align>;
 {% endhighlight %}
 
 ### Empty types
@@ -33,11 +33,12 @@ but I'll use an alias for readability.
 With that out of the way let us consider the following tuple type:
 
 {% highlight cpp %}
-    struct empty {};
-    static_assert(std::is_empty<empty>::value, "empty is an empty type");
-    static_assert(sizeof(empty) > 0, "empty doesn't have zero size");
+// a template to make distinct empty types
+template <int> struct empty {};
+static_assert(std::is_empty<empty<0>>::value, "empty<0> is an empty type");
+static_assert(sizeof(empty<0>) > 0, "empty<0> doesn't have zero size");
 
-    using tuple1 = std::tuple<empty, layout<1>, empty>;
+using tuple1 = std::tuple<empty<0>, layout<1>, empty<1>>;
 {% endhighlight %}
 
 How large should this tuple be? The sum of the sizes of its elements is 3. But
@@ -55,7 +56,7 @@ so the `tuple1` above will have size 1 in both implementations.
 Now let us consider another tuple type:
 
 {% highlight cpp %}
-    using tuple2 = std::tuple<layout<1>, layout<2>, layout<1>>;
+using tuple2 = std::tuple<layout<1>, layout<2>, layout<1>>;
 {% endhighlight %}
 
 What's the size of this tuple? Clearly it can't be less than 1+2+1=4. But it can
