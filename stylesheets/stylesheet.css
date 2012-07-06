@@ -147,6 +147,10 @@ strong {
   font-weight: bold;
 }
 
+sup {
+  vertical-align: super;
+}
+
 img {
   position: relative;
   margin: 0 auto;
