@@ -91,8 +91,8 @@ alignment first. If we do that here, the tuple can be stored using only 4 bytes:
 ![Optimal layout for tuple2][tuple2 optimal layout]
 
 This strategy works because you can always place an object immediately after one
-with a stricter alignment: a multiple of 2<sup>n</sup> is a multiple of
-2<sup>n-1</sup> as well.
+with a stricter alignment: a multiple of 2^n^ is a multiple of
+2^n-1^ as well.
 
 Turns out neither libstdc++ nor libc++ do this kind of optimization. libstdc++
 always places the members in reverse order, and libc++ always places the members
