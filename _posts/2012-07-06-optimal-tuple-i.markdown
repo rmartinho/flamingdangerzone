@@ -25,7 +25,7 @@ but I'll use an alias for readability.
 
 {% highlight cpp %}
 template <std::size_t Size, std::size_t Align = Size>
-using layout = std::aligned_storage<Size, Align>;
+using layout = typename std::aligned_storage<Size, Align>::type;
 {% endhighlight %}
 
 ### Empty types
