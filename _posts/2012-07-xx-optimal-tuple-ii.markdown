@@ -14,8 +14,13 @@ actually looks like.
 The main difficulty an implementation needs to overcome is the fact that the
 user needs to treat the tuple as if its elements were in the order of the
 template arguments: when a call to `get<0>` with a `tuple<int, double>` argument
-is made, the result is the `int` even if the tuple was reordered to have the
+is made, the result is the `int` even if the tuple was reordered to store the
 `double` first.
+
+The implementation will need to store the values internally in an optimal order,
+but map to and from it in the function calls. And how should it store a
+fixed-size collection of heterogeneous values? `std::tuple` seems like the
+logical choice. But that requires knowledge of the implementation.
 
  [previous]: /2012/07/06/optimal-tuple-i.html "Previously..."
 <!-- [next]: /2012/07/13/optimal-tuple-ii.html "To be continued..." -->
