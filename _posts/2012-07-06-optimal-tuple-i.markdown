@@ -51,7 +51,7 @@ achieved through the empty base class optimization (EBCO).
 Both libstdc++ and libc++ use EBCO to optimize away empty types in tuples,
 so the `tuple1` above will have size 1 in both implementations.
 
-### Size matters
+### Padding
 
 Now let us consider another tuple type:
 
@@ -97,11 +97,13 @@ with a stricter alignment: a multiple of 2<sup>n</sup> is a multiple of
 Turns out neither libstdc++ nor libc++ do this kind of optimization. libstdc++
 always places the members in reverse order, and libc++ always places the members
 in the order given. And that's why I set out to write a tuple implementation
-that uses an optimal layout for storage. But that's a story for another day.
+that uses an optimal layout for storage. But that's [a story for another
+day][next].
 
  [tuple1 layout]: /images/2012-07-06-optimal-tuple-i-01.png "Possible layouts for tuple1"
  [tuple2 layout]: /images/2012-07-06-optimal-tuple-i-02.png "Possible layout for tuple2"
  [tuple2 optimal layout]: /images/2012-07-06-optimal-tuple-i-03.png "Optimal layout for tuple2"
 
  [singleton]: http://en.wikipedia.org/wiki/Singleton_(mathematics) "A singleton is a 1-tuple"
+ [next]: /2012/07/09/optimal-tuple-ii.html "To be continued..."
 
