@@ -5,30 +5,30 @@ title: Rule of Zero
 
 ### Ownership
 
-Objects with automatic storage duration get their destructors invoked whenever
-they go out of scope. This property is often used to handle cleanup of
-resources automatically in a pattern known as *Resource Acquisition Is
+In C++ the destructors of objects with automatic storage duration are invoked
+whenever their scope ends. In C++ this property is often used to handle cleanup
+of resources automatically in a pattern known as *Resource Acquisition Is
 Initialisation* (RAII).
 
 An essential part of RAII is the concept of resource ownership: the object
 responsible for cleaning up a resource in its destructor *owns that resource*.
-Proper ownership policies are the secret to avoiding resource leaks. And C++
-allows us to encapsulate ownership policies into generic reusable classes.
+Proper ownership policies are the secret to avoid resource leaks. And C++ allows
+us to encapsulate ownership policies into generic reusable classes.
 
 ### Value semantics
 
 When we use object types (as opposed to reference types) to pass values around
-in C++, those values get copied.  If we want to store a value as a member, its
-need to be of an object type, otherwise it's ripe ground for dangling
+in C++, those values get copied. If we want to store a value as a member, it
+should be of a non-pointer object type, otherwise it's ripe ground for dangling
 references. Whenever we want a function to handle a copy of an argument, we can
 take that argument by value (i.e. with an object type). If we want to handle the
 same object without making a copy, we can take that argument by reference (i.e.
 with a reference type).
 
 Using value semantics (i.e. object types) is important for RAII, because
-references don't affect the storage duration to their referrents. Unfortunately
-these semantics don't interact very well with the idea of ownership described
-above.
+references don't affect the storage duration to their referrents. Unfortunately,
+by default these semantics don't interact very well with the idea of ownership
+described above.
 
 ### Rule of Three
 
@@ -39,8 +39,14 @@ resource. Ultimately they'll both try to release the resource, and that will
 lead to catastrophe.
 
 Luckily, C++ allows programmers to define what value semantics means for a
-class, but allowing user-defined copy constructors and copy assignment
+class, by allowing user-defined copy constructors and copy assignment
 operators.
+
+This idea is commonly known as the [*Rule of Three*][rule of three]:
+
+> If a class defines a destructor, constructor or copy assignment operator then
+> it should explicitly define all three and not rely on their default
+> implementation.
 
 To solve this conflict between value semantics and ownership, one can take
 several options. Common choices include:
@@ -78,12 +84,6 @@ good approach (in fact, `std::auto_ptr` is now a deprecated feature).
 
 And obviously, any other reasonable ownership policy one can think of can be
 implemented.
-
-This idea is commonly known as the *Rule of Three*:
-
-> If a class defines a destructor, constructor or copy assignment operator then
-> it should explicitly define all three and not rely on their default
-> implementation.
 
 ### Rule of Five
 
@@ -169,7 +169,7 @@ ownership policy instead and get the same effect?
 
 {% highlight cpp %}
 // HMODULE and HANDLE are the same
-using winapi_handle = std::unique_ptr<void, BOOL (WINAPI*)(HANDLE)>;
+using winapi_handle = std::unique_ptr<void, decltype(&::CloseHandle)>;
 winapi_handle as_raii_handle(HANDLE h) {
     return winapi_handle { h, &::CloseHandle }; // custom deleter
 }
@@ -224,4 +224,6 @@ Responsibility Principle*, is thus:
 > Classes that have custom destructors, copy/move constructors or assignment
 > operators should deal exclusively with ownership. Other classes should not
 > have custom destructors, copy/move constructors or assignment operators.
+
+ [rule of three]: http://stackoverflow.com/q/4172722/46642
 
