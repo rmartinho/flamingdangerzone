@@ -123,10 +123,9 @@ user provide custom deleter objects, allowing to use them for ownership of most
 kinds of resources.
 
 Consider for example, writing a class that owns a `HMODULE` resource from the
-Windows API. A `HMODULE` is a handle to a loaded DLL or executable image
-(collectively known as modules). It must be closed by passing it to the
-`CloseHandle` function, which can close any kind of handle (which under the
-covers are just a type alias to `void*`).
+Windows API. A `HMODULE` (a type alias for `void*`) is a handle to a loaded DLL
+or executable image (collectively known as modules). It must be released by
+passing it to the `FreeLibrary` function.
 
 One option would be to implement a class that follows the above rule of three
 (or five).
@@ -154,7 +153,7 @@ public:
 
     // destructor
     ~module() {
-        ::CloseHandle(handle);
+        ::FreeLibrary(handle);
     }
 
     // other module related functions go here
@@ -169,22 +168,22 @@ ownership policy instead and get the same effect?
 
 {% highlight cpp %}
 // HMODULE and HANDLE are the same
-using winapi_handle = std::unique_ptr<void, decltype(&::CloseHandle)>;
-winapi_handle as_raii_handle(HANDLE h) {
-    return winapi_handle { h, &::CloseHandle }; // custom deleter
+using module_handle = std::unique_ptr<void, decltype(&::FreeLibrary)>;
+module_handle make_module_handle(HMODULE h) {
+    return module_handle { h, &::FreeLibrary }; // custom deleter
 }
 
 class module {
 public:
     explicit module(std::wstring const& name)
-    : handle { as_raii_handle(::LoadLibrary(name.c_str())) } {}
+    : handle { make_module_handle(::LoadLibrary(name.c_str())) } {}
 
     // all lifetime members are defined implicitly
 
     // other module related functions go here
 
 private:
-    winapi_handle handle;
+    module_handle handle;
 };
 {% endhighlight %}
 
