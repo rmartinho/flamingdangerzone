@@ -147,7 +147,7 @@ public:
     // move assignment
     module& operator=(module&& that) {
         module copy { std::move(that) };
-        std::swap(handle, that.handle);
+        std::swap(handle, copy.handle);
         return *this;
     }
     // copy assignment is implicitly forbidden due to explicit move assignment
