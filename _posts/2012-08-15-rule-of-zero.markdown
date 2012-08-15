@@ -167,21 +167,18 @@ But why would anyone want to do that when you can just grab an existing reusable
 ownership policy instead and get the same effect?
 
 {% highlight cpp %}
-using module_handle = std::unique_ptr<void, decltype(&::FreeLibrary)>;
-module_handle make_module_handle(HMODULE h) {
-    return module_handle { h, &::FreeLibrary }; // custom deleter
-}
-
 class module {
 public:
     explicit module(std::wstring const& name)
-    : handle { make_module_handle(::LoadLibrary(name.c_str())) } {}
+    : handle { ::LoadLibrary(name.c_str()), &::FreeLibrary } {}
 
     // all lifetime members are defined implicitly
 
     // other module related functions go here
 
 private:
+    using module_handle = std::unique_ptr<void, decltype(&::FreeLibrary)>;
+
     module_handle handle;
 };
 {% endhighlight %}
