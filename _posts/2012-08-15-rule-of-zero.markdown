@@ -74,7 +74,7 @@ Option #2 also gives exclusive ownership to a single object, but emulates the
 "normal" value semantics for the resource. This is useful for polymorphic
 classes to avoid the slicing problem, and for other resources for which a copy
 can be made easily (POSIX file descriptors is a possible example, since they can
-be copied with `dup`]).
+be copied with `dup`).
 
 Option #3 shares the ownership between the two objects. This one can be quite
 tricky to implement, especially in a thread-safe manner. Common implementations
