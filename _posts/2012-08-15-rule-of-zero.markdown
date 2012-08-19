@@ -59,11 +59,8 @@ To solve this conflict between value semantics and ownership, one can take
 several approaches. Common choices include:
 
 1. do not allow copies to be made;
- 
 2. provide custom copy semantics that copy the resource;
-
 3. make both objects have ownership of the resource;
-
 4. make copying transfer the resource;
 
 Option #1 gives exclusive ownership of a resource to a single object and does not
