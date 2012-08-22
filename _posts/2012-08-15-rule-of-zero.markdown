@@ -7,8 +7,7 @@ title: Rule of Zero
 
 In C++ the destructors of objects with automatic storage duration are invoked
 whenever their scope ends. This property is often used to handle cleanup of
-resources automatically in a pattern known as *Resource Acquisition Is
-Initialisation* (RAII).
+resources automatically in a pattern known by the meaningless name RAII.
 
 An essential part of RAII is the concept of resource ownership: the object
 responsible for cleaning up a resource in its destructor *owns that resource*.
