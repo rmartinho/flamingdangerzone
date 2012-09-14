@@ -227,9 +227,10 @@ in a separate place makes it easier to maintain.
 So, we have arrived at the The Rule of Zero (which is actually a particular
 instance of the *Single Responsibility Principle*):
 
-> Classes that have custom destructors, copy/move constructors or assignment
-> operators should deal exclusively with ownership. Other classes should not
-> have custom destructors, copy/move constructors or assignment operators.
+> Classes that have custom destructors, copy/move constructors or copy/move
+> assignment operators should deal exclusively with ownership. Other classes
+> should not have custom destructors, copy/move constructors or copy/move
+> assignment operators.
 
 ---
 
