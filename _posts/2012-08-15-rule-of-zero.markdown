@@ -50,8 +50,8 @@ To get consistent and correct behaviour, one has to pay close attention to how
 these user-defined functions interoperate. This idea is commonly known as the
 [*Rule of Three*][rule of three]:
 
-> If a class defines a destructor, constructor or copy assignment operator then
-> it should explicitly define all three, and not rely on their default
+> If a class defines a destructor, copy constructor or copy assignment operator then
+> it should probably explicitly define all three, and not rely on their default
 > implementation.
 
 To solve this conflict between value semantics and ownership, one can take
@@ -94,8 +94,8 @@ semantics in the mix, we can now provide options for transferring ownership
 between objects that are safer than option #4 above.
 
 Option #1 can be improved to allow transferring ownership by adding a move
-constructor and a move assignment operator. This makes it a lot more usable, but
-also a lot more useful. It can be returned from functions and passed by value to
+constructor and a move assignment operator. This makes it a lot more usable and
+a lot more useful. It can be returned from functions and passed by value to
 transfer ownership. An example of this is [`std::unique_ptr`][unique_ptr], the first choice
 when one needs a smart pointer.
 
@@ -224,7 +224,7 @@ just write a new "ownership-in-a-package" class and reap the same benefits.
 The code will have to deal with that ownership somewhere, and having it isolated
 in a separate place makes it easier to maintain.
 
-So, we have arrived at the The Rule of Zero (which is actually a particular
+So, we have arrived at the Rule of Zero (which is actually a particular
 instance of the *Single Responsibility Principle*):
 
 > Classes that have custom destructors, copy/move constructors or copy/move
