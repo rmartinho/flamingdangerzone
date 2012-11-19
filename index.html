@@ -21,7 +21,7 @@ language, both on my own and with the help of others.</p>
 <h3>Other articles</h3>
 
 <ul class="posts">
-{% for post in site.other %}
+{% for post in site.pages %}
   <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
 </ul>
