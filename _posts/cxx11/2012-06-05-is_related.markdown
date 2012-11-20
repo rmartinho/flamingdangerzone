@@ -2,6 +2,7 @@
 layout: post
 title: Some pitfalls with forwarding constructors
 categories: cxx11
+short: where I find that you can copy without invoking the copy constructor
 ---
 
 Let's say we're implementing a class template similar to

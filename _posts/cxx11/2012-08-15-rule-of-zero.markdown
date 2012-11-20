@@ -2,6 +2,7 @@
 layout: post
 title: Rule of Zero
 categories: cxx11
+short: where I rediscover the Single Responsibility Principle
 ---
 
 ### Ownership

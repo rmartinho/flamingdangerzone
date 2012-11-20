@@ -2,6 +2,7 @@
 layout: post
 title: More type traits
 categories: cxx11
+short: where I showcase cool traits
 ---
 
 The C++11 standard library provides us with several type traits, many of which

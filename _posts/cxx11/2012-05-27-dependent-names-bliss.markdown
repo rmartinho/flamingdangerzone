@@ -2,6 +2,7 @@
 layout: post
 title: Handling dependent names
 categories: cxx11
+short: where I get rid of typename
 ---
 
 ### Annoying `typename`

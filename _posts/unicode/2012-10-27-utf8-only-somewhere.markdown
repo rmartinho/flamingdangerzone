@@ -2,6 +2,7 @@
 layout: post
 title: How I want to use Unicode in C++
 categories: unicode
+short: where I rant about obsessing with encodings
 ---
 
 I think that using [UTF-8 everywhere][manifesto] is nothing but a hack. Sure it
