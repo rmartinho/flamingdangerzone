@@ -1,39 +1,22 @@
+---
+is_post: true
+---
 <!DOCTYPE html>
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Flaming Dangerzone" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/stylesheet.css">
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml">
-    <link rel="icon" type="image/png" href="/icon.png" />
+    {% include metadata.html %}
 
     <title>{{ page.title }} @ Flaming Dangerzone</title>
 
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34246390-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+    {% include ga.html %}
 
   </head>
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-        <h1 id="project_title"><a href="/">Flaming Dangerzone</a></h1>
-        </header>
-    </div>
+    {% include header.html %}
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
@@ -44,31 +27,9 @@
 
       </section>
 
-      <section id="comments" class="inner">
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            var disqus_shortname = 'flaming-dangerzone';
+    {% include comments.html %}
 
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      <section id="comments" class="inner">
-    </div>
-        
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="post_date">This entry was posted on {{ page.date | date_to_string }}</p>
-        <p class="copyright"><a href="/">Flaming Dangerzone</a> authored by <a href="http://stackoverflow.com/u/46642">R. Martinho Fernandes</a></p>
-      </footer>
-    </div>
+    {% include footer.html %}
 
   </body>
 </html>
