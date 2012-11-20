@@ -407,18 +407,18 @@ ul.posts li {
   line-height: 1.75em;
 }
 
+ul.posts span.extra {
+  color: #888;
+  font-family: Monaco, Consolas, monospace;
+  font-size: 80%;
+}
+
 ul.posts span.date {
   color: #aaa;
 }
 
 ul.posts span.description {
   margin-left: 2em;
-}
-
-ul.posts span.extra {
-  color: #444;
-  font-family: Monaco, Consolas, monospace;
-  font-size: 80%;
 }
 
 #project_title a {
