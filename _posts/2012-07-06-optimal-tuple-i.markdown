@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Size matters, part 1
-categories: cxx11
 ---
 
 Variadic templates is one of the interesting new features in C++. It allows one
