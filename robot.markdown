@@ -9,7 +9,7 @@ I am a young man from Portugal that chose to make a living writing software.
 In meatspace my name does not have an "R." at the beginning. I currently live
 and work in Berlin.
 
-## In cyberspace
+### In cyberspace
 
 I am a carnivore programming robot. Sometimes I go by the nickname "the Robot",
 and that's what the R. honourific in my cyberspace name stands for.
