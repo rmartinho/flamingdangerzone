@@ -26,20 +26,9 @@
 
         <p>The page you are looking for doesn't exist.</p>
 
-        <p>If you got here with an old link for the site, try 
-        <a id="newLink" href="/">the archive</a>.</p>
+        <p>You can try to go back to the <a href="/">home page</a> and find it from there.</p>
 
       </section>
-
-        <script type="text/javascript">
-        var url = document.location.href;
-        if (url.indexOf(".html") >= 0 && url.indexOf("/2012/" > 0)) {
-            url = url.replace(/\/2012\//g, "/cxx11/2012/");
-            var link = document.getElementById("newLink");
-            link.setAttribute("href", url);
-            link.innerText = url;
-        }
-        </script>
     </div>
 
     <!-- FOOTER  -->
