@@ -399,7 +399,7 @@ Small Device Styles
 }
 
 ul.posts {
-  list-style-type: none;
+  list-style: none;
   margin-bottom: 2em;
 }
 
