@@ -407,7 +407,7 @@ ul.posts li {
   line-height: 1.75em;
 }
 
-ul.posts span.date {
+ul.posts span.extra {
   color: #aaa;
   font-family: Monaco, Consolas, monospace;
   font-size: 80%;
