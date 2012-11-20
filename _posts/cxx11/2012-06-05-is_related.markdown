@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Some pitfalls with forwarding constructors
+categories: cxx11
 ---
 
 Let's say we're implementing a class template similar to

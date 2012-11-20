@@ -1,6 +1,7 @@
 ---
 layout: default
 title: How I want to use Unicode in C++
+categories: unicode
 ---
 
 ## UTF-8 everywhere is a hack

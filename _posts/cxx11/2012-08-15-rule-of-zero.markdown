@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Rule of Zero
+categories: cxx11
 ---
 
 ### Ownership
