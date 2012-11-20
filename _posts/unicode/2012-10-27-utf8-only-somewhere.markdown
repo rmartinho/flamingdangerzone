@@ -4,8 +4,6 @@ title: How I want to use Unicode in C++
 categories: unicode
 ---
 
-## UTF-8 everywhere is a hack
-
 I think that using [UTF-8 everywhere][manifesto] is nothing but a hack. Sure it
 may work if you put up with it, but it is a sub-optimal choice.
 
@@ -13,7 +11,7 @@ As an engineer, I prefer to use *the right tool for the job*. Hammers are all
 nice and dandy if I'm nailing someone to a cross, but please keep them away from
 my screws.
 
-### Right tool for the job
+## Right tool for the job
 
 Different encodings have different characteristics, and there are trade-offs
 involved when picking one. Do you think that you should always make the same
@@ -39,7 +37,7 @@ wire.
 I cannot think of any reason to use UTF-16 other than interoperating with systems
 that made the mistake of using UTF-16 everywhere.
 
-### Choices, choices everywhere!
+## Choices, choices everywhere!
 
 Encoded in UTF-32, the King James version of the Bible uses a whopping sixteen
 megabytes of memory. Now consider how much text your application is manipulating
@@ -67,7 +65,7 @@ fashionista will pick whatever the latest trend is.
 But this hammer-screw argument I just made is not the reason I don't like
 http://utf8everywhere.org.
 
-### Text is text is text
+## Text is text is text
 
 The reason I don't like http://utf8everywhere.org is that it focuses on
 the wrong details. I believe the encoding is irrelevant for most text-related
@@ -84,7 +82,7 @@ As if text were not complex enough when made of Unicode codepoints, you are
 telling me that I should use text made of code units? No!  That simply does not
 make any sense for me.
 
-### One does not simply use a string
+## One does not simply use a string
 
 No, don't give me `std::string`. `std::string` is nothing but a `vector<char>`
 that keeps an extra null character at the end and has an enormous interface that
@@ -98,7 +96,7 @@ tool for the job.
 
 But I want more.
 
-### Use ALL the encodings!
+## Use ALL the encodings!
 
 I want the interfaces to be agnostic of encoding but I don't want the encoding
 to be chosen for me. I want to choose the right tool for the job. I want an
@@ -109,7 +107,7 @@ I want the interfaces to provide me with the tools for *serializing and
 deserializing text* to and from whatever other encodings I might need. The right
 tool for one job is not the right tool for all jobs.
 
-### Invariants or GTFO
+## Invariants or GTFO
 
 I want invariants. I don't want `char*`, aka "a bunch of bytes that may or may not be
 actual text". I want the interface to give me the guarantee that text is text. I
@@ -118,7 +116,7 @@ units, because I don't want to deal with code units. If I read in some lone
 surrogates I cannot create text from it; it follows that I should not find
 myself with an object representing that nonexistent text.
 
-### Am I living in the land of ponies and Unicodes?
+## Am I living in the land of ponies and Unicodes?
 
 Does this magical interface exist? Am I the only one that is fed up with the
 Jabberwocks that go by the names "UTF-8 text" and "UTF-16 text"? Can haz vorpal
