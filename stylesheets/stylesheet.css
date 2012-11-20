@@ -409,12 +409,12 @@ ul.posts li {
 
 ul.posts span.extra {
   color: #444;
-  font-family: Monaco, Consolas, monospace;
   font-size: 80%;
 }
 
 ul.posts span.date {
   color: #aaa;
+  font-family: Monaco, Consolas, monospace;
 }
 
 ul.posts span.description {
