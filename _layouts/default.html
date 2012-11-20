@@ -2,48 +2,28 @@
 <html>
 
   <head>
+
     {% include metadata.html %}
 
     <title>Flaming Dangerzone - {{ page.title }}</title>
 
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34246390-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+    {% include ga.html %}
 
   </head>
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-        <h1 id="project_title"><a href="/">Flaming Dangerzone</a></h1>
-        </header>
-    </div>
+    {% include header.html %}
 
-    <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+      <article id="main_content" class="inner">
 
         {{ content }}
 
-      </section>
+      </article>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Flaming Dangerzone authored by <a href="http://stackoverflow.com/u/46642">R. Martinho Fernandes</a></p>
-      </footer>
-    </div>
+    {% include footer.html %}
 
   </body>
 </html>
