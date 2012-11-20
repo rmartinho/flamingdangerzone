@@ -18,14 +18,26 @@ language, both on my own and with the help of others.</p>
 {% endfor %}
 </ul>
 
-<h3>Exploring Unicode</h3>
+<h3>Taming Unicode</h3>
+
+<p>Writing is a crucial part of almost all human cultures. The vast diversity in human cultures
+has lead to the use of numerous writing systems. Unicode is an attempt at making it possible
+for programmers to handle text in all of those writing systems to be represented and handled.</p>
+
+<p>I got curious about Unicode around June 2012, after several discussions about the sad state of
+affairs in C++. I started by writing a simple set of encoders and decoders just for show, but got
+progressively more and more interested in the subject. Eventually I found myself writing what I
+now intend to turn into a serious
+<a href="https://bitbucket.org/martinhofernandes/ogonek">Unicode handling library</a>.</p>
+
+<p>This series of posts explains some of the motivations, problems, and design decisions involved
+in the development of ogonek, my Unicode library.</p>
 
 <ul class="posts">
 {% for post in site.categories.unicode %}
   <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
 </ul>
-
 
 <!--
 <h3>C++ libraries</h3>

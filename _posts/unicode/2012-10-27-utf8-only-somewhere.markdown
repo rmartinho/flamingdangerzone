@@ -1,7 +1,7 @@
 ---
-layout: default
+layout: post
 title: How I want to use Unicode in C++
-categories: unicode,
+categories: unicode
 ---
 
 ## UTF-8 everywhere is a hack
