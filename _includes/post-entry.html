@@ -1,6 +1,7 @@
       <li>
-        <span class="date">{{ post.date | date_to_string }}</span>
+        <span class="date extra">{{ post.date | date_to_string }}</span>
         &raquo;
         <a href="{{ post.url }}">{{ post.title }}</a>
-        <span class="extra">{{ post.short }}</span>
+        &laquo;
+        <span class="extra">({{ post.short }})</span>
       </li>
