@@ -26,7 +26,7 @@ Unless otherwise mentioned, all content posted is licensed under the
 
 The favicon image is in the public domain.
 
- [about me]: /about-me.html
+ [about me]: /robot.html
  [sources]: http://github.com/rmartinho/rmartinho.github.com/
  [pages]: http://pages.github.com/
  [Disqus]: http://disqus.com/
