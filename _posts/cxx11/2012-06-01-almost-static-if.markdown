@@ -3,6 +3,7 @@ layout: post
 title: Remastered enable_if
 categories: cxx11
 short: where I fix enable_if
+last_edit: 02 Jun 2012
 ---
 
 Without the language support for concepts, one cannot directly overload template

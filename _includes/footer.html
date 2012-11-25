@@ -3,7 +3,10 @@
 
         {% if page.is_post %}
         <p class="post_date">
-          This entry was posted on {{ page.date | date_to_string }}.
+          This entry was originally posted on {{ page.date | date_to_string }}.
+          {% if page.last_edit %}
+            It was last edited on {{ page.last_edit }}.
+          {% endif %}
         </p>
         {% endif %}
 
