@@ -3,7 +3,7 @@ layout: post
 title: Size matters, part 1
 categories: cxx11
 short: where I explore the layout of tuples
-last_edit: 14 Aug 2012
+last_edit: 14 August 2012
 ---
 
 Variadic templates is one of the interesting new features in C++. It allows one

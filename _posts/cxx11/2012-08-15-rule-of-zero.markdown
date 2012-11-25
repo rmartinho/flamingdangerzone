@@ -3,7 +3,7 @@ layout: post
 title: Rule of Zero
 categories: cxx11
 short: where I rediscover the Single Responsibility Principle
-last_edit: 20 Sep 2012
+last_edit: 20 September 2012
 ---
 
 ### Ownership

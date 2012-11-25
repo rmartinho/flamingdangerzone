@@ -3,5 +3,5 @@
         &raquo;
         <a href="{{ post.url }}">{{ post.title }}</a>
         <br>&nbsp;
-        <span class="description extra">{{ post.short }}</span>
+        <span class="description extra">{{ post.short | markdownify }}</span>
       </li>

@@ -4,15 +4,15 @@ layout: nil
 <?xml version="1.0"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Flaming Dangerzone</title>
+    <title>Flaming Dangerzone (Exploring C++11)</title>
     <link>http://rmartinho.github.com/</link>
-    <atom:link href="http://rmartinho.github.com/rss.xml" rel="self" type="application/rss+xml" />
-    <description>R. Martinho's website</description>
+    <atom:link href="http://rmartinho.github.com/rss-cxx11.xml" rel="self" type="application/rss+xml" />
+    <description>R. Martinho's C++ adventures</description>
     <language>en-us</language>
     <pubDate>{{ site.time | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
     <lastBuildDate>{{ site.time | date: "%a, %d %b %Y %H:%M:%S %z" }}</lastBuildDate>
 
-    {% for post in site.posts %}
+    {% for post in site.categories.cxx11 %}
     <item>
       <title>{{ post.title }}</title>
       <link>http://rmartinho.github.com{{ post.url }}</link>
@@ -25,4 +25,5 @@ layout: nil
 
   </channel> 
 </rss>
+
 
