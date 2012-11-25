@@ -3,6 +3,7 @@ layout: post
 title: Handling dependent names
 categories: cxx11
 short: where I get rid of typename
+last_edit: 2012-05-30 00:00:00
 ---
 
 ### Annoying `typename`

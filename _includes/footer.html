@@ -4,8 +4,14 @@
         {% if page.is_post %}
         <p class="post_date">
           This entry was posted on {{ page.date | date_to_string }}.
+          {% if page.last_edit %}
+          <p class="edit_date">
+            This last edit was made on {{ page.last_edit | date_to_string }}.
+          </p>
+          {% endif %}
         </p>
         {% endif %}
+
 
         <p class="copyright">
           <a href="/about.html">Flaming Dangerzone</a>
