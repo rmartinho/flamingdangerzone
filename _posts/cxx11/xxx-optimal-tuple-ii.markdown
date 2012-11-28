@@ -69,7 +69,7 @@ libc++'s implementation would be `indices<2, 0, 1>` and `indices<1, 2, 0>`.
 
 To define the optimal order, we need some metafunction that takes all types
 involved and produces the two index maps. For ease of communication, let's say
-we call the maps respectively the *optimal map* and the *reverse optimal map*.
+we call the maps respectively the *optimal map* and the *optimal reverse map*.
 We need something that looks like this:
 
 {% highlight cpp %}
@@ -79,21 +79,28 @@ We need something that looks like this:
     template <typename... T>
     using OptimalMap = typename optimal_order<T...>::map;
     template <typename... T>
-    using ReverseOptimalMap = typename optimal_order<T...>::reverse_map;
+    using OptimalReverseMap = typename optimal_order<T...>::reverse_map;
 {% endhighlight %}
 
 How can this be done? Let's start with something simpler: sorting the types by
-their alignment. First, we need to define a binary predicate that defines the
-order we are looking for.
+their alignment. A simple insertion sort will do fine for a first
+implementation.
+
+#### Finding a predicate
+
+First, we need to define a binary predicate that defines the order we are
+looking for.
 
 This order depends on how the layout of the underlying `std::tuple`. I'll be
 leaving the detection of that for the build system. I think one might try to
 detect it with some reasonable assumptions and a bit of TMP, but I'm leaving
-that as an exercise for the reader. Let's assume our build system defines of
-the macros `MY_STD_TUPLE_LAYOUT_STRAIGHT` or `MY_STD_TUPLE_LAYOUT_REVERSED`
-according to how the standard library being used does the layout. These macros
-can then be used to decide to perform the actual comparisons with the arguments
-in reverse order when appropriate.
+that as an exercise for the reader.
+
+Let's assume our build system defines of the macros
+`MY_STD_TUPLE_LAYOUT_STRAIGHT` or `MY_STD_TUPLE_LAYOUT_REVERSED` according to
+how the standard library being used does the layout. These macros can then be
+used to decide to perform the actual comparisons with the arguments in reverse
+order when appropriate.
 
 {% highlight cpp %}
     template <typename T, typename U>
@@ -132,17 +139,16 @@ compute its alignment:
     : std::integral_constant<bool, (alignof(member<T>) > alignof(member<U>))> {};
 {% endhighlight %}
 
-{% highlight cpp %}
-    template <typename T, typename U>
-    struct layout_before_impl
-    : std::integral_constant<bool,
-        std::is_empty<T>::value
-        || (!std::is_empty<U>::value && alignof(member<T>) > alignof(member<U>))
-    > {};
-{% endhighlight %}
+This works because the compiler will have to layout `member<int&>` with the
+proper alignment for a reference member, and we can grab that alignment from the
+struct itself.
 
- [mappings]: /images/2012-10-20-optimal-tuple-ii-01.png
+#### 
 
- [previous]: /2012/07/06/optimal-tuple-i.html "Previously..."
+Now that we have a fine predicate, we can move on to sorting
+
+ [mappings]: /images/2012-10-20-optimal-tuple-ii-01.png 
+
+ [previous]: /cxx11/2012/07/06/optimal-tuple-i.html "Previously..."
 <!-- [next]: /xxxx/xx/xx/optimal-tuple-iii.html "To be continued..." -->
 
