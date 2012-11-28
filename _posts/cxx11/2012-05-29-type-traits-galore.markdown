@@ -256,6 +256,6 @@ using WithValueCategoryOf = Conditional<std::is_lvalue_reference<Source>,
                                     Destination>>;
 {% endhighlight %}
 
- [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html
+ [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html "boost::mpl::identity"
  [temporary-array]: http://stackoverflow.com/a/10624677/46642
 

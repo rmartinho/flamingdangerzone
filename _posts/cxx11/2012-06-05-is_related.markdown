@@ -118,5 +118,5 @@ And now the forwarding constructor can be written as follows:
 {% endhighlight %}
 
  [boost-optional]: http://www.boost.org/libs/optional/index.html 
- [bare types]: /2012/05/29/type-traits-galore.html
+ [bare types]: /cxx11/2012/05/29/type-traits-galore.html "More type traits"
 

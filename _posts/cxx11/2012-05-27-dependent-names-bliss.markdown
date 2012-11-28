@@ -161,5 +161,5 @@ example looks like this:
 UnderlyingType< RemoveReference< QuxTrait< T > > >
 {% endhighlight %}
 
- [typename]: http://stackoverflow.com/a/613132/46642
+ [typename]: http://stackoverflow.com/a/613132/46642 "Where and why do I have to put the “template” and “typename” keywords?"
 

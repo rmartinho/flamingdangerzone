@@ -240,7 +240,7 @@ instance of the *Single Responsibility Principle*):
 *Special thanks to [sehe][sehe] for taking the time for a thorough review of
 this post and several suggestions*
 
- [rule of three]: http://stackoverflow.com/q/4172722/46642
+ [rule of three]: http://stackoverflow.com/q/4172722/46642 "What is the Rule of Three?"
  [scoped_ptr]: http://www.boost.org/libs/smart_ptr/scoped_ptr.htm
  [auto_ptr]: http://en.cppreference.com/w/cpp/memory/auto_ptr
  [shared_ptr]: http://en.cppreference.com/w/cpp/memory/shared_ptr
