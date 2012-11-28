@@ -165,6 +165,7 @@ img {
 
 img.rss {
   position: relative;
+  max-width: 16px;
   margin: auto;
   margin-left: 10px;
   padding: 0px;
