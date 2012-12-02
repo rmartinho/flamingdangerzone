@@ -190,7 +190,7 @@ accumulator.
     template <typename T>
     struct alignof_indexed;
     template <typename T, std::size_t I>
-    struct alignof_indexed<indexed<T, I>> : std::alignment_of<T> {};
+    struct alignof_indexed<indexed<T, I>> : std::alignment_of<member<T>> {};
 
     template <typename T>
     struct max_alignment;
