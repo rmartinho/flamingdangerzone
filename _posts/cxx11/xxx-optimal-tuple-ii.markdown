@@ -52,12 +52,12 @@ compile-time list of integers. Some aliases may make it easier to work with
 these though.
 
 {% highlight cpp %}
-    template <std::size_t I, typename T>
-    using TupleElement = typename std::tuple_element<I, T>::type;
-    template <std::size_t I>
-    using index = std::integral_constant<std::size_t, I>;
-    template <std::size_t... I>
-    using indices = std::tuple<index<I>...>;
+template <std::size_t I, typename T>
+using TupleElement = typename std::tuple_element<I, T>::type;
+template <std::size_t I>
+using index = std::integral_constant<std::size_t, I>;
+template <std::size_t... I>
+using indices = std::tuple<index<I>...>;
 {% endhighlight %}
 
 As an example, the mappings for `my::tuple<layout<1>, layout<4>, layout<2>>`, on
@@ -73,75 +73,39 @@ we call the maps respectively the *optimal map* and the *optimal reverse map*.
 We need something that looks like this:
 
 {% highlight cpp %}
-    template <typename... T>
-    class optimal_order;
+template <typename... T>
+class optimal_order;
 
-    template <typename... T>
-    using OptimalMap = typename optimal_order<T...>::map;
-    template <typename... T>
-    using OptimalReverseMap = typename optimal_order<T...>::reverse_map;
+template <typename... T>
+using OptimalMap = typename optimal_order<T...>::map;
+template <typename... T>
+using OptimalReverseMap = typename optimal_order<T...>::reverse_map;
 {% endhighlight %}
 
 How can this be done? Let's start with something simpler: sorting the types by
-their alignment. A simple insertion sort will do fine for a first
-implementation.
+their alignment.
 
-#### Finding a predicate
+#### Not all alignments are born equal
 
-First, we need to define a binary predicate that defines the order we are
-looking for.
+Before we go any further, we need look to closer at how we will obtain the
+alignment of the types involved: there is an easily overlooked issue with
+references.
 
-This order depends on how the layout of the underlying `std::tuple`. I'll be
-leaving the detection of that for the build system. I think one might try to
-detect it with some reasonable assumptions and a bit of TMP, but I'm leaving
-that as an exercise for the reader.
-
-Let's assume our build system defines of the macros
-`MY_STD_TUPLE_LAYOUT_STRAIGHT` or `MY_STD_TUPLE_LAYOUT_REVERSED` according to
-how the standard library being used does the layout. These macros can then be
-used to decide to perform the actual comparisons with the arguments in reverse
-order when appropriate.
+`alignof(int&)` does not give us the alignment that a stored reference (as a member)
+will have, but instead it gives us the alignment of `int`. This may be the desirable
+result in a number of situations, but it is not what we want in this case if we
+have a tuple with references. We really want the alignment of the reference
+itself. To retrieve that, we can simulate a member and compute its alignment.
 
 {% highlight cpp %}
-    template <typename T, typename U>
-    struct layout_before_impl;
-
-    struct layout_before
-    #if defined(MY_STD_TUPLE_LAYOUT_STRAIGHT)
-    : layout_before_impl<T,U> {};
-    #elif defined(MY_STD_TUPLE_LAYOUT_REVERSED)
-    : layout_before_impl<U,T> {};
-    #endif
+template <typename T>
+struct member { T _; };
 {% endhighlight %}
 
-As we've seen on the previous post the optimal order places the members with the
-strictest alignment first. We can use `alignof` to do this comparison.
-
-{% highlight cpp %}
-    template <typename T, typename U>
-    struct layout_before_impl
-    : std::integral_constant<bool, (alignof(T) > alignof(U))> {};
-{% endhighlight %}
-
-This implementation is rather simple, but there are a few issues with it.
-One of them is that `alignof(int&)` does not give us the alignment that a
-stored reference (as a member) will have, but instead it gives us the alignment
-of `int`. This is not what we want if we have a tuple with references. Since we
-really want the alignment of a reference member, let's simulate a member and
-compute its alignment:
-
-{% highlight cpp %}
-    template <typename T>
-    struct member { T _; };
-
-    template <typename T, typename U>
-    struct layout_before_impl
-    : std::integral_constant<bool, (alignof(member<T>) > alignof(member<U>))> {};
-{% endhighlight %}
-
-This works because the compiler will have to layout `member<int&>` with the
-proper alignment for a reference member, and we can grab that alignment from the
-struct itself.
+The compiler will always layout `member<T>` with the proper layout for its
+member. It could use a stricter alignment than the member needs, but no
+reasonable implementation will do that. So, if we write `alignof(member<int&>)`
+we can grab an alignment value suitable for a reference member.
 
 #### Carrying all the info
 
@@ -150,11 +114,11 @@ need is to bundle all the information we need to carry around.  Just sorting the
 types is not enough because we need to know what was their original index.
 
 {% highlight cpp %}
-    template <typename T, std::size_t I>
-    struct indexed {
-        using type = T;
-        static constexpr auto index = I;
-    };
+template <typename T, std::size_t I>
+struct indexed {
+    using type = T;
+    static constexpr auto index = I;
+};
 {% endhighlight %}
 
 For this to work we need a way to make a list of these `indexed` types from our
@@ -165,7 +129,7 @@ we can sort this list.
 
 #### Sorting with linear complexity
 
-The types will be based on their alignment. One interesting property of those
+The order of the types will be based on their alignment. One interesting property of those
 alignments is that they are always powers of two. Not only this means there is a
 finite and rather small number of possible values, but it also means that we
 can know them all in advance.
@@ -185,58 +149,57 @@ first. That is something that is easily done with a little recursion with an
 accumulator.
 
 {% highlight cpp %}
-    // max<N...> left as an exercise for the reader
+// max<N...> left as an exercise for the reader
 
-    template <typename T>
-    struct alignof_indexed;
-    template <typename T, std::size_t I>
-    struct alignof_indexed<indexed<T, I>> : std::alignment_of<member<T>> {};
+template <typename T>
+struct alignof_indexed;
+template <typename T, std::size_t I>
+struct alignof_indexed<indexed<T, I>> : std::alignment_of<member<T>> {};
 
-    template <typename T>
-    struct max_alignment;
-    template <typename... T>
-    struct max_alignment<std::tuple<T...>> : max<alignof_indexed<T>::value...> {};
+template <typename T>
+struct max_alignment;
+template <typename... T>
+struct max_alignment<std::tuple<T...>> : max<alignof_indexed<T>::value...> {};
 {% endhighlight %}
 
-Now, we need to iterate over the alignments in a different direction, depending
-on how the standard library tuple we will be using behaves. We can use the
-macros the build system defines for us and encapsulate this different behaviour
-in a meta function. I think switching the iteration order requires more code
-than instead building our result in reverse, so I am going to switch the
-construction order of the result.
+Now, we need to iterate over the alignments and sequentially put the types with
+each alignment on one end of a list. The way we build this list depends on how
+the standard library tuple we will be using behaves. For this post I will
+assume an implementation like the one in libstdc++ that lays out the members in
+reverse order. If we iterate down from the largest alignment, we want to keep
+putting the types at the start of the list.
 
 {% highlight cpp %}
-    template <typename Head, typename Tail>
-    struct cons;
-    template <typename Head, typename... Tail>
-    struct cons<Head, std::tuple<Tail...>>
-    #if defined(MY_STD_TUPLE_LAYOUT_STRAIGHT)
-    : identity<std::tuple<Tail..., Head>> {}; // append at end
-    #elif defined(MY_STD_TUPLE_LAYOUT_REVERSED)
-    : identity<std::tuple<Head, Tail...>> {}; // append at start
-    #endif
+template <typename Head, typename Tail>
+struct cons;
+template <typename Head, typename... Tail>
+struct cons<Head, std::tuple<Tail...>>
+: identity<std::tuple<Head, Tail...>> {};
 
-    template <typename Head, typename Tail>
-    using Cons = typename cons<Head, Tail>::type;
+template <typename Head, typename Tail>
+using Cons = typename cons<Head, Tail>::type;
 {% endhighlight %}
+
+If we were using something like libc++ that lays the members in the same order
+as given, we could simply switch from prepending to appending.
 
 Next we can build a meta function that appends all types with a given alignment
 from a given type list into another type list. Nothing harder than the usual
 recursion over variadic parameter packs.
 
 {% highlight cpp %}
-    template <std::size_t Align, typename Acc, typename List>
-    struct cons_alignment : identity<Acc> {};
-    template <std::size_t Align, typename Acc, typename Head, typename... Tail>
-    struct cons_alignment<Align, Acc, std::tuple<Head, Tail...>>
-    : cons_alignment<
-        Align,
-        // append conditionally
-        Conditional<Bool<alignof_indexed<Head>::value == Align>, Cons<Head, Acc>, Acc>,
-        std::tuple<Tail...>> {};
+template <std::size_t Align, typename Acc, typename List>
+struct cons_alignment : identity<Acc> {};
+template <std::size_t Align, typename Acc, typename Head, typename... Tail>
+struct cons_alignment<Align, Acc, std::tuple<Head, Tail...>>
+: cons_alignment<
+    Align,
+    // append conditionally
+    Conditional<Bool<alignof_indexed<Head>::value == Align>, Cons<Head, Acc>, Acc>,
+    std::tuple<Tail...>> {};
 
-    template <std::size_t Align, typename Acc, typename List>
-    using ConsAlignment = typename cons_alignment<Align, Acc, List>::type;
+template <std::size_t Align, typename Acc, typename List>
+using ConsAlignment = typename cons_alignment<Align, Acc, List>::type;
 {% endhighlight %}
 
 And then sorting is simply a matter of iterating over all the alignments, down
@@ -244,36 +207,22 @@ from the maximum to 0. Since the alignments are powers of two, we just divide by
 two to go down one alignment.
 
 {% highlight cpp %}
-    template <std::size_t Align, typename Acc, typename List>
-    struct sort_impl
-    : sort_impl<Align / 2, ConsAlignment<Align, Acc, List>, List> {};
-    template <typename Acc, typename List>
-    struct sort_impl<0, Acc, List> : identity<Acc> {};
+template <std::size_t Align, typename Acc, typename List>
+struct sort_impl
+: sort_impl<Align / 2, ConsAlignment<Align, Acc, List>, List> {};
+template <typename Acc, typename List>
+struct sort_impl<0, Acc, List> : identity<Acc> {};
 
-    template <typename List>
-    struct sort : sort_impl<max_alignment<List>::value, std::tuple<>, List> {};
+template <typename List>
+struct sort : sort_impl<max_alignment<List>::value, std::tuple<>, List> {};
 
-    template <typename List>
-    using Sort : typename sort<List>::type;
+template <typename List>
+using Sort : typename sort<List>::type;
 {% endhighlight %}
-
-Turns out we did not need our predicate after all, because our sorting algorithm
-is not based on comparisons between elements. All we needed was the trick to get
-the alignment of a member reference.
 
 Now we can write `Sort<WithIndices<T...>>` and get the optimal map for a
-list of types.
-
-{% highlight cpp %}
-    template <typename... T>
-    class optimal_order {
-        using map = Sort<WithIndices<T...>>;
-        using reverse_map = /* on part 3 */;
-    }
-{% endhighlight %}
-
-The next step is to figure out how to build the reversed map from this, which I
-will explain in the next post on this series.
+list of types. The next step is to figure out how to build the map and the
+reversed map from this, which I will explain in the next post on this series.
 
  [mappings]: /images/2012-10-20-optimal-tuple-ii-01.png 
 
