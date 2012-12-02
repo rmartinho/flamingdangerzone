@@ -11,6 +11,9 @@ result in a sub-optimal layout, and how an optimal layout could be achieved.
 Now we'll see what an implementation of a tuple with such an optimal layout
 actually looks like.
 
+(Note: all this could have benefited from the Boost.MPL library, but I decided
+not to use it in order to expose more ideas)
+
 ### Tuples all the way down
 
 The main difficulty an implementation needs to overcome is the fact that the
@@ -220,11 +223,6 @@ using Sort : typename sort<List>::type;
 Now we can write `Sort<WithIndices<T...>>` and get the optimal map for a
 list of types. The next step is to figure out how to build the map and the
 reversed map from this, which I will explain in the next post on this series.
-
----
-
-*Note: all this could have benefited from the Boost.MPL library, but I decided
-not to use it in order to expose more ideas*
 
  [mappings]: /images/2012-10-20-optimal-tuple-ii-01.png 
 
