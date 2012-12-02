@@ -257,7 +257,11 @@ two to go down one alignment.
     using Sort : typename sort<List>::type;
 {% endhighlight %}
 
-And now we can write `Sort<WithIndices<T...>>` and get the optimal map for a
+Turns out we did not need our predicate after all, because our sorting algorithm
+is not based on comparisons between elements. All we needed was the trick to get
+the alignment of a member reference.
+
+Now we can write `Sort<WithIndices<T...>>` and get the optimal map for a
 list of types.
 
 {% highlight cpp %}
