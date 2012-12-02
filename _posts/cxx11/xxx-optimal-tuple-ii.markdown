@@ -143,9 +143,133 @@ This works because the compiler will have to layout `member<int&>` with the
 proper alignment for a reference member, and we can grab that alignment from the
 struct itself.
 
-#### 
+#### Carrying all the info
 
-Now that we have a fine predicate, we can move on to sorting
+Now that we have a fine predicate, we can move on to sorting. The first thing we
+need is to bundle all the information we need to carry around.  Just sorting the
+types is not enough because we need to know what was their original index.
+
+{% highlight cpp %}
+    template <typename T, std::size_t I>
+    struct indexed {
+        using type = T;
+        static constexpr auto index = I;
+    };
+{% endhighlight %}
+
+For this to work we need a way to make a list of these `indexed` types from our
+original list of types. So, let's say that we have an `WithIndices` alias that
+produces such a list of indexed types, i.e., `WithIndices<int, double, int>`
+produces `std::tuple<indexed<int, 0>, indexed<double, 1>, indexed<int, 2>>`. Now
+we can sort this list.
+
+#### Sorting with linear complexity
+
+The types will be based on their alignment. One interesting property of those
+alignments is that they are always powers of two. Not only this means there is a
+finite and rather small number of possible values, but it also means that we
+can know them all in advance.
+
+Knowing this means we can write a sorting algorithm that does the sorting with a
+linear number of template instantiations. That will certainly help with those
+compilation times.
+
+The algorithm can simply take all the types with each of the possible alignments
+in the proper order of alignments. The order between types with the same
+alignment is not relevant. This requires a number of passes equal to the number
+of possible alignments, and each pass goes through the list once, i.e., is
+linear.
+
+To iterate over all the possible alignments we can compute the maximum alignment
+first. That is something that is easily done with a little recursion with an
+accumulator.
+
+{% highlight cpp %}
+    // max<N...> left as an exercise for the reader
+
+    template <typename T>
+    struct alignof_indexed;
+    template <typename T, std::size_t I>
+    struct alignof_indexed<indexed<T, I>> : std::alignment_of<T> {};
+
+    template <typename T>
+    struct max_alignment;
+    template <typename... T>
+    struct max_alignment<std::tuple<T...>> : max<alignof_indexed<T>::value...> {};
+{% endhighlight %}
+
+Now, we need to iterate over the alignments in a different direction, depending
+on how the standard library tuple we will be using behaves. We can use the
+macros the build system defines for us and encapsulate this different behaviour
+in a meta function. I think switching the iteration order requires more code
+than instead building our result in reverse, so I am going to switch the
+construction order of the result.
+
+{% highlight cpp %}
+    template <typename Head, typename Tail>
+    struct cons;
+    template <typename Head, typename... Tail>
+    struct cons<Head, std::tuple<Tail...>>
+    #if defined(MY_STD_TUPLE_LAYOUT_STRAIGHT)
+    : identity<std::tuple<Tail..., Head>> {}; // append at end
+    #elif defined(MY_STD_TUPLE_LAYOUT_REVERSED)
+    : identity<std::tuple<Head, Tail...>> {}; // append at start
+    #endif
+
+    template <typename Head, typename Tail>
+    using Cons = typename cons<Head, Tail>::type;
+{% endhighlight %}
+
+Next we can build a meta function that appends all types with a given alignment
+from a given type list into another type list. Nothing harder than the usual
+recursion over variadic parameter packs.
+
+{% highlight cpp %}
+    template <std::size_t Align, typename Acc, typename List>
+    struct cons_alignment : identity<Acc> {};
+    template <std::size_t Align, typename Acc, typename Head, typename... Tail>
+    struct cons_alignment<Align, Acc, std::tuple<Head, Tail...>>
+    : cons_alignment<
+        Align,
+        // append conditionally
+        Conditional<Bool<alignof_indexed<Head>::value == Align>, Cons<Head, Acc>, Acc>,
+        std::tuple<Tail...>> {};
+
+    template <std::size_t Align, typename Acc, typename List>
+    using ConsAlignment = typename cons_alignment<Align, Acc, List>::type;
+{% endhighlight %}
+
+And then sorting is simply a matter of iterating over all the alignments, down
+from the maximum to 0. Since the alignments are powers of two, we just divide by
+two to go down one alignment.
+
+{% highlight cpp %}
+    template <std::size_t Align, typename Acc, typename List>
+    struct sort_impl
+    : sort_impl<Align / 2, ConsAlignment<Align, Acc, List>, List> {};
+    template <typename Acc, typename List>
+    struct sort_impl<0, Acc, List> : identity<Acc> {};
+
+    template <typename List>
+    struct sort : sort_impl<max_alignment<List>::value, std::tuple<>, List> {};
+
+    template <typename List>
+    using Sort : typename sort<List>::type;
+{% endhighlight %}
+
+And now we can write `Sort<WithIndices<T...>>` and get the optimal map for a
+list of types.
+
+{% highlight cpp %}
+    template <typename... T>
+    class optimal_order {
+        using map = Sort<WithIndices<T...>>;
+        using reverse_map = /* on part 3 */;
+    }
+{% endhighlight %}
+
+The next step is to figure out how to build the reversed map from this, which I
+will explain in the next post on this series.
 
  [mappings]: /images/2012-10-20-optimal-tuple-ii-01.png 
 

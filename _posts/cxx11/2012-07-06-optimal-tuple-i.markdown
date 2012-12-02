@@ -3,7 +3,7 @@ layout: post
 title: Size matters, part 1
 categories: cxx11
 short: where I explore the layout of tuples
-last_edit: 14 August 2012
+last_edit: 02 December 2012
 ---
 
 Variadic templates is one of the interesting new features in C++. It allows one
@@ -95,7 +95,8 @@ alignment first. If we do that here, the tuple can be stored using only 4 bytes:
 
 This strategy works because you can always place an object immediately after one
 with a stricter alignment: a multiple of 2<sup>n</sup> is a multiple of
-2<sup>n-1</sup> as well.
+2<sup>n-1</sup> as well and everything is a multiple of 2<sup>0</sup>
+(proof by induction left as an exercise for the reader).
 
 Turns out neither libstdc++ nor libc++ do this kind of optimization. libstdc++
 always places the members in reverse order, and libc++ always places the members
