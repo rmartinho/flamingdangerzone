@@ -217,8 +217,8 @@ template <typename List>
 using Sort : typename sort<List>::type;
 {% endhighlight %}
 
-Now we can write `Sort<WithIndices<T...>>` and get the optimal map for a
-list of types. The next step is to figure out how to build the map and the
+Now we can write `Sort<WithIndices<T...>>` and get the optimal layout order for
+a list of types. The next step is to figure out how to build the map and the
 reversed map from this, which I will explain in the next post on this series.
 
 ---
