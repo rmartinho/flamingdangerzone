@@ -109,9 +109,10 @@ we can grab an alignment value suitable for a reference member.
 
 #### Carrying all the info
 
-Now that we have a fine predicate, we can move on to sorting. The first thing we
-need is to bundle all the information we need to carry around.  Just sorting the
-types is not enough because we need to know what was their original index.
+Now that we can compute the proper alignments, we can move on to sorting. The
+first thing we need is to bundle all the information we need to carry around.
+Just sorting the types is not enough because we need to know what was their
+original index.
 
 {% highlight cpp %}
 template <typename T, std::size_t I>
