@@ -21,8 +21,8 @@ support Markdown syntax. A limited subset of HTML can be used instead.
 
 ### Intellectual property
 
-Unless otherwise mentioned, all content on this website is licensed under the
-[Creative Commons Attribution 3.0 Unported][cc-by] license.
+Except where otherwise noted, content on this site is licensed under a
+[Creative Commons Attribution 3.0 Unported License][cc-by].
 
 The favicon image is in the public domain.
 
