@@ -22,7 +22,7 @@ support Markdown syntax. A limited subset of HTML can be used instead.
 ### Intellectual property
 
 Unless otherwise mentioned, all content on this website is licensed under the
-[Creative Commons Attribution-ShareAlike 3.0 Unported][cc-by-sa] license.
+[Creative Commons Attribution 3.0 Unported][cc-by] license.
 
 The favicon image is in the public domain.
 
@@ -30,5 +30,5 @@ The favicon image is in the public domain.
  [sources]: http://github.com/rmartinho/rmartinho.github.com/
  [pages]: http://pages.github.com/
  [Disqus]: http://disqus.com/
- [cc-by-sa]: http://creativecommons.org/licenses/by-sa/3.0/ 
+ [cc-by]: http://creativecommons.org/licenses/by/3.0/ 
 
