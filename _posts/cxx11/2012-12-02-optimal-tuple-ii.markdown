@@ -218,7 +218,7 @@ template <typename List>
 struct sort : sort_impl<max_alignment<List>::value, std::tuple<>, List> {};
 
 template <typename List>
-using Sort : typename sort<List>::type;
+using Sort = typename sort<List>::type;
 {% endhighlight %}
 
 Now we can write `Sort<WithIndices<T...>>` and get the optimal layout for a
