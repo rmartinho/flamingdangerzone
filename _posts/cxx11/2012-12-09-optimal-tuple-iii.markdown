@@ -8,9 +8,37 @@ short: where I abuse overload resolution for fun and profit
 In [part 2][previous] we got our types sorted properly for optimal layout. The
 next step is building the mappings to and from the storage indices.
 
+Before we start, I need to make clear what these mappings are. The code can be
+quite confusing and difficult to follow without a clear idea of this.
+
+When we have a call like `get<0>(some_tuple)` we need to know where in the
+storage is the element 0, since we may have relocated it to get our optimal
+layout. In the picture below, we can see an example where the element 0 is at
+position 1 in storage. We need to map index 0 from the interface to index 1 in
+the storage.
+
+![Mapping from interface to storage][mapping1]
+
+That would mean that our representation of this map, being merely a list of
+indices, would store in position 0 the value 1: `indices<1, x, y, z>`. Applying
+the same logic to the other elements, we would have `indices<1,3,2,0>`. 
+
+This map is not enough, though. If we have a call to `make_tuple(a, b, c, d)`,
+we need to rearrange these arguments to place each one at the appropriate spot.
+To call the constructor for the tuple that we use for storage, we need to figure
+out which of those arguments to place at index 0, so we can pass it as the first
+argument of that constructor.
+
+![Mapping from storage to interface][mapping2]
+
+The picture shows that at index 0 we would place the object that was given at
+position 3. The previous map does not readily provide this information. We need
+one that has a 3 at position 0, and so on for the other elements. For this
+example, that map would be `indices<3,0,2,1>`.
+
 ### Mapping from storage to interface
 
-After sorting, we are facing a type list that might look like the following.
+After sorting, we have type list that might look like the following.
 
 {% highlight cpp %}
 using sorted_example = std::tuple<
@@ -30,7 +58,7 @@ format.
 So far we needed to carry the types and indices together, and now we need to
 split them. Variadic templates actually make this task pretty easy. We can
 simply do some pattern matching in a partial specialization and take the two
-parameter packs at once. Then pack them separately in two different types.
+parameter packs at once. Then we repack them separately in two different types.
 
 {% highlight cpp %}
 template <typename List>
@@ -50,22 +78,20 @@ class optimal_order {
 
 template <typename... T>
 using Storage = typename optimal_order<std::tuple<T...>>::tuple;
+
 template <typename... T>
-using MapToInterface = typename optimal_order<std::tuple<T...>>::to_interface;
+using MapToInterface =
+typename optimal_order<std::tuple<T...>>::to_interface;
+
 template <typename... T>
-using MapToStorage = typename optimal_order<std::tuple<T...>>::to_storage;
+using MapToStorage =
+typename optimal_order<std::tuple<T...>>::to_storage;
 {% endhighlight %}
 
-One map down, one to go. The other map is a bit trickier. For each position *p*
-in that map we need to find at which index it is in the map to storage. In our
-example above, the map to storage is `indices<1,3,2,0>`. It has a 1 in position 0.
-That means the map to interface will have a 0 in position 1. The whole map needs
-to be `indices<3,0,2,1>`.
-
-We could implement this by simply searching for the position of each index and
-iterate over all indices. This would result in O(N<sup>2</sup>) template
-instantiations, but we can avoid that and keep everything compiling with linear
-instantiations.
+One map down, one to go. The other map is a bit trickier. We could implement it
+by simply searching for the position of each index in the map we already built.
+A naive approach would result in O(N<sup>2</sup>) template instantiations, but
+we can avoid that and keep everything compiling with linear instantiations.
 
 ### Convincing overload resolution to do our work for us
 
@@ -78,7 +104,7 @@ some template parameters explicit. We can take advantage of this to do our
 search and don't need to write our own with recursive template instantiations.
          
 For this to work, we need a type that derives from all the candidates for our
-search. That is not difficult to fabricate using variadic templates.
+search. That is not difficult to produce using variadic templates.
 
 {% highlight cpp %}
 template <typename List>
@@ -90,6 +116,10 @@ struct inherit_all<std::tuple<T...>> : T... {};
 We will use only our empty TMP types, so we can inherit from them directly. If
 there was a possibly of having fundamental types, references, etc, we would need
 some sort of wrapper because we cannot inherit from those.
+
+I should also note that there is no risk for ambiguity here: we know for certain
+that all types are different specializations of `indexed` and each one has a
+different index.
 
 Now we need a function template that accepts all our candidates. Those
 candidates need to carry around their positions in the map we have already
@@ -142,7 +172,7 @@ template <typename List>
 class optimal_order {
     //using sorted = ...;
     // ...
-    using to_storage = typename map_to_storage<List>::type;
+    using to_storage = typename map_to_storage<WithIndices<sorted>>::type;
 };
 {% endhighlight %}
 
@@ -151,6 +181,9 @@ class optimal_order {
 And we finally have enough machinery in place to start the actual tuple class.
 So far everything was done on the metaprogramming level, but the next post in
 this series will finally involve a bit at the "regular" program level.
+
+ [mapping1]: /images/2012-12-09-optimal-tuple-iii-01.png 
+ [mapping2]: /images/2012-12-09-optimal-tuple-iii-02.png 
 
  [previous]: /cxx11/2012/12/02/optimal-tuple-ii.html "Previously..."
 <!-- [next]: /cxx11/2012/12/16/optimal-tuple-iv.html "To be continued..." -->
