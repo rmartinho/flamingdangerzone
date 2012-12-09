@@ -25,9 +25,11 @@ This type contains information about the order of the types, which we will need
 to define a `std::tuple` for storage; and also the indices for the map from the
 storage indices to the interface indices, which we will need to write
 `make_tuple`. We just need to extract this information into a more appropriate
-format. So far we needed to carry the types and indices together, and now we
-need to split them. Variadic templates actually make this task pretty easy. We
-can simply do some pattern matching in a partial specialization and take the two
+format.
+
+So far we needed to carry the types and indices together, and now we need to
+split them. Variadic templates actually make this task pretty easy. We can
+simply do some pattern matching in a partial specialization and take the two
 parameter packs at once. Then pack them separately in two different types.
 
 {% highlight cpp %}

@@ -3,7 +3,7 @@ layout: post
 title: Size matters, part 2
 categories: cxx11
 short: where I sort types for optimal layout 
-last_edit: 04 December 2012
+last_edit: 09 December 2012
 ---
 
 On [part 1][previous] we saw how two common `std::tuple` implementations could
