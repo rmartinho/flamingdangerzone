@@ -36,7 +36,7 @@ position 3. The previous map does not readily provide this information. We need
 one that gives us a 3 in position 0, and so on for the other elements. For this
 example, that map would be `indices<3,0,2,1>`.
 
-### Mapping from storage to interface
+### Mapping from interface to storage
 
 After sorting, we have a type list that might look like the following.
 
@@ -51,7 +51,7 @@ using sorted_example = std::tuple<
 
 This type contains information about the order of the types, which we will need
 to define a `std::tuple` for storage; and also the indices for the map from the
-storage indices to the interface indices, which we will need to write `get`. We
+interface indices to the storage indices, which we will need to write `get`. We
 just need to extract this information into a more appropriate format.
 
 So far we needed to carry the types and indices together, and now we need to
@@ -71,16 +71,12 @@ template <typename List>
 class optimal_order {
     using sorted = Sort<WithIndices<List>>;
     using tuple = typename split<sorted>::tuple;
-    using to_interface = typename split<sorted>::map;
-    //using to_storage = ...;
+    using to_storage = typename split<sorted>::map;
+    //using to_interface = ...;
 };
 
 template <typename... T>
 using Storage = typename optimal_order<std::tuple<T...>>::tuple;
-
-template <typename... T>
-using MapToInterface =
-typename optimal_order<std::tuple<T...>>::to_interface;
 
 template <typename... T>
 using MapToStorage =
@@ -162,17 +158,21 @@ given tuple. I will leave that as an exercise for the reader.
 
 {% highlight cpp %}
 template <typename List, typename Indices = IndicesFor<List>>
-struct map_to_storage;
+struct map_to_interface;
 template <typename List, std::size_t... I>
-struct map_to_storage<List, indices<I...>>
+struct map_to_interface<List, indices<I...>>
 : identity<indices<find_index<I, List>::value...>> {};
 
 template <typename List>
 class optimal_order {
     //using sorted = ...;
     // ...
-    using to_storage = typename map_to_storage<WithIndices<sorted>>::type;
+    using to_interface = typename map_to_interface<WithIndices<sorted>>::type;
 };
+
+template <typename... T>
+using MapToInterface =
+typename optimal_order<std::tuple<T...>>::to_interface;
 {% endhighlight %}
 
 ### The lower level
