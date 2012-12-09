@@ -33,12 +33,12 @@ argument of that constructor.
 
 The picture shows that at index 0 we would place the object that was given at
 position 3. The previous map does not readily provide this information. We need
-one that has a 3 at position 0, and so on for the other elements. For this
+one that gives us a 3 in position 0, and so on for the other elements. For this
 example, that map would be `indices<3,0,2,1>`.
 
 ### Mapping from storage to interface
 
-After sorting, we have type list that might look like the following.
+After sorting, we have a type list that might look like the following.
 
 {% highlight cpp %}
 using sorted_example = std::tuple<
