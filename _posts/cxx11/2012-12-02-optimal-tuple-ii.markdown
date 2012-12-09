@@ -125,7 +125,7 @@ struct indexed {
 
 For this to work we need a way to make a list of these `indexed` types from our
 original list of types. So, let's say that we have an `WithIndices` alias that
-produces such a list of indexed types, i.e., `WithIndices<int, double, int>`
+produces such a list of indexed types, i.e., `WithIndices<std::tuple<int, double, int>>`
 produces `std::tuple<indexed<int, 0>, indexed<double, 1>, indexed<int, 2>>`. Now
 we can sort this list.
 
@@ -222,12 +222,13 @@ template <typename List>
 using Sort = typename sort<List>::type;
 {% endhighlight %}
 
-Now we can write `Sort<WithIndices<T...>>` and get the optimal layout for a
+Now we can write `Sort<WithIndices<List>>` and get the optimal layout for a
 list of types. The next step is to figure out how to build the map and the
-reversed map from this, which I will explain in the next post on this series.
+reversed map from this, which I will explain in [the next post][next] on this
+series.
 
  [mappings]: /images/2012-10-20-optimal-tuple-ii-01.png 
 
  [previous]: /cxx11/2012/07/06/optimal-tuple-i.html "Previously..."
-<!-- [next]: /xxxx/xx/xx/optimal-tuple-iii.html "To be continued..." -->
+ [next]: /cxx11/2012/12/09/optimal-tuple-iii.html "To be continued..."
 
