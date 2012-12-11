@@ -143,11 +143,11 @@ arguments appropriately shuffled according to one of our maps.
 
 ---
 
-<a id="footnote_1" href="#reference_1"><sup>1</sup></a>
-There is currently a bug in GCC 4.7.2 that makes it impossible to carry a pack
-of indices as a tuple, so it may be necessary to use a few workarounds. One
-alternative involves using a custom type to pack the indices and a
-specialization of `std::tuple_element` for that type.
+<a id="footnote_1" href="#reference_1"><sup>1</sup></a> There is currently a bug
+in GCC 4.7.2 that makes it impossible to carry a pack of indices as a tuple, so
+it may be necessary to use a few workarounds. One alternative involves using a
+custom type to pack the indices and a specialization of `std::tuple_element` for
+that type.
 
  [tuple reference]: http://en.cppreference.com/w/cpp/utility/tuple "std::tuple reference"
  [constructors]: http://en.cppreference.com/w/cpp/utility/tuple/tuple "std::tuple constructors"
@@ -158,5 +158,4 @@ specialization of `std::tuple_element` for that type.
  [tuple_element]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_element "std::tuple_element"
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
  [next]: /cxx11/2012/12/23/optimal-tuple-v.html "To be continued..."
-
 
