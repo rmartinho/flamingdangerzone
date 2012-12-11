@@ -157,8 +157,81 @@ the indices and a specialization of `std::tuple_element` for that type.
 ### Shuffle and forward
 
 As should be obvious by now, we will need some way to forward a pack of
-arguments appropriately shuffled according to one of our maps. This can be done
-but expanding `get<I>` where `I` is a variadic pack of indices with our map.
+arguments appropriately shuffled according to one of our maps.
+
+Recall that our maps are just packs of indices. With a pack of indices as a
+variadic template parameter pack we can simply expand to `std::get<I>` or
+similar and we have all the elements in the desired order. For that to work we
+also need to have the arguments as a tuple. We will assume it is a tuple of
+references because we want perfect forwarding all over (i.e. it will be the
+result of `std::forward_as_tuple`).
+
+Let's start by writing a helper function that forwards the element at a given
+index.
+
+{% highlight cpp %}
+template <std::size_t I, typename Tuple>
+TupleElement<I, Unqualified<Tuple>> forward_index(Tuple&& t) {
+    return std::forward<TupleElement<I, Unqualified<Tuple>>>(
+               std::get<I>(t));
+}
+{% endhighlight %}
+
+The `Unqualified` alias here is the same as the `Bare` alias described in [one
+of the first posts][bare types], but I find "unqualified" is a much more
+descriptive name. We need this here because `std::tuple_element` does not accept
+references to tuples.
+
+We cannot directly use `get` because the value category of its return type
+depends on the value category of the tuple passed in: if we pass it a tuple
+lvalue, it will always return lvalues, even if the element is an rvalue
+reference[<sup id="ref2">2</sup>][ftn2]. Note that this could happen even if we
+perfectly forwarded `t`, because that could be an lvalue. That's why we don't
+care, pass an lvalue anyway, and then fix that by forwarding when returning.
+
+Our function to shuffle and forward a tuple will need to return the shuffled
+tuple. It is rather easy to make an alias to compute that shuffled tuple for the
+return type, and together with `forward_index` writing the entire function is
+easy: we just need to forward the element at each index given in the map into a
+new tuple of references.
+
+{% highlight cpp %}
+template <typename Tuple, std::size_t... I>
+using ShuffleTuple = std::tuple<TupleElement<I, Tuple>...>;
+
+template <std::size_t... I, typename Tuple>
+ShuffleTuple<Tuple, I...> forward_shuffled_tuple(indices<I...>, Tuple&& t) {
+    return std::forward_as_tuple(forward_index<I>(t)...);
+}
+{% endhighlight %}
+
+Since we will need this for the tuple constructors as well, let us write a
+version that takes the arguments as a variadic pack, instead of a tuple. All it
+needs to do is to forward them as a tuple into the function above.
+
+{% highlight cpp %}
+template <std::size_t... I, typename... T>
+ShuffleTuple<std::tuple<T&&...>, I...> forward_shuffled(indices<I...> map, T&&... t) {
+    return forward_shuffled_tuple(map, std::forward<T>(t)...);
+}
+{% endhighlight %}
+
+There is one important thing to note in the return type. We cannot use
+`std::tuple<T...>`, because when, for example, we pass in an int rvalue, `T` is
+deduced as `int`, not as `int&&` (and `T&&` becomes `int&&`). So we use
+`std::tuple<T&&...>` to make sure we have a tuple of references and the
+reference collapsing rules make sure the references are of the right kind.
+
+---
+
+[2][ref2]<a id="ftn2"> </a>There is a shorter implementation of `forward_index`,
+but I think it is a bit more cryptic so I prefer the longer, clearer one. I will
+leave this shorter implementation as an exercise (hint: it involves another
+overload of `std::get` and reference collapsing).
+
+ [ftn2]: #ftn2
+ [ref2]: #ref2
+ [bare types]: /cxx11/2012/05/29/type-traits-galore.html#bare_types "Bare types"
 
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
  [next]: /cxx11/2012/12/23/optimal-tuple-v.html "To be continued..."
