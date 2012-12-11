@@ -118,7 +118,7 @@ declare it a friend of our tuple.
 When we have a call like `get<I>(t)`, we need to map `I` to a storage index and
 then just call the `std::get` on that index. For that we can use `tuple_element`
 on the map we computed since our maps are actually tuples
-[<sup id="ref1">1</sup>][ftn1]. That leaves us with the following
+[<sup id="ref1">&dagger;</sup>][ftn1]. That leaves us with the following
 implementations.
 
 {% highlight cpp %}
@@ -146,7 +146,7 @@ interface indices on the interface.
 
 ---
 
-[1][ref1]<a id="ftn1"> </a>There is currently a bug in GCC 4.7.2 that causes
+[&dagger;][ref1]<a id="ftn1"> </a>There is currently a bug in GCC 4.7.2 that causes
 trouble for carrying a pack of indices as a `std::tuple`, so it may be necessary
 to use a few workarounds. One alternative involves using a custom type to pack
 the indices and a specialization of `std::tuple_element` for that type.
@@ -185,9 +185,10 @@ references to tuples.
 We cannot directly use `get` because the value category of its return type
 depends on the value category of the tuple passed in: if we pass it a tuple
 lvalue, it will always return lvalues, even if the element is an rvalue
-reference[<sup id="ref2">2</sup>][ftn2]. Note that this could happen even if we
-perfectly forwarded `t`, because that could be an lvalue. That's why we don't
-care, pass an lvalue anyway, and then fix that by forwarding when returning.
+reference[<sup id="ref2">&dagger;</sup>][ftn2]. Note that this could happen even
+if we perfectly forwarded `t`, because that could be an lvalue. Here I don't
+care, pass an lvalue anyway, and then fix that when forwarding to the return
+value.
 
 Our function to shuffle and forward a tuple will need to return the shuffled
 tuple. It is rather easy to make an alias to compute that shuffled tuple for the
@@ -224,7 +225,7 @@ reference collapsing rules make sure the references are of the right kind.
 
 ---
 
-[2][ref2]<a id="ftn2"> </a>There is a shorter implementation of `forward_index`,
+[&dagger;][ref2]<a id="ftn2"> </a>There is a shorter implementation of `forward_index`,
 but I think it is a bit more cryptic so I prefer the longer, clearer one. I will
 leave this shorter implementation as an exercise (hint: it involves another
 overload of `std::get` and reference collapsing).
