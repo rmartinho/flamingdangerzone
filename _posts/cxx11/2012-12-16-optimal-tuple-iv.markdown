@@ -67,12 +67,11 @@ public:
 
 The [interface of a standard tuple][tuple reference] is pretty big, but there
 are only a few members that require special attention in terms of
-implementation. They vary from dead simple to pain in the mikta. If we take a
-look at it we can see that most members are actually [constructors]. There's
-very little to do with a tuple other than constructing and accessing elements.
-Some important parts of the interface are provided as non-member functions
-([`get`][get], three [factories], [relational operators], and
- [`tuple_cat`][tuple_cat]). And then we have the type traits like
+implementation. If we take a look at it we can see that most members are
+actually [constructors]. There's very little to do with a tuple other than
+constructing and accessing elements.  Some important parts of the interface are
+provided as non-member functions ([`get`][get], three [factories], [relational
+operators], and [`tuple_cat`][tuple_cat]). And then we have the type traits like
 [`std::tuple_element`][tuple_element] that we will want to specialize in the
 `std` namespace.
 
