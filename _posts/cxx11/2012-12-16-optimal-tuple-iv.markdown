@@ -109,8 +109,8 @@ declare it a friend of our tuple.
 
 When we have a call like `get<I>(t)`, we need to map `I` to a storage index and
 then just call the `std::get` on that index. For that we can use `tuple_element`
-on the map we computed since our maps are actually tuples<a id="reference_1"
-href="#footnote_1"><sup>1</sup></a>. That leaves us with the following
+on the map we computed since our maps are actually tuples
+[<sup id="ref1">1</sup>][ftn1]. That leaves us with the following
 implementations.
 
 {% highlight cpp %}
@@ -143,11 +143,13 @@ arguments appropriately shuffled according to one of our maps.
 
 ---
 
-<a id="footnote_1" href="#reference_1"><sup>1</sup></a> There is currently a bug
-in GCC 4.7.2 that makes it impossible to carry a pack of indices as a tuple, so
-it may be necessary to use a few workarounds. One alternative involves using a
-custom type to pack the indices and a specialization of `std::tuple_element` for
-that type.
+[1][ref1]<a id="ftn1"> </a>There is currently a bug in GCC 4.7.2 that causes
+trouble for carrying a pack of indices as a `std::tuple`, so it may be necessary
+to use a few workarounds. One alternative involves using a custom type to pack
+the indices and a specialization of `std::tuple_element` for that type.
+
+ [ftn1]: #ftn1
+ [ref1]: #ref1
 
  [tuple reference]: http://en.cppreference.com/w/cpp/utility/tuple "std::tuple reference"
  [constructors]: http://en.cppreference.com/w/cpp/utility/tuple/tuple "std::tuple constructors"
