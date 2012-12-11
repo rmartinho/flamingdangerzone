@@ -69,20 +69,23 @@ look at it we can see that most members are actually [constructors]. There's
 very little to do with a tuple other than constructing and accessing elements.
 Some important parts of the interface are provided as non-member functions
 ([`get`][get], three [factories], [relational operators], and
- [`tuple_cat`][tuple_cat]).
+ [`tuple_cat`][tuple_cat]). And then we have the type traits like
+[`std::tuple_element`][tuple_element] that we will want to specialize in the
+`std` namespace.
 
 Let's go through all of the members and non-members to get a general overview of
 their implementations.
 
 - The default constructor is dead simple: default constructing the storage works
 fine, so the compiler generated one is ok;
-- the two variadic constructors require mapping from storage to interface, just
-like `make_tuple`;
+- the two variadic constructors can delegated to the `std::tuple` constructors
+by mapping from storage to interface;
 - the copy and move constructors, as well as the copy and move assignment
 operators can be compiler generated, since the underlying tuple already does all
 the work;
 - the constructors or assignment operators that convert from tuples with
-different types can use our map from storage to interface indices;
+different types can delegate to the `std::tuple` constructor using our map from
+storage to interface indices;
 - the uses-allocator constructors are similar to their respective regular
 constructors;
 - the factories can be simply implemented by delegating to the constructor of
@@ -92,6 +95,59 @@ the right tuple types; our tuple does not give a big advantage for `tie` and
 complicated mappings and will be the subject of a later post;
 - `get` is to use our interface to storage mappings;
 - everything else can be simply delegated to the underlying standard tuple.
+
+As we can see, there a couple of trivial directly delegating implementations,
+some that delegate with a map from interface to storage, some that delegate
+with a map from storage to interface, and then there's `std::tuple_cat`.
+
+### Element access
+
+Let's skip all the trivial stuff and start with the simplest non-trivial one:
+`get`. There are three overloads, for different kinds of reference: `&`, `&&`,
+and `const&`. This function will need access to the underlying tuple, so we will
+declare it a friend of our tuple.
+
+When we have a call like `get<I>(t)`, we need to map `I` to a storage index and
+then just call the `std::get` on that index. For that we can use `tuple_element`
+on the map we computed since our maps are actually tuples<a id="reference_1"
+href="#footnote_1"><sup>1</sup></a>. That leaves us with the following
+implementations.
+
+{% highlight cpp %}
+template <std::size_t I, typename... T>
+using ToStorageIndex = TupleElement<I, MapToStorage<T...>>;
+
+template <std::size_t I, typename... T>
+TupleElement<I, tuple<T...>>& get(tuple<T...>& t) noexcept {
+    return std::get<ToStorageIndex<I, T...>::value>(t);
+    // std::get will access the private base; we are with friends here!
+}
+template <std::size_t I, typename... T>
+TupleElement<I, tuple<T...>>&& get(tuple<T...>&& t) noexcept {
+    return std::get<ToStorageIndex<I, T...>::value>(std::move(t));
+    // we need to get an rvalue reference, so we use std::move
+}
+template <std::size_t I, typename... T>
+TupleElement<I, tuple<T...>> const& get(tuple<T...> const& t) noexcept {
+    return std::get<ToStorageIndex<I, T...>::value>(t);
+}
+{% endhighlight %}
+
+Note how the return types don't need to map anything: we always want to use the
+interface indices on the interface.
+
+### Shuffle and forward
+
+As should be obvious by now, we will need some way to forward a pack of
+arguments appropriately shuffled according to one of our maps.
+
+---
+
+<a id="footnote_1" href="#reference_1"><sup>1</sup></a>
+There is currently a bug in GCC 4.7.2 that makes it impossible to carry a pack
+of indices as a tuple, so it may be necessary to use a few workarounds. One
+alternative involves using a custom type to pack the indices and a
+specialization of `std::tuple_element` for that type.
 
  [tuple reference]: http://en.cppreference.com/w/cpp/utility/tuple "std::tuple reference"
  [constructors]: http://en.cppreference.com/w/cpp/utility/tuple/tuple "std::tuple constructors"
