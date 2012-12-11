@@ -100,6 +100,14 @@ As we can see, there a couple of trivial directly delegating implementations,
 some that delegate with a map from interface to storage, some that delegate
 with a map from storage to interface, and then there's `std::tuple_cat`.
 
+ [tuple reference]: http://en.cppreference.com/w/cpp/utility/tuple "std::tuple reference"
+ [constructors]: http://en.cppreference.com/w/cpp/utility/tuple/tuple "std::tuple constructors"
+ [get]: http://en.cppreference.com/w/cpp/utility/tuple/get "std::get"
+ [factories]: http://en.cppreference.com/w/cpp/utility/tuple/tie "e.g. std::tie"
+ [relational operators]: http://en.cppreference.com/w/cpp/utility/tuple/operator_cmp "std::tuple relational operators"
+ [tuple_cat]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_cat "std::tuple_cat"
+ [tuple_element]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_element "std::tuple_element"
+
 ### Element access
 
 Let's skip all the trivial stuff and start with the simplest non-trivial one:
@@ -136,11 +144,6 @@ TupleElement<I, tuple<T...>> const& get(tuple<T...> const& t) noexcept {
 Note how the return types don't need to map anything: we always want to use the
 interface indices on the interface.
 
-### Shuffle and forward
-
-As should be obvious by now, we will need some way to forward a pack of
-arguments appropriately shuffled according to one of our maps.
-
 ---
 
 [1][ref1]<a id="ftn1"> </a>There is currently a bug in GCC 4.7.2 that causes
@@ -151,13 +154,12 @@ the indices and a specialization of `std::tuple_element` for that type.
  [ftn1]: #ftn1
  [ref1]: #ref1
 
- [tuple reference]: http://en.cppreference.com/w/cpp/utility/tuple "std::tuple reference"
- [constructors]: http://en.cppreference.com/w/cpp/utility/tuple/tuple "std::tuple constructors"
- [get]: http://en.cppreference.com/w/cpp/utility/tuple/get "std::get"
- [factories]: http://en.cppreference.com/w/cpp/utility/tuple/tie "e.g. std::tie"
- [relational operators]: http://en.cppreference.com/w/cpp/utility/tuple/operator_cmp "std::tuple relational operators"
- [tuple_cat]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_cat "std::tuple_cat"
- [tuple_element]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_element "std::tuple_element"
+### Shuffle and forward
+
+As should be obvious by now, we will need some way to forward a pack of
+arguments appropriately shuffled according to one of our maps. This can be done
+but expanding `get<I>` where `I` is a variadic pack of indices with our map.
+
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
  [next]: /cxx11/2012/12/23/optimal-tuple-v.html "To be continued..."
 
