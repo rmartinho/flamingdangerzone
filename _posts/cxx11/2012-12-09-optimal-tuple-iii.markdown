@@ -3,7 +3,6 @@ layout: post
 title: Size matters, part 3
 categories: cxx11
 short: where I abuse overload resolution for fun and profit
-last_edit: 16 December 2012
 ---
 
 In [part 2][previous] we got our types sorted properly for optimal layout. The
@@ -180,7 +179,7 @@ typename optimal_order<std::tuple<T...>>::to_interface;
 
 And we finally have enough machinery in place to start the actual tuple class.
 So far everything was done on the metaprogramming level, but
-[the next post][next] in this series will finally involve a bit at the
+[the next post] in this series will finally involve a bit at the
 "regular" program level.
 
  [mapping1]: /images/2012-12-09-optimal-tuple-iii-01.png 
