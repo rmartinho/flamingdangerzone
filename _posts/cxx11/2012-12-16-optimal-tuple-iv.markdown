@@ -3,6 +3,7 @@ layout: post
 title: Size matters, part 4
 categories: cxx11
 short: still don't know what this is about
+published: false
 ---
 
 Now that we can [map all indices back and forth][previous] between the interface
@@ -167,35 +168,10 @@ also need to have the arguments as a tuple. We will assume it is a tuple of
 references because we want perfect forwarding all over (i.e. it will be the
 result of `std::forward_as_tuple`).
 
-Let's start by writing a helper function that forwards the element at a given
-index.
-
-{% highlight cpp %}
-template <std::size_t I, typename Tuple>
-TupleElement<I, Unqualified<Tuple>> forward_index(Tuple&& t) {
-    return std::forward<TupleElement<I, Unqualified<Tuple>>>(
-               std::get<I>(t));
-}
-{% endhighlight %}
-
-The `Unqualified` alias here is the same as the `Bare` alias described in [one
-of the first posts][bare types], but I find "unqualified" is a much more
-descriptive name. We need this here because `std::tuple_element` does not accept
-references to tuples.
-
-We cannot directly use `get` because the value category of its return type
-depends on the value category of the tuple passed in: if we pass it a tuple
-lvalue, it will always return lvalues, even if the element is an rvalue
-reference[<span id="ref2">&dagger;</span>][ftn2]. Note that this could happen even
-if we perfectly forwarded `t`, because that could be an lvalue. Here I don't
-care, pass an lvalue anyway, and then fix that when forwarding to the return
-value.
-
-Our function to shuffle and forward a tuple will need to return the shuffled
+This function to shuffle and forward a tuple will need to return the shuffled
 tuple. It is rather easy to make an alias to compute that shuffled tuple for the
-return type, and together with `forward_index` writing the entire function is
-easy: we just need to forward the element at each index given in the map into a
-new tuple of references.
+return type. Then we just need to forward the element at each index given in the
+map into a new tuple of references.
 
 {% highlight cpp %}
 template <typename Tuple, std::size_t... I>
@@ -203,7 +179,7 @@ using ShuffleTuple = std::tuple<TupleElement<I, Tuple>...>;
 
 template <std::size_t... I, typename Tuple>
 ShuffleTuple<Tuple, I...> forward_shuffled_tuple(indices<I...>, Tuple&& t) {
-    return std::forward_as_tuple(forward_index<I>(t)...);
+    return std::forward_as_tuple(std::get<I>(std::forward<Tuple>(t))...);
 }
 {% endhighlight %}
 
@@ -279,8 +255,8 @@ static_assert(std::is_same<decltype(t), std::tuple<int&, int>,
 {% endhighlight %}
 
 To get this for our version of `make_tuple` we need to write a trait that turns
-`reference_wrapper<T>` into `T&` and leaves all other types unchanged. That's
-not terribly complicated.
+`reference_wrapper<T>` into `T&` and that decays all other types into value
+types.
 
 {% highlight cpp %}
 template <typename T>
@@ -292,7 +268,9 @@ struct unwrap_reference<std::reference_wrapper<T>>
 : identity<T&> {};
 
 template <typename T>
-using UnwrapReference = typename unwrap_reference<T>::type;
+struct decay_reference : unwrap_reference<Decay<T>> {};
+template <typename T>
+using DecayReference = typename decay_reference<T>::type;
 {% endhighlight %}
 
 With this writing `make_tuple` is now very simple. Reference wrappers convert
@@ -301,11 +279,10 @@ return type needs to be right.
 
 {% highlight cpp %}
 template <typename... T>
-tuple<UnwrapReference<Decay<T>>...> make_tuple(T&&... t) {
-    return tuple<UnwrapReference<Decay<T>>...>(std::forward<T>(t)...);
+tuple<DecayReference<T>...> make_tuple(T&&... t) {
+    return tuple<DecayReference<T>...>(std::forward<T>(t)...);
 }
 {% endhighlight %}
-
 
  [make_tuple]: http://en.cppreference.com/w/cpp/utility/tuple/make_tuple "std::make_tuple reference"
 
