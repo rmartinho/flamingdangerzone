@@ -264,7 +264,7 @@ overload of `std::get` and reference collapsing).
  [ref2]: #ref2
  [bare types]: /cxx11/2012/05/29/type-traits-galore.html#bare_types "Bare types"
 
-### Dealing with `reference_wrapper`s
+### Dealing with reference wrappers
 
 We are almost done with the non-boring work. I will just make a short stop to
 talk about [`make_tuple`][make_tuple]. As can be read in the documentation,
@@ -300,7 +300,9 @@ template <typename T>
 using UnwrapReference = typename unwrap_reference<T>::type;
 {% endhighlight %}
 
-With this writing `make_tuple` is now very simple.
+With this writing `make_tuple` is now very simple. Reference wrappers convert
+implicitly to references, so we can simply forward them directly; only the
+return type needs to be right.
 
 {% highlight cpp %}
 template <typename... T>
@@ -308,6 +310,7 @@ tuple<UnwrapReference<Decay<T>>...> make_tuple(T&&... t) {
     return tuple<UnwrapReference<Decay<T>>...>(std::forward<T>(t)...);
 }
 {% endhighlight %}
+
 
  [make_tuple]: http://en.cppreference.com/w/cpp/utility/tuple/make_tuple "std::make_tuple reference"
 
