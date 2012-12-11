@@ -124,7 +124,7 @@ it a friend of our tuple.
 When we have a call like `get<I>(t)`, we need to map `I` to a storage index and
 then just call the `std::get` on that index. For that we can use `tuple_element`
 on the map we computed since our maps are actually tuples
-[<sup id="ref1">&dagger;</sup>][ftn1]. That leaves us with the following
+[<span id="ref1">&dagger;</span>][ftn1]. That leaves us with the following
 implementations.
 
 {% highlight cpp %}
@@ -152,7 +152,7 @@ interface indices on the interface.
 
 ---
 
-[&dagger;][ref1]<a id="ftn1"> </a>There is currently a bug in GCC 4.7.2 that causes
+[<span id="ftn1">&dagger;</span>][ref1] There is currently a bug in GCC 4.7.2 that causes
 trouble for carrying a pack of indices as a `std::tuple`, so it may be necessary
 to use a few workarounds. One alternative involves using a custom type to pack
 the indices and a specialization of `std::tuple_element` for that type.
@@ -191,7 +191,7 @@ references to tuples.
 We cannot directly use `get` because the value category of its return type
 depends on the value category of the tuple passed in: if we pass it a tuple
 lvalue, it will always return lvalues, even if the element is an rvalue
-reference[<sup id="ref2">&dagger;</sup>][ftn2]. Note that this could happen even
+reference[<span id="ref2">&dagger;</span>][ftn2]. Note that this could happen even
 if we perfectly forwarded `t`, because that could be an lvalue. Here I don't
 care, pass an lvalue anyway, and then fix that when forwarding to the return
 value.
@@ -255,7 +255,7 @@ both and use it to maintain a single implementation of the helper functions.
 
 ---
 
-[&dagger;][ref2]<a id="ftn2"> </a>There is a shorter implementation of `forward_index`,
+[<span id="ftn2">&dagger;</span>][ref2] There is a shorter implementation of `forward_index`,
 but I think it is a bit more cryptic so I prefer the longer, clearer one. I will
 leave this shorter implementation as an exercise (hint: it involves another
 overload of `std::get` and reference collapsing).
@@ -263,6 +263,60 @@ overload of `std::get` and reference collapsing).
  [ftn2]: #ftn2
  [ref2]: #ref2
  [bare types]: /cxx11/2012/05/29/type-traits-galore.html#bare_types "Bare types"
+
+### Dealing with `reference_wrapper`s
+
+We are almost done with the non-boring work. I will just make a short stop to
+talk about [`make_tuple`][make_tuple]. As can be read in the documentation,
+`make_tuple` has some special treatment for `reference_wrapper`.
+
+Without `reference_wrapper` we would never be able to make a tuple where some
+elements are references using `make_tuple`. `make_tuple` is important because it
+saves us from writing out tuple types and lets them be inferred. By default it
+always deduces non-reference types, but it lets us use  `reference_wrapper` to
+have it deduce an actual reference.
+
+{% highlight cpp %}
+int n = 1;
+auto t = std::make_tuple(std::ref(n), n);
+static_assert(std::is_same<decltype(t), std::tuple<int&, int>,
+    "make_tuple unwraps reference_wrappers");
+{% endhighlight %}
+
+To get this for our version of `make_tuple` we need to write a trait that turns
+`reference_wrapper<T>` into `T&` and leaves all other types unchanged. That's
+not terribly complicated.
+
+{% highlight cpp %}
+template <typename T>
+struct unwrap_reference
+: identity<T> {};
+
+template <typename T>
+struct unwrap_reference<std::reference_wrapper<T>>
+: identity<T&> {};
+
+template <typename T>
+using UnwrapReference = typename unwrap_reference<T>::type;
+{% endhighlight %}
+
+With this writing `make_tuple` is now very simple.
+
+{% highlight cpp %}
+template <typename... T>
+tuple<UnwrapReference<Decay<T>>...> make_tuple(T&&... t) {
+    return tuple<UnwrapReference<Decay<T>>...>(std::forward<T>(t)...);
+}
+{% endhighlight %}
+
+ [make_tuple]: http://en.cppreference.com/w/cpp/utility/tuple/make_tuple "std::make_tuple reference"
+
+### That's not all, folks!
+
+Most of the rest of the implementation is either trivial, or extremely similar
+to what we implemented already. The only function worth of mention now is
+`tuple_cat`. This one is quite tricky, so I will leave it for [the next
+installment].
 
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
  [next]: /cxx11/2012/12/23/optimal-tuple-v.html "To be continued..."
