@@ -11,8 +11,8 @@ and the storage we can start fleshing out the interface of our tuple. A worthy
 goal is to provide exactly the same interface as the standard tuple class, so
 that we can use ours as a drop-in replacement.
 
-Not that this post will only cover the interestings bits of the implementation, as some
-of it is rather boring and uninteresting.
+(Note that this post will only cover the interestings bits of the implementation, as some
+of it is rather boring and uninteresting.)
 
 ### To member or not to member
 
