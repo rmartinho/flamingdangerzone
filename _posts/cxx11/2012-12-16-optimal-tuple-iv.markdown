@@ -155,6 +155,7 @@ specialization of `std::tuple_element` for that type.
  [factories]: http://en.cppreference.com/w/cpp/utility/tuple/tie "e.g. std::tie"
  [relational operators]: http://en.cppreference.com/w/cpp/utility/tuple/operator_cmp "std::tuple relational operators"
  [tuple_cat]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_cat "std::tuple_cat"
+ [tuple_element]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_element "std::tuple_element"
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
  [next]: /cxx11/2012/12/23/optimal-tuple-v.html "To be continued..."
 
