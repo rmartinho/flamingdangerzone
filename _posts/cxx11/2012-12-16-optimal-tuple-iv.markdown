@@ -7,9 +7,12 @@ published: false
 ---
 
 Now that we can [map all indices back and forth][previous] between the interface
-and the storage we can start fleshing out the tuple interface. For this exercise
-I am going to provide exactly the same interface as the standard tuple class, so
-that we can use this as a drop-in replacement.
+and the storage we can start fleshing out the interface of our tuple. A worthy
+goal is to provide exactly the same interface as the standard tuple class, so
+that we can use ours as a drop-in replacement.
+
+Not that this post will only cover the interestings bits of the implementation, as some
+of it is rather boring and uninteresting.
 
 ### To member or not to member
 
@@ -84,8 +87,8 @@ by mapping from storage to interface;
 operators can be compiler generated, since the underlying tuple already does all
 the work;
 - the constructors or assignment operators that convert from tuples with
-different types can delegate to the `std::tuple` constructor using our map from
-storage to interface indices;
+different elements can delegate to the `std::tuple` constructor using our map
+from storage to interface indices;
 - the uses-allocator constructors are similar to their respective regular
 constructors;
 - the factories can be simply implemented by delegating to the constructor of
@@ -95,6 +98,9 @@ the right tuple types; our tuple does not give a big advantage for `tie` and
 complicated mappings and will be the subject of a later post;
 - `get` is to use our interface to storage mappings;
 - everything else can be simply delegated to the underlying standard tuple.
+- our tuple will also want to have constructors that accept standard tuples
+directly; those can be implemented in a fashion similar to the constructors that
+take tuples of different elements.
 
 As we can see, there a couple of trivial directly delegating implementations,
 some that delegate with a map from interface to storage, some that delegate
@@ -112,8 +118,8 @@ with a map from storage to interface, and then there's `std::tuple_cat`.
 
 Let's skip all the trivial stuff and start with the simplest non-trivial one:
 `get`. There are three overloads, for different kinds of reference: `&`, `&&`,
-and `const&`. This function will need access to the underlying tuple, so we will
-declare it a friend of our tuple.
+and `const&`. These will need access to the underlying tuple, so we will declare
+it a friend of our tuple.
 
 When we have a call like `get<I>(t)`, we need to map `I` to a storage index and
 then just call the `std::get` on that index. For that we can use `tuple_element`
@@ -222,6 +228,30 @@ There is one important thing to note in the return type. We cannot use
 deduced as `int`, not as `int&&` (and `T&&` becomes `int&&`). So we use
 `std::tuple<T&&...>` to make sure we have a tuple of references and the
 reference collapsing rules make sure the references are of the right kind.
+
+Now it's easy to implement all those constructors: all that is needed is to pass
+along the map.
+
+{% highlight cpp %}
+explicit tuple(T const&... t)
+: storage_type { forward_shuffled(to_interface{}, t...) } {
+    // static assertion to get decent errors
+    static_assert(All<std::is_copy_constructible<T>...>::value,
+        "all tuple element types must be copy constructible");
+}
+template <typename... U,
+          EnableIf<std::is_convertible<U, T>...>...>
+explicit tuple(U&&... u)
+: storage_type { forward_shuffled(to_interface{}, std::forward<U>(u)...) } {
+    static_assert(sizeof...(T) == sizeof...(U),
+        "number of constructor parameters must match tuple size");
+}
+{% endhighlight %}
+
+The constructors that take tuples of different elements will need appropriate
+overloads of the helper functions that use our `get` function instead of
+`std::get`. It may be more appropriate to make a policy with specializations for
+both and use it to maintain a single implementation of the helper functions.
 
 ---
 
