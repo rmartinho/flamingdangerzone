@@ -68,7 +68,8 @@ implementation. They vary from dead simple to pain in the mikta. If we take a
 look at it we can see that most members are actually [constructors]. There's
 very little to do with a tuple other than constructing and accessing elements.
 Some important parts of the interface are provided as non-member functions
-([`get`], three [factories], [relational operators], and [`tuple_cat`]).
+([`get`][get], three [factories], [relational operators], and
+ [`tuple_cat`][tuple_cat]).
 
 Let's go through all of the members and non-members to get a general overview of
 their implementations.
@@ -94,10 +95,10 @@ complicated mappings and will be the subject of a later post;
 
  [tuple reference]: http://en.cppreference.com/w/cpp/utility/tuple "std::tuple reference"
  [constructors]: http://en.cppreference.com/w/cpp/utility/tuple/tuple "std::tuple constructors"
- [`get`]: http://en.cppreference.com/w/cpp/utility/tuple/get "std::get"
+ [get]: http://en.cppreference.com/w/cpp/utility/tuple/get "std::get"
  [factories]: http://en.cppreference.com/w/cpp/utility/tuple/tie "e.g. std::tie"
  [relational operators]: http://en.cppreference.com/w/cpp/utility/tuple/operator_cmp "std::tuple relational operators"
- [`tuple_cat`]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_cat "std::tuple_cat"
+ [tuple_cat]: http://en.cppreference.com/w/cpp/utility/tuple/tuple_cat "std::tuple_cat"
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
  [next]: /cxx11/2012/12/23/optimal-tuple-v.html "To be continued..."
 
