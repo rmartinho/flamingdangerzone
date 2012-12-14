@@ -14,6 +14,8 @@
 
 #include <tuple>
 #include <type_traits>
+#include <utility>
+#include <functional>
 
 #include <cstddef>
 
@@ -95,7 +97,18 @@ namespace my {
     template <typename Tuple>
     using IndicesFor = typename indices_up_to<std::tuple_size<Tuple>::value>::type;
 
-    // code starts here
+    template <typename T>
+    using Decay = typename std::decay<T>::type;
+    template <typename T>
+    struct unwrap_reference : identity<T> {};
+    template <typename T>
+    struct unwrap_reference<std::reference_wrapper<T>> : identity<T&> {};
+    template <typename T>
+    struct decay_reference : unwrap_reference<Decay<T>> {};
+    template <typename T>
+    using DecayReference = typename decay_reference<T>::type;
+
+    // *** interesting code starts here ***
     // wrapper to get alignment of references
     template <typename T>
     struct member { T _; };
@@ -394,14 +407,18 @@ namespace my {
             storage_type::swap(t);
         }
 
+        template <typename... U>
+        friend class tuple;
         template <std::size_t I, typename... U>
         friend TupleElement<I, std::tuple<U...>>& get(tuple<U...>& t);
         template <std::size_t I, typename... U>
         friend TupleElement<I, std::tuple<U...>>&& get(tuple<U...>&& t);
         template <std::size_t I, typename... U>
         friend TupleElement<I, std::tuple<U...>> const& get(tuple<U...> const& t);
-        template <typename... U>
-        friend class tuple;
+        template <typename... L, typename... R>
+        friend bool operator==(tuple<L...> const& l, tuple<R...> const& r);
+        template <typename... L, typename... R>
+        friend bool operator<(tuple<L...> const& l, tuple<R...> const& r);
     };
 
     template <std::size_t I, typename... U>
@@ -416,7 +433,62 @@ namespace my {
     TupleElement<I, std::tuple<U...>> const& get(tuple<U...> const& t) {
         return std::get<TupleElement<I, MapToStorage<U...>>::value>(t);
     }
+
+    template <typename... T>
+    tuple<DecayReference<T>...> make_tuple(T&&... t) {
+        return tuple<DecayReference<T>...>(std::forward<T>(t)...);
+    }
+    template <typename... T>
+    tuple<T&&...> forward_as_tuple(T&&... t) noexcept {
+        return tuple<T&&...>(std::forward<T>(t)...);
+    }
+    template <typename... T>
+    tuple<T&...> tie(T&... t) noexcept {
+        return tuple<T&...>(t...);
+    }
+
+    template <typename... T>
+    void swap(tuple<T...>& x, tuple<T...>& y)
+    noexcept(noexcept(std::declval<tuple<T...>&>().swap(std::declval<tuple<T...>&>()))) {
+        x.swap(y);
+    }
+
+    template <typename... T, typename... U>
+    bool operator==(tuple<T...> const& t, tuple<U...> const& u) {
+        return static_cast<OptimalStorage<T...> const&>(t) == u;
+    }
+    template <typename... T, typename... U>
+    bool operator<(tuple<T...> const& t, tuple<U...> const& u) {
+        return static_cast<OptimalStorage<T...> const&>(t) < u;
+    }
+    template <typename... T, typename... U>
+    bool operator!=(tuple<T...> const& t, tuple<U...> const& u) {
+        return !(t == u);
+    }
+    template <typename... T, typename... U>
+    bool operator>(tuple<T...> const& t, tuple<U...> const& u) {
+        return u < t;
+    }
+    template <typename... T, typename... U>
+    bool operator<=(tuple<T...> const& t, tuple<U...> const& u) {
+        return !(u < t);
+    }
+    template <typename... T, typename... U>
+    bool operator>=(tuple<T...> const& t, tuple<U...> const& u) {
+        return !(t < u);
+    }
 } // namespace my
+
+namespace std {
+    template <typename... T>
+    struct tuple_size< ::my::tuple<T...>> : tuple_size< ::std::tuple<T...>> {};
+
+    template <size_t I, typename... T>
+    struct tuple_element<I, ::my::tuple<T...>> : tuple_element<I, ::std::tuple<T...>> {};
+
+    template <typename... T, typename Alloc>
+    struct uses_allocator< ::my::tuple<T...>, Alloc> : ::std::true_type {};
+} // namespace std
 
 #endif // MY_TUPLE_HPP
 
