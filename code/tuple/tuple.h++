@@ -16,6 +16,7 @@
 #include <type_traits>
 #include <utility>
 #include <functional>
+#include <memory>
 
 #include <cstddef>
 
@@ -334,6 +335,78 @@ namespace my {
                   EnableIf<std::is_constructible<T, U&&>...>...>
         constexpr tuple(std::tuple<U...>&& t)
         : tuple { forward_shuffled_tuple(to_interface{}, std::move(t)) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+
+        template <typename Alloc>
+        tuple(std::allocator_arg_t tag, Alloc const& a)
+        : storage_type { tag, a } {}
+
+        template <typename Alloc>
+        tuple(std::allocator_arg_t tag, Alloc const& a, T const&... t)
+        : storage_type { tag, a, forward_shuffled(to_interface{}, t...) } {
+            static_assert(All<std::is_copy_constructible<T>...>::value,
+                "all elements must be copy constructible");
+        }
+        template <typename Alloc, typename... U,
+                  EnableIf<pairwise_convertible<std::tuple<U...>, std::tuple<T...>>>...>
+        explicit tuple(std::allocator_arg_t tag, Alloc const& a, U&&... u)
+        : storage_type { tag, a, forward_shuffled(to_interface{}, std::forward<U>(u)...) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "number of arguments must match tuple size");
+        }
+
+        template <typename Alloc>
+        tuple(std::allocator_arg_t tag, Alloc const& a, tuple const& t)
+        : storage_type { tag, a, t } {}
+        template <typename Alloc>
+        tuple(std::allocator_arg_t tag, Alloc const& a, tuple&& t)
+        : storage_type { tag, a, std::move(t) } {}
+
+        template <typename Alloc, typename... U,
+                  EnableIf<std::is_constructible<T, U const&>...>...>
+        constexpr tuple(std::allocator_arg_t tag, Alloc const& a, tuple<U...> const& t)
+        : storage_type { tag, a, forward_shuffled_tuple(MapFor<U...>{}, t) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+        template <typename Alloc, typename... U,
+                  EnableIf<std::is_constructible<T, U&&>...>...>
+        constexpr tuple(std::allocator_arg_t tag, Alloc const& a, tuple<U...>&& t)
+        : storage_type { tag, a, forward_shuffled_tuple(MapFor<U...>{}, std::move(t)) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+
+        template <typename Alloc, typename U1, typename U2,
+                  EnableIf<std::is_convertible<U1 const&, PackElement<0, T...>>,
+                           std::is_convertible<U2 const&, PackElement<1, T...>>>...>
+        constexpr tuple(std::allocator_arg_t tag, Alloc const& a, std::pair<U1, U2> const& p)
+        : tuple { tag, a, p.first, p.second } {
+            static_assert(sizeof...(T) == 2,
+                "tuple size must be 2");
+        }
+        template <typename Alloc, typename U1, typename U2,
+                  EnableIf<std::is_convertible<U1 const&, PackElement<0, T...>>,
+                           std::is_convertible<U2 const&, PackElement<1, T...>>>...>
+        constexpr tuple(std::allocator_arg_t tag, Alloc const& a, std::pair<U1, U2>&& p)
+        : tuple { tag, a, std::move(p.first), std::move(p.second) } {
+            static_assert(sizeof...(T) == 2,
+                "tuple size must be 2");
+        }
+
+        template <typename Alloc, typename... U,
+                  EnableIf<std::is_constructible<T, U const&>...>...>
+        constexpr tuple(std::allocator_arg_t tag, Alloc const& a, std::tuple<U...> const& t)
+        : tuple { tag, a, forward_shuffled_tuple(to_interface{}, t) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+        template <typename Alloc, typename... U,
+                  EnableIf<std::is_constructible<T, U&&>...>...>
+        constexpr tuple(std::allocator_arg_t tag, Alloc const& a, std::tuple<U...>&& t)
+        : tuple { tag, a, forward_shuffled_tuple(to_interface{}, std::move(t)) } {
             static_assert(sizeof...(T) == sizeof...(U),
                 "source tuple size must match destination tuple size");
         }
