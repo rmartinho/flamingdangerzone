@@ -3,7 +3,6 @@ layout: post
 title: Size matters, part 4
 categories: cxx11
 short: still don't know what this is about
-published: false
 ---
 
 Now that we can [map all indices back and forth][previous] between the interface
@@ -223,17 +222,6 @@ The constructors that take tuples of different elements will need appropriate
 overloads of the helper functions that use our `get` function instead of
 `std::get`. It may be more appropriate to make a policy with specializations for
 both and use it to maintain a single implementation of the helper functions.
-
----
-
-[<span id="ftn2">&dagger;</span>][ref2] There is a shorter implementation of `forward_index`,
-but I think it is a bit more cryptic so I prefer the longer, clearer one. I will
-leave this shorter implementation as an exercise (hint: it involves another
-overload of `std::get` and reference collapsing).
-
- [ftn2]: #ftn2
- [ref2]: #ref2
- [bare types]: /cxx11/2012/05/29/type-traits-galore.html#bare_types "Bare types"
 
 ### Dealing with reference wrappers
 

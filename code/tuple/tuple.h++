@@ -44,11 +44,34 @@ namespace my {
     struct max<Acc, Head, Tail...>
     : std::conditional<Acc < Head, max<Head, Tail...>, max<Acc, Tail...>>::type {};
 
+    template <bool B>
+    using Bool = std::integral_constant<bool, B>;
+
+    template <typename Cond, typename Then, typename Else>
+    using Conditional = typename std::conditional<Cond::value, Then, Else>::type;
+
+    template <typename... T>
+    struct All : Bool<true> {};
+    template <typename Head, typename... Tail>
+    struct All<Head, Tail...> : Conditional<Head, All<Tail...>, Bool<false>> {};
+
+    enum class enabler {};
+    template <typename... Cond>
+    using EnableIf = typename std::enable_if<All<Cond...>::value, enabler>::type;
+
     // indices
     template <std::size_t... I>
     struct indices {};
     template <std::size_t I>
     using index = std::integral_constant<std::size_t, I>;
+    // wait a moment! GCC needs a goat sacrifice
+} // namespace my
+namespace std {
+    template < ::std::size_t I, ::std::size_t... Is>
+    struct tuple_element<I, ::my::indices<Is...>>
+    : ::std::tuple_element<I, ::std::tuple< ::my::index<Is>...>> {};
+} // namespace std
+namespace my {
     /* GCC bug here
     template <std::size_t... I>
     using indices = std::tuple<index<I>...>;
@@ -192,6 +215,207 @@ namespace my {
     using MapToInterface = typename optimal_order<std::tuple<T...>>::to_interface;
     template <typename... T>
     using MapToStorage = typename optimal_order<std::tuple<T...>>::to_storage;
+
+    template <typename Tuple, std::size_t... I>
+    using ShuffleTuple = std::tuple<TupleElement<I, Tuple>...>;
+    
+    template <std::size_t... I, typename Tuple>
+    ShuffleTuple<Tuple, I...> forward_shuffled_tuple(indices<I...>, Tuple&& t) {
+        return std::forward_as_tuple(std::get<I>(std::forward<Tuple>(t))...);
+    }
+    template <std::size_t... I, typename... T>
+    ShuffleTuple<std::tuple<T&&...>, I...> forward_shuffled(indices<I...> map, T&&... t) {
+        return forward_shuffled_tuple(map, std::forward_as_tuple(std::forward<T>(t)...));
+    }
+
+    // GCC needs another goat sacrifice
+    template <typename Ts, typename Us>
+    struct pairwise_convertible : Bool<false> {};
+    template <>
+    struct pairwise_convertible<std::tuple<>, std::tuple<>> : Bool<true> {};
+    template <typename THead, typename... TTail, typename UHead, typename... UTail>
+    struct pairwise_convertible<std::tuple<THead, TTail...>, std::tuple<UHead, UTail...>>
+    : All<std::is_convertible<THead, UHead>, pairwise_convertible<std::tuple<TTail...>, std::tuple<UTail...>>> {};
+
+    template <typename From, typename To>
+    struct convert_layout_map;
+
+    template <typename From, std::size_t... To>
+    struct convert_layout_map<From, indices<To...>>
+    : identity<std::tuple<TupleElement<To, From>...>> {};
+
+    template <typename From, typename To>
+    using ConvertLayoutMap = typename convert_layout_map<From, To>::type;
+
+    template <std::size_t I, typename... T>
+    using PackElement = TupleElement<I, std::tuple<T...>>;
+
+    template <typename... T>
+    struct tuple : private OptimalStorage<T...> {
+    private:
+        using storage_type = OptimalStorage<T...>;
+        using to_interface = MapToInterface<T...>;
+        using to_storage = MapToStorage<T...>;
+        template <typename... U>
+        using MapFor = ConvertLayoutMap<typename tuple<U...>::to_interface, to_interface>;
+
+    public:
+        constexpr tuple() = default;
+
+        explicit tuple(T const&... t)
+        : storage_type { forward_shuffled(to_interface{}, t...) } {
+            static_assert(All<std::is_copy_constructible<T>...>::value,
+                "all elements must be copy constructible");
+        }
+        template <typename... U,
+                  EnableIf<pairwise_convertible<std::tuple<U...>, std::tuple<T...>>>...>
+        explicit tuple(U&&... u)
+        : storage_type { forward_shuffled(to_interface{}, std::forward<U>(u)...) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "number of arguments must match tuple size");
+        }
+
+        tuple(tuple const&) = default;
+        tuple(tuple&&) = default;
+
+        template <typename... U,
+                  EnableIf<std::is_constructible<T, U const&>...>...>
+        constexpr tuple(tuple<U...> const& t)
+        : storage_type { forward_shuffled_tuple(MapFor<U...>{}, t) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+        template <typename... U,
+                  EnableIf<std::is_constructible<T, U&&>...>...>
+        constexpr tuple(tuple<U...>&& t)
+        : storage_type { forward_shuffled_tuple(MapFor<U...>{}, std::move(t)) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+
+        template <typename U1, typename U2,
+                  EnableIf<std::is_convertible<U1 const&, PackElement<0, T...>>,
+                           std::is_convertible<U2 const&, PackElement<1, T...>>>...>
+        constexpr tuple(std::pair<U1, U2> const& p)
+        : tuple { p.first, p.second } {
+            static_assert(sizeof...(T) == 2,
+                "tuple size must be 2");
+        }
+        template <typename U1, typename U2,
+                  EnableIf<std::is_convertible<U1 const&, PackElement<0, T...>>,
+                           std::is_convertible<U2 const&, PackElement<1, T...>>>...>
+        constexpr tuple(std::pair<U1, U2>&& p)
+        : tuple { std::move(p.first), std::move(p.second) } {
+            static_assert(sizeof...(T) == 2,
+                "tuple size must be 2");
+        }
+
+        template <typename... U,
+                  EnableIf<std::is_constructible<T, U const&>...>...>
+        constexpr tuple(std::tuple<U...> const& t)
+        : tuple { forward_shuffled_tuple(to_interface{}, t) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+        template <typename... U,
+                  EnableIf<std::is_constructible<T, U&&>...>...>
+        constexpr tuple(std::tuple<U...>&& t)
+        : tuple { forward_shuffled_tuple(to_interface{}, std::move(t)) } {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "source tuple size must match destination tuple size");
+        }
+
+        tuple& operator=(tuple const&) = default;
+        tuple& operator=(tuple&&) = default;
+
+        template <typename... U>
+        tuple& operator=(tuple<U...> const& t) {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "tuples can only be assigned to tuples with the same size");
+            static_assert(All<std::is_assignable<T&, U const&>...>::value,
+                "all elements must be assignable to the corresponding element");
+            storage_type::operator=(forward_shuffled_tuple(MapFor<U...>{}, t));
+            return *this;
+        }
+        template <typename... U>
+        tuple& operator=(tuple<U...>&& t) {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "tuples can only be assigned to tuples with the same size");
+            static_assert(All<std::is_assignable<T&, U&&>...>::value,
+                "all elements must be move-assignable to the corresponding element");
+            storage_type::operator=(forward_shuffled_tuple(MapFor<U...>{}, std::move(t)));
+            return *this;
+        }
+
+        template <typename U1, typename U2>
+        tuple& operator=(std::pair<U1, U2> const& p) {
+            static_assert(sizeof...(T) == 2,
+                "tuple size must be 2");
+            static_assert(std::is_assignable<PackElement<0, T...>&, U1 const&>::value,
+                "first pair element must be assignable to first tuple element");
+            static_assert(std::is_assignable<PackElement<1, T...>&, U2 const&>::value,
+                "second pair element must be assignable to second tuple element");
+            storage_type::operator=(forward_shuffled(to_interface{}, p.first, p.second));
+            return *this;
+        }
+        template <typename U1, typename U2>
+        tuple& operator=(std::pair<U1, U2>&& p) {
+            static_assert(sizeof...(T) == 2,
+                "tuple size must be 2");
+            static_assert(std::is_assignable<PackElement<0, T...>&, U1&&>::value,
+                "first pair element must be move-assignable to first tuple element");
+            static_assert(std::is_assignable<PackElement<1, T...>&, U2&&>::value,
+                "second pair element must be move-assignable to second tuple element");
+            storage_type::operator=(forward_shuffled(to_interface{}, std::move(p.first), std::move(p.second)));
+            return *this;
+        }
+
+        template <typename... U>
+        tuple& operator=(std::tuple<U...> const& t) {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "tuples can only be assigned to tuples with the same size");
+            static_assert(All<std::is_assignable<T&, U const&>...>::value,
+                "all elements must be assignable to the corresponding element");
+            storage_type::operator=(forward_shuffled_tuple(to_interface{}, t));
+            return *this;
+        }
+        template <typename... U>
+        tuple& operator=(std::tuple<U...>&& t) {
+            static_assert(sizeof...(T) == sizeof...(U),
+                "tuples can only be assigned to tuples with the same size");
+            static_assert(All<std::is_assignable<T&, U&&>...>::value,
+                "all elements must be move-assignable to the corresponding element");
+            storage_type::operator=(forward_shuffled_tuple(to_interface{}, std::move(t)));
+            return *this;
+        }
+
+        void swap(tuple& t)
+        noexcept(noexcept(std::declval<storage_type>().swap(std::declval<storage_type>()))) {
+            storage_type::swap(t);
+        }
+
+        template <std::size_t I, typename... U>
+        friend TupleElement<I, std::tuple<U...>>& get(tuple<U...>& t);
+        template <std::size_t I, typename... U>
+        friend TupleElement<I, std::tuple<U...>>&& get(tuple<U...>&& t);
+        template <std::size_t I, typename... U>
+        friend TupleElement<I, std::tuple<U...>> const& get(tuple<U...> const& t);
+        template <typename... U>
+        friend class tuple;
+    };
+
+    template <std::size_t I, typename... U>
+    TupleElement<I, std::tuple<U...>>& get(tuple<U...>& t) {
+        return std::get<TupleElement<I, MapToStorage<U...>>::value>(t);
+    }
+    template <std::size_t I, typename... U>
+    TupleElement<I, std::tuple<U...>>&& get(tuple<U...>&& t) {
+        return std::get<TupleElement<I, MapToStorage<U...>>::value>(t);
+    }
+    template <std::size_t I, typename... U>
+    TupleElement<I, std::tuple<U...>> const& get(tuple<U...> const& t) {
+        return std::get<TupleElement<I, MapToStorage<U...>>::value>(t);
+    }
 } // namespace my
 
 #endif // MY_TUPLE_HPP
