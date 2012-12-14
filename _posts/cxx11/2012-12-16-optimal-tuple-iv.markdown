@@ -2,7 +2,7 @@
 layout: post
 title: Size matters, part 4
 categories: cxx11
-short: still don't know what this is about
+short: where I finally implement the tuple class
 ---
 
 Now that we can [map all indices back and forth][previous] between the interface
@@ -277,10 +277,23 @@ tuple<DecayReference<T>...> make_tuple(T&&... t) {
 ### That's not all, folks!
 
 Most of the rest of the implementation is either trivial, or extremely similar
-to what we implemented already. The only function worth of mention now is
-`tuple_cat`. This one is quite tricky, so I will leave it for [the next
-installment].
+to what we implemented already. There is a
+[full implementation][implementation][<span id="ref2">&dagger;</span>][ftn2] of
+the tuple described in this series available on GitHub.
 
+The only function worth of mention now is `tuple_cat`. This one is quite tricky,
+so I will leave it for [the next installment].
+
+---
+
+[<span id="ftn2">&dagger;</span>][ref2] The code is not exactly as in the posts
+because I needed to work around some issues with GCC, but other than that, it is
+pretty much the same and compiles with a current snapshot of GCC 4.8.
+
+ [ftn2]: #ftn2
+ [ref2]: #ref2
+
+ [implementation]: http://github.com/rmartinho/rmartinho.github.com/tree/master/code/tuple "Code on GitHub"
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
  [next]: /cxx11/2012/12/23/optimal-tuple-v.html "To be continued..."
 
