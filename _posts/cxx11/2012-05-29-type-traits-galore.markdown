@@ -3,7 +3,7 @@ layout: post
 title: More type traits
 categories: cxx11
 short: where I showcase cool traits
-last_edit: 30 May 2012
+last_edit: 24 December 2012
 ---
 
 The C++11 standard library provides us with several type traits, many of which
@@ -131,7 +131,7 @@ With it the primary template can be made to work now.
 {% highlight cpp %}
 template <typename T>
 struct result_of {
-    static_assert(Bool<false, T>, "T must be a signature");
+    static_assert(Bool<false, T>::value, "T must be a signature");
 };
 {% endhighlight %}
 

@@ -256,7 +256,8 @@ namespace my {
 
     template <typename From, std::size_t... To>
     struct convert_layout_map<From, indices<To...>>
-    : identity<std::tuple<TupleElement<To, From>...>> {};
+    //: identity<std::tuple<TupleElement<To, From>...>> {};
+    : identity<indices<TupleElement<To, From>::value...>> {};
 
     template <typename From, typename To>
     using ConvertLayoutMap = typename convert_layout_map<From, To>::type;
@@ -266,7 +267,7 @@ namespace my {
 
     template <typename... T>
     struct tuple : private OptimalStorage<T...> {
-    private:
+    //private:
         using storage_type = OptimalStorage<T...>;
         using to_interface = MapToInterface<T...>;
         using to_storage = MapToStorage<T...>;

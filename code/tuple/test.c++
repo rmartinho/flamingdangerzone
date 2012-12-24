@@ -9,7 +9,8 @@
 #include <cassert>
 
 int main() {
-    my::tuple<int, double, float> t(1,2,3);
+    my::tuple<int, double, float> t1(1,2,3);
+    my::tuple<int, int, int> t2 = t1;
 
     my::get<0>(t) = 4;
     my::get<1>(t) = 3.2;
