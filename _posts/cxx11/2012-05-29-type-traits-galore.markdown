@@ -3,7 +3,7 @@ layout: post
 title: More type traits
 categories: cxx11
 short: where I showcase cool traits
-last_edit: 24 December 2012
+last_edit: 18 January 2013
 ---
 
 The C++11 standard library provides us with several type traits, many of which
@@ -207,7 +207,8 @@ Conditional<
 ### Bare types
 
 Sometimes I need to strip a type of any references and cv-qualifiers, usually to
-compare it to a known non-reference, non-cv type. I call these *bare types*.
+compare it to a known non-reference, non-cv type. I call these *bare
+types*&dagger;.
 
 Transforming a type into a bare type can be achieved with a combination of
 `RemoveReference` and `RemoveCv`, but I prefer to have a specialized trait
@@ -220,6 +221,10 @@ trait avoids this potential mistake.
 template <typename T>
 using Bare = RemoveCv<RemoveReference<T>>;
 {% endhighlight %}
+
+---
+
+&dagger; I have since found [a better name][unqualified types] for these.
 
 ### Reference and cv-qualifier propagators
 
@@ -256,6 +261,12 @@ using WithValueCategoryOf = Conditional<std::is_lvalue_reference<Source>,
                                     Destination>>;
 {% endhighlight %}
 
+---
+
+*See the follow-up article for [even more traits].*
+
  [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html "boost::mpl::identity"
  [temporary-array]: http://stackoverflow.com/a/10624677/46642
+ [even more traits]: /cxx11/2013/01/21/even-more-traits.html
+ [unqualified types]: /cxx11/2013/01/21/even-more-traits.html#unqualified_types
 
