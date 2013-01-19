@@ -7,25 +7,39 @@ short:
 
 *Use of Weapons*, by Iain M. Banks, is the third novel in the Culture series,
 after *Consider Phlebas* and *The Player of Games*. Having enjoyed the first two
-I started *Use of Weapons* expecting some more enjoyable reading.
+I started *Use of Weapons* expecting more enjoyable reading. I was a bit
+nonplussed but the narrative structure at first, but after turning the last page
+I can say I really liked it.
 
-The first thing that I feel the need to mention is the narrative structure of
-the book. We are told two stories, part of one larger story that is the
-life of the book's protagonist, Cheradenine Zakalwe. These two stories are
-interwoven in alternating chapters, and move in opposite temporal directions.
-The main narrative is told moving forward in time; the backward moving chapters
-tell us of events in Zakalwe's earlier life. To further complicate matters, some
-of the backward moving chapters involve characters having flashbacks of even
-older events; and both the prologue and the epilogue are both set after the
-events of the main story.
+# Narrative
 
-Cheradenine is a warrior that has done several jobs for the Culture in the past,
-under the direction of Diziet Sma, an agent from Special Circumstances, the
-Culture's secret service organization. The main narrative tells us how Diziet
-got him back from exile in order to do one last job, how Zakalwe performed that
-job, and what he wanted as payment for it.
+The narrative structure of the book is really weird. We are told two stories,
+that when put together form one larger story. The larger story is the biography
+of book's protagonist, who goes by the name Cheradenine Zakalwe.
 
-The biographic narrative tells us important events of Zakalwe's earlier life,
+That is not the weird thing, though. The weird thing is that these two stories
+are interwoven in alternating chapters, and move in opposite temporal
+directions. The first chapter is labelled "One" and is part of the main
+narrative of the book; its events take place in "the present" (which means
+sometime not after 2093 AD). The second chapter is labelled "XIII" and is part
+of the secondary narrative; it describes events that took place some time before
+chapter "One". After "XIII" comes chapter "Two" which describes events following
+the ones in "One". And then comes "XII" with events that take place before
+"XIII". This alternating pattern continues throughout the entire book. To
+further complicate matters, some of the backward moving chapters involve
+characters having flashbacks of even older events.
+
+The main narrative tells us how Diziet got the protagonist back from exile in
+order to do one last job, how he performed that job, and how he got paid for it.
+The secondary narrative tells us important events of Zakalwe's earlier life,
 including some of the previous jobs he did for the Culture.
 
+One nice thing about this structure is that you get two powerful endings for the
+price of one. The "larger story" of the book starts with a pivotal event in the
+protagonist's life, but we wonder about it until the very end of the secondary
+narrative.
+
+At first I found the whole deal was confusing, but over time I grew to like it.
+It gradually piqued my interest in the protagonist's goals and motivations, and
+that makes the story much more interesting, and the endings much more rewarding.
 
