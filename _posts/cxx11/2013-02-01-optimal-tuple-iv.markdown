@@ -3,7 +3,6 @@ layout: post
 title: Size matters, part 4
 categories: cxx11
 short: where I finally implement the tuple class
-published: false
 ---
 
 Now that we can [map all indices back and forth][previous] between the interface
@@ -77,8 +76,8 @@ their implementations.
 
 - The default constructor is dead simple: default constructing the storage works
 fine, so the compiler generated one is ok;
-- the two variadic constructors can delegated to the `std::tuple` constructors
-by mapping from storage to interface;
+- the two variadic constructors can be delegated to the `std::tuple`
+constructors by mapping from storage to interface;
 - the copy and move constructors, as well as the copy and move assignment
 operators can be compiler generated, since the underlying tuple already does all
 the work;
@@ -190,7 +189,7 @@ needs to do is to forward them as a tuple into the function above.
 {% highlight cpp %}
 template <std::size_t... I, typename... T>
 ShuffleTuple<std::tuple<T&&...>, I...> forward_shuffled(indices<I...> map, T&&... t) {
-    return forward_shuffled_tuple(map, std::forward<T>(t)...);
+    return forward_shuffled_tuple(map, std::forward_as_tuple(std::forward<T>(t)...));
 }
 {% endhighlight %}
 
@@ -220,9 +219,16 @@ explicit tuple(U&&... u)
 {% endhighlight %}
 
 The constructors that take tuples of different elements will need appropriate
-overloads of the helper functions that use our `get` function instead of
-`std::get`. It may be more appropriate to make a policy with specializations for
-both and use it to maintain a single implementation of the helper functions.
+our helper functions to use our `get` function instead of `std::get`. ADL can
+help us here.
+
+{% highlight cpp %}
+template <std::size_t... I, typename Tuple>
+ShuffleTuple<Tuple, I...> forward_shuffled_tuple(indices<I...>, Tuple&& t) {
+    using std::get; // bring std::get into scope
+    return std::forward_as_tuple(get<I>(std::forward<Tuple>(t))...);
+}
+{% endhighlight %}
 
 ### Dealing with reference wrappers
 
@@ -278,21 +284,11 @@ tuple<DecayReference<T>...> make_tuple(T&&... t) {
 ### That's not all, folks!
 
 Most of the rest of the implementation is either trivial, or extremely similar
-to what we implemented already. There is a
-[full implementation][implementation][<span id="ref2">&dagger;</span>][ftn2] of
-the tuple described in this series available on GitHub.
+to what we implemented already. Some workarounds may be needed to work around
+bugs in the implementations of variadic templates.
 
 The only function worth of mention now is `tuple_cat`. This one is quite tricky,
 so I will leave it for [the next installment].
-
----
-
-[<span id="ftn2">&dagger;</span>][ref2] The code is not exactly as in the posts
-because I needed to work around some issues with GCC, but other than that, it is
-pretty much the same and compiles with a current snapshot of GCC 4.8.
-
- [ftn2]: #ftn2
- [ref2]: #ref2
 
  [implementation]: http://github.com/rmartinho/rmartinho.github.com/tree/master/code/tuple "Code on GitHub"
  [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."

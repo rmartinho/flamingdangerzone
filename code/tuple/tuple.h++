@@ -231,11 +231,12 @@ namespace my {
     using MapToStorage = typename optimal_order<std::tuple<T...>>::to_storage;
 
     template <typename Tuple, std::size_t... I>
-    using ShuffleTuple = std::tuple<TupleElement<I, Tuple>...>;
+    using ShuffleTuple = std::tuple<TupleElement<I, Decay<Tuple>>...>;
     
     template <std::size_t... I, typename Tuple>
     ShuffleTuple<Tuple, I...> forward_shuffled_tuple(indices<I...>, Tuple&& t) {
-        return std::forward_as_tuple(std::get<I>(std::forward<Tuple>(t))...);
+        using std::get;
+        return std::forward_as_tuple(get<I>(std::forward<Tuple>(t))...);
     }
     template <std::size_t... I, typename... T>
     ShuffleTuple<std::tuple<T&&...>, I...> forward_shuffled(indices<I...> map, T&&... t) {
