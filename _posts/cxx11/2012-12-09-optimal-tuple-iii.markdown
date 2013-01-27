@@ -186,5 +186,5 @@ So far everything was done on the metaprogramming level, but
  [mapping2]: /images/2012-12-09-optimal-tuple-iii-02.png 
 
  [previous]: /cxx11/2012/12/02/optimal-tuple-ii.html "Previously..."
- [next]: /cxx11/2012/12/16/optimal-tuple-iv.html "To be continued..."
+ [next]: /cxx11/2013/02/01/optimal-tuple-iv.html "To be continued..."
 
