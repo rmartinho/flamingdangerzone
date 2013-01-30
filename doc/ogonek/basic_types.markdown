@@ -1,7 +1,11 @@
 ---
 layout: doc-ogonek
-title: Basic types
+title: Fundamental types and concepts
 ---
+
+Some types and concepts are used pervasively throughout the ogonek library. In
+the description of the various parts it is assumed that the reader is familiar
+with these.
 
 ### code\_point
 
@@ -11,8 +15,8 @@ using code_point = char32_t;
 
 Many algorithms in ogonek operate on sequences of code points. The sequences
 themselves can have any type, but their elements must be code points.
-`ogonek::code_point` is the type used to represent code points. It is an alias
-for the C++ `char32_t` type.
+`code_point` is the type used to represent code points. It is an alias for the
+C++ `char32_t` type.
 
 ### byte
 
@@ -22,20 +26,21 @@ using byte = std::uint8_t;
 
 Encoding schemes and some encoding forms take input or produce output in the
 form of bytes or sequences of bytes. The type used to represent bytes in ogonek
-is `ogonek::byte`, which is an alias for the C++ `std::uint8_t` type.
+is `byte`, which is an alias for the C++ `std::uint8_t` type.
 
 ### Ranges
 
 A large portion of ogonek works with sequences of values, notably code points,
 code units and bytes. Throughout the library, the Boost range concepts are used
 to specify the requirements of input sequences and capabilities of returned
-sequences. \[Note: this may be subject to change in the future due to limitations
-of the Boost concepts.]
+sequences. \[Note: this is under consideration and may change in the future to
+overcome limitations of the Boost concepts.]
 
-All ranges returned from ogonek algorithms have deferred-evaluation. This means
-that nothing happens until the value of the sequence is actually required. If
-full materialization of the result is desired, the range can be used to
-construct any container that can be constructed from a pair of iterators.
+Unless stated otherwise ranges returned from ogonek algorithms have
+deferred-evaluation. This means that nothing happens until the value of the
+sequence is actually required. If full materialization of the result is desired,
+the range can be used to construct any container that can be constructed from a
+pair of iterators.
 
 *Example*:
 {% highlight cpp %}
@@ -43,12 +48,12 @@ auto deferred = ogonek::utf8::decode(source);
 // the object holds all information needed to do the decoding when iterated
 // but no decoding has actually happened
 
-std::vector<ogonek::codepoint> materialized(deferred.begin(), deferred.end());
+std::vector<ogonek::codepoint> materialised(deferred.begin(), deferred.end());
 // now the range was iterated and the decoded results stored in a vector
 {% endhighlight %}
 
 Alternatively, materialisation can be performed using the member function
-`materialise`.
+`materialise`, which all ogonek deferred ranges have.
 
 *Example*:
 {% highlight cpp %}
