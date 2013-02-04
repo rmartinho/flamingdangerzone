@@ -10,6 +10,12 @@
         </p>
         {% endif %}
 
+        {% if page.doc_version %}
+        <p class="post_date">
+          This documentation applies to version {{ page.doc_version }}.
+        </p>
+        {% endif %}
+
         <p class="copyright">
           <a href="/about.html">Flaming Dangerzone</a>
           authored by

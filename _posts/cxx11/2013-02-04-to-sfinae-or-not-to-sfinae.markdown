@@ -197,23 +197,16 @@ Hopefully this distinction is now clear enough. Let's talk about why it matters.
 
 ### Why you should care
 
-As I alluded above, there are trade-offs to be made here. 
+As I alluded above, there are trade-offs to be made here. Tag dispatching and
+static assertions may be more convenient than SFINAE, but they don't provide all
+the same effects, namely they result in different kinds of errors in a way that
+can affect semantics.
 
---- from now on, just copy-pasted stuff from comments to flesh out ---
+Consider this scenario.
 
-Short? Sorry :( Imagine you implement a function f as a template for all types
-in that fulfill some condition and not for other types. If you use tag
-dispatching, you won't have a `false_type` overload. That's fine, it causes an
-error when you try to use that f for the wrong types. You don't even need tag
-dispatching for this, you could just use `static_assert` and give better error
-messages. (to be continued) – R. Martinho Fernandes 7 mins ago 
-    
-But now consider a trait `is_f_able` that tells you if the expression
-`f(std::declval<T>())` is valid. That trait will likely use some form decltype on
-that expression to detect this (the usual "has member" kind of trait). Problem
-is, `decltype(f(std::declval<T>()))` will either "work" (i.e. not fail
-substitution) or produce a static assertion failure. Neither of these options is
-desirable because it means you never get a `::value` false from that trait. SFINAE
-makes the function not be there, and the trait detects that correctly to produce
-a false.
+{% highlight cpp %}
+template <typename T, typename U,
+          EnableIf<std::is_constructible<T, U>...>
+void 
+{% endhighlight %}
 

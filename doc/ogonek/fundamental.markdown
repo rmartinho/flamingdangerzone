@@ -48,23 +48,17 @@ auto deferred = ogonek::utf8::decode(source);
 // the object holds all information needed to do the decoding when iterated
 // but no decoding has actually happened
 
-std::vector<ogonek::codepoint> materialised(deferred.begin(), deferred.end());
+std::vector<ogonek::codepoint> materialized(deferred.begin(), deferred.end());
 // now the range was iterated and the decoded results stored in a vector
 {% endhighlight %}
 
-Alternatively, materialisation can be performed using the member function
-`materialise`, which all ogonek deferred ranges have.
+If the `deferred` variable is not desirable, an algorithm like
+[`boost::copy_range`][copy_range] can help.
 
 *Example*:
 {% highlight cpp %}
-// vector1 will have type std::vector<ogonek::codepoint>
-auto vector1 = ogonek::utf8::decode(source)
-                   .materialise<std::vector>();
-
-// vector2 will have type std::vector<std::uint32_t>
-auto vector2 = ogonek::utf8::decode(source)
-                   .materialise<std::vector<std::uint32_t>>();
+auto vector = boost::copy_range<std::vector<ogonek::code_point>>(
+                ogonek::utf8::decode(source));
 {% endhighlight %}
 
-This works for any class or class template with a constructor that accepts two
-iterators.
+ [copy_range]: http://www.boost.org/doc/libs/1_52_0/libs/range/doc/html/range/reference/utilities/iterator_range.html
