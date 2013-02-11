@@ -3,20 +3,22 @@ layout: post
 title: To SFINAE or not to SFINAE
 categories: cxx11
 short: what should the short be?
-published: false
 ---
 
 `enable_if` is somewhat of a hack used to exploit a language feature (SFINAE)
 for selectively enabling or disabling certain overloads based on compile-time
 tests. SFINAE can sometimes be cumbersome, ugly, and cryptic, and isn't known
-for producing the clearest error messages. As I've shown before, some of these
+for producing the clearest error messages. As I've [shown before], some of these
 annoyances can be mitigated with some clever changes to the typical patterns,
 but it still feels like a hack.
 
 There are some relatively well-known alternatives to SFINAE that seem to fulfill
 the same purpose, and don't have many of the annoyances of SFINAE: like tag
-dispatching and static assertions. But can these alternatives fully replace
-things like `enable_if`?
+dispatching and static assertions.
+
+**Can these alternatives fully replace things like `enable_if`?**
+
+ [shown before]: /cxx11/2012/06/01/almost-static-if.html 
 
 ### Tag dispatching
 
@@ -200,13 +202,196 @@ Hopefully this distinction is now clear enough. Let's talk about why it matters.
 As I alluded above, there are trade-offs to be made here. Tag dispatching and
 static assertions may be more convenient than SFINAE, but they don't provide all
 the same effects, namely they result in different kinds of errors in a way that
-can affect semantics.
+can affect semantics. It is now time to answer the question I posed at the
+beginning.
 
-Consider this scenario.
+Consider the following two functions in some library:
 
 {% highlight cpp %}
-template <typename T, typename U,
-          EnableIf<std::is_constructible<T, U>...>
-void 
+template <typename T, typename U>
+T make_impl(U&& u, std::true_type) {
+    return T(std::forward<U>(u));
+}
+template <typename T, typename U>
+T make_impl(U&&, std::false_type) {
+    return T(); // line 7
+}
+
+// construct a T with the given argument if constructible,
+// otherwise default-construct
+template <typename T, typename U>
+T make(U&& u) {
+    return make_impl(std::forward<U>(u), std::is_constructible<T, U>());
+}
 {% endhighlight %}
 
+When we call `make<foo>(bar)`, there are three different possibilities:
+
+1. `foo` can be constructed from `bar`: the first overload of `make_impl` is
+   picked and the code compiles;
+2. `foo` cannot be constructed from `bar` and can be default-constructed: the
+   second overload is picked and the code compiles;
+3. `foo` cannot be constructed from `bar` and cannot be default-constructed: the
+   second overload is picked we have a compiler error on line 7.
+
+Now, let us suppose we write a class with a template constructor with two
+overloads: one for random-access iterators, and one for other iterators. We
+would be doing this because we can make a more efficient implementation using
+the capabilities of random-access iterators. However, let's say that our code
+cannot work without bidirectional iterators, so the other overload will use
+functionality from those. There is no way to implement the constructor with
+input or forward iterators.
+
+Static assertions alone won't do here: they can never be used to select between
+two overloads. We could statically assert that the iterator passed in is a
+forward iterator or better, but that won't help with picking an overload.
+
+The only viable options are tag dispatching and SFINAE, since both can be used
+to pick between overloads. Let's look at both in turn.
+
+{% highlight cpp %}
+// a little helper
+template <typename Iterator>
+using IteratorCategory = typename std::iterator_traits<Iterator>::iterator_category;
+
+// with tag dispatching
+struct foo {
+public:
+    foo() {}
+
+    template <typename Iterator>
+    foo(Iterator it)
+    : foo(it, IteratorCategory<Iterator>()) {}
+
+private:
+    template <typename Iterator>
+    foo(Iterator it, std::bidirectional_iterator_tag) {
+        // do it with a bidirectional iterator
+    }
+    template <typename Iterator>
+    foo(Iterator it, std::random_access_iterator_tag) {
+        // do it with a random-access iterator
+        do_it_with_a_random_access_iterator(it);
+    }
+};
+{% endhighlight %}
+
+By now it should be obvious what happens when we pass different kinds of
+iterators: 
+
+1. passing a random access iterator will pick the second overload and use the
+   version optimized for random-access;
+2. passing a bidirectional iterator will pick the second overload and use the
+   non-optimized version;
+3. passing an input iterator will pick neither overload and will result in a hard
+   error (overload resolution failure).
+
+What about the implementation with SFINAE?
+
+{% highlight cpp %}
+// a little helper
+template <typename Iterator>
+struct is_random_access_iterator
+: std::is_base_of<std::random_access_iterator_tag, IteratorCategory<Iterator>> {};
+
+// with tag dispatching
+struct foo {
+public:
+    foo() {}
+
+    template <typename Iterator,
+              DisableIf<is_random_access_iterator<Iterator>>...>
+    foo(Iterator it) {
+        // do it with a bidirectional iterator
+    }
+
+    template <typename Iterator,
+              EnableIf<is_random_access_iterator<Iterator>>...>
+    foo(Iterator it) {
+        // do it with a random-access iterator
+    }
+};
+{% endhighlight %}
+
+This gives us the same behaviour as the version with tag dispatching when using
+random-access or bidirectional iterators.
+
+It also gives the same result, but for slightly different reasons when using an
+input iterator: the first overload will be picked, but the body will fail to
+compile since it probably makes use of `--it` somewhere.
+
+Now, how does this relate to the function `make` presented at the start? Both
+examples share one important characteristic here: they both cause hard errors
+*because* a constructor is picked and does not have a valid body (remember that
+in the case of tag dispatching, the dispatching constructor is always picked).
+
+This characteristic interact poorly with traits like `std::is_constructible`.
+Those traits only look at the declarations (otherwise, how would they even begin
+to work when the definition is in another translation unit?). Unfortunately this
+means that for both examples presented `std::is_constructible<foo, some_input_iterator>::value`
+is true.
+
+Because of that, when we call `make<foo>(some_input_iterator())`, this will
+attempt to construct a foo with an argument, instead of default constructing
+one, and that ends with a compiler error.
+
+The example with SFINAE, however, can be made to work correctly. We just need to
+make sure the constructors are removed from the overload candidate set when the
+argument is an input iterator.
+
+{% highlight cpp %}
+// with tag dispatching
+struct foo {
+public:
+    foo() {}
+
+    template <typename Iterator,
+              EnableIf<Not<is_random_access_iterator<Iterator>>,
+                       is_bidirectional_iterator<Iterator>>...>
+    foo(Iterator it) {
+        // do it with a bidirectional iterator
+    }
+
+    template <typename Iterator,
+              EnableIf<is_random_access_iterator<Iterator>>...>
+    foo(Iterator it) {
+        // do it with a random-access iterator
+    }
+};
+{% endhighlight %}
+
+One could also combine the two: use tag dispatching to pick between the
+two overloads, and use SFINAE to disable the distpatcher when the iterator does
+not meet the requirements.
+
+{% highlight cpp %}
+// with both!
+struct foo {
+public:
+    foo() {}
+
+    // SFINAE on dispatcher
+    template <typename Iterator,
+              EnableIf<is_bidirectional_iterator<Iterator>>...>
+    foo(Iterator it)
+    : foo(it, IteratorCategory<Iterator>()) {}
+
+private:
+    // tags as usual
+    template <typename Iterator>
+    foo(Iterator it, std::bidirectional_iterator_tag) {
+        // do it with a bidirectional iterator
+    }
+    template <typename Iterator>
+    foo(Iterator it, std::random_access_iterator_tag) {
+        // do it with a random-access iterator
+        do_it_with_a_random_access_iterator(it);
+    }
+};
+{% endhighlight %}
+### Conclusion
+
+While convenient, tag dispatching cannot quite replace SFINAE, because sometimes
+it is actually important to get rid of overloads. If a templated overload cannot
+work with a some set of template parameters, it should be constrained
+appropriately if one wants any traits that check for its existence to work.
