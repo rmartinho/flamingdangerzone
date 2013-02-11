@@ -2,7 +2,7 @@
 layout: post
 title: To SFINAE or not to SFINAE
 categories: cxx11
-short: what should the short be?
+short: where I wonder if SFINAE is really needed
 ---
 
 `enable_if` is somewhat of a hack used to exploit a language feature (SFINAE)
@@ -249,6 +249,8 @@ forward iterator or better, but that won't help with picking an overload.
 The only viable options are tag dispatching and SFINAE, since both can be used
 to pick between overloads. Let's look at both in turn.
 
+#### Implementing with tag dispatching
+
 {% highlight cpp %}
 // a little helper
 template <typename Iterator>
@@ -286,6 +288,8 @@ iterators:
 3. passing an input iterator will pick neither overload and will result in a hard
    error (overload resolution failure).
 
+#### Implementing with SFINAE
+
 What about the implementation with SFINAE?
 
 {% highlight cpp %}
@@ -320,6 +324,8 @@ It also gives the same result, but for slightly different reasons when using an
 input iterator: the first overload will be picked, but the body will fail to
 compile since it probably makes use of `--it` somewhere.
 
+#### Traits need some consideration
+
 Now, how does this relate to the function `make` presented at the start? Both
 examples share one important characteristic here: they both cause hard errors
 *because* a constructor is picked and does not have a valid body (remember that
@@ -334,6 +340,8 @@ is true.
 Because of that, when we call `make<foo>(some_input_iterator())`, this will
 attempt to construct a foo with an argument, instead of default constructing
 one, and that ends with a compiler error.
+
+#### Implementing with SFINAE, fixed
 
 The example with SFINAE, however, can be made to work correctly. We just need to
 make sure the constructors are removed from the overload candidate set when the
@@ -359,6 +367,13 @@ public:
     }
 };
 {% endhighlight %}
+
+With this both constructors will be discard when overload resolution is
+performed, and `std::is_constructible<foo, some_input_iterator>::value` will be
+false, as expected, and `make<foo>(some_input_iterator())` will correctly
+default construct `foo`.
+
+#### Implementing with both
 
 One could also combine the two: use tag dispatching to pick between the
 two overloads, and use SFINAE to disable the distpatcher when the iterator does
@@ -389,9 +404,11 @@ private:
     }
 };
 {% endhighlight %}
+
 ### Conclusion
 
 While convenient, tag dispatching cannot quite replace SFINAE, because sometimes
 it is actually important to get rid of overloads. If a templated overload cannot
-work with a some set of template parameters, it should be constrained
-appropriately if one wants any traits that check for its existence to work.
+work with some set of template parameters, it should be constrained
+appropriately if one wants any traits that check for its existence to work
+properly.
