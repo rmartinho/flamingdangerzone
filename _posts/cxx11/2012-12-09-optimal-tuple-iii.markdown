@@ -3,6 +3,7 @@ layout: post
 title: Size matters, part 3
 categories: cxx11
 short: where I abuse overload resolution for fun and profit
+last_edit: 12 February 2013
 ---
 
 In [part 2][previous] we got our types sorted properly for optimal layout. The
@@ -186,5 +187,5 @@ So far everything was done on the metaprogramming level, but
  [mapping2]: /images/2012-12-09-optimal-tuple-iii-02.png 
 
  [previous]: /cxx11/2012/12/02/optimal-tuple-ii.html "Previously..."
- [next]: /cxx11/2013/02/01/optimal-tuple-iv.html "To be continued..."
+ [next]: /cxx11/2013/02/18/optimal-tuple-iv.html "To be continued..."
 

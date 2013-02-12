@@ -5,8 +5,8 @@ layout: nil
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Flaming Dangerzone (Exploring C++11)</title>
-    <link>http://rmartinho.github.com/</link>
-    <atom:link href="http://rmartinho.github.com/rss-cxx11.xml" rel="self" type="application/rss+xml" />
+    <link>http://flamingdangerzone.com/</link>
+    <atom:link href="http://flamingdangerzone.com/rss-cxx11.xml" rel="self" type="application/rss+xml" />
     <description>R. Martinho's C++ adventures</description>
     <language>en-us</language>
     <pubDate>{{ site.time | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
@@ -15,7 +15,7 @@ layout: nil
     {% for post in site.categories.cxx11 %}
     <item>
       <title>{{ post.title }}</title>
-      <link>http://rmartinho.github.com{{ post.url }}</link>
+      <link>http://flamingdangerzone.com{{ post.url }}</link>
       <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
       <author>R. Martinho Fernandes</author>
       <guid>http://rmartinho.github.com{{ post.id }}</guid>
