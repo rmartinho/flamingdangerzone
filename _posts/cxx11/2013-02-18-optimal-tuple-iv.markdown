@@ -3,7 +3,6 @@ layout: post
 title: Size matters, part 4
 categories: cxx11
 short: where I finally implement the tuple class
-published: false
 ---
 
 Now that we can [map all indices back and forth][previous] between the interface
