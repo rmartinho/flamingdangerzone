@@ -3,7 +3,7 @@ layout: post
 title: Remastered enable_if
 categories: cxx11
 short: where I fix enable_if
-last_edit: 02 June 2012
+last_edit: 22 February 2013
 ---
 
 Without the language support for concepts, one cannot directly overload template
@@ -303,7 +303,7 @@ tweaked version.
 
 {% highlight cpp %}
 template <typename... Condition>
-using EnableIf = typename std::enable_if<all<Condition...>, detail::enabler>::type;
+using EnableIf = typename std::enable_if<all<Condition...>::value, detail::enabler>::type;
 
 template <typename T,
           EnableIf<is_scalable<T>, is_something_else<T>>...>
