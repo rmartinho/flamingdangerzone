@@ -2,7 +2,7 @@
 layout: post
 title: Even more type traits
 categories: cxx11
-short: where I showcase more cool traits
+short: where I showcase more nice traits
 published: false
 ---
 
@@ -34,7 +34,7 @@ little.
 ### Unqualified types
 
 I have talked about types stripped of qualifiers before. At the time I decided
-to call those [bare types]. After trying the name on some people and after
+to call those "[bare types]". After trying the name on some people and after
 looking around for ideas, I have a found a much better and much more obvious
 name. I now simply call these *unqualified types*. It is clear what I means, and
 I no longer need to explain what "bare" means.
@@ -49,7 +49,8 @@ using Unqualified = RemoveCv<RemoveReference<T>>;
 ### Raw storage
 
 It does not happen often, but I have before needed to use raw storage of
-appropriate size and alignment for some type.
+appropriate size and alignment for some type (`boost::optional` without move
+semantics, I am looking at you).
 
 The C++11 standard library provides us with `std::aligned_storage` for this
 task. It provides storage with a certain size and alignment.
@@ -126,8 +127,4 @@ using DecayReference = typename decay_reference<T>::type;
 {% endhighlight %}
 
  [tuple iv]: /cxx11/2013/02/18/optimal-tuple-iv.html
-
-### is callable and is invokable
-### SFINAEing resultof
-
 
