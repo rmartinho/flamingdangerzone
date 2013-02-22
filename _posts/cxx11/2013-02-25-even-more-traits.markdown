@@ -73,3 +73,61 @@ using StorageFor = Invoke<std::aligned_storage<sizeof(T), alignof(T)>>;
 I will expand on this trait latter when I explore the use cases and show
 improvements to it.
 
+### Improved decay
+
+The standard library provides the `std::decay` trait to simulate pass-by-value
+semantics. This is a transformation that shares similarities with the
+`Unqualified` trait, but there are important differences: `std::decay` will
+transform array and function types into pointer types, just like when passing
+them by value.
+
+`std::make_tuple`, for example, performs this kind of transformation. Using
+`Unqualified` would not work for something like the following:
+
+{% highlight cpp %}
+void f();
+auto tuple = std::make_tuple(0, f);
+{% endhighlight %}
+
+One cannot have members of function types. Decaying that type to a function
+pointer does the natural thing and allows that to work. The result in the
+example has type `std::tuple<int, void(*)()>`.
+
+But `std::make_tuple` performs a slightly more involved transformation: in order
+to allow creating tuples with references, one can use `std::reference_wrapper`
+(through `std::ref` and `std::cref`).
+
+{% highlight cpp %}
+int x = 42;
+auto tuple = std::make_tuple(0, std::ref(x));
+{% endhighlight %}
+
+This creates a `std::tuple<int, int&>` not a `std::tuple<int, std::reference_wrapper<int>>`.
+`std::decay` cannot do that.
+
+This kind of transformation is used in other places in the standard library as
+well (`std::bind` for example), and comes up pretty often when writing generic
+tools. So I think it's worth having a trait for it. I actually [used it][tuple iv]
+in the tuple series to implement `make_tuple`.
+
+{% highlight cpp %}
+template <typename T>
+struct unwrap_reference
+: identity<T> {};
+
+template <typename T>
+struct unwrap_reference<std::reference_wrapper<T>>
+: identity<T&> {};
+
+template <typename T>
+struct decay_reference : unwrap_reference<Decay<T>> {};
+template <typename T>
+using DecayReference = typename decay_reference<T>::type;
+{% endhighlight %}
+
+ [tuple iv]: /cxx11/2013/02/18/optimal-tuple-iv.html
+
+### is callable and is invokable
+### SFINAEing resultof
+
+
