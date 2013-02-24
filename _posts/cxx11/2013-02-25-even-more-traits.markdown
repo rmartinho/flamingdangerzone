@@ -3,7 +3,6 @@ layout: post
 title: Even more type traits
 categories: cxx11
 short: where I showcase more nice traits
-published: false
 ---
 
 I have before talked about [some type traits][previous] I use often. I feel like
