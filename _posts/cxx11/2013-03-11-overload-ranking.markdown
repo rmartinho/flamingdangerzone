@@ -39,11 +39,11 @@ overloads are all viable and enabled - after all, 15 is a multiple of 3, 5 and
 
 Why, by abusing a language feature of course! And one that is in quite a close
 relationship with overloading, to boot: Implicit conversions. I could bore you
-with a slew of Standardese at this point, but I think I'll just summarize:
-Overloads with the least amount of implicit conversions on each argument, if
+with a slew of standardese at this point, but I think I'll just summarize:
+overloads with the least amount of implicit conversions on each argument, if
 any, are preferred.
 
-The fix is pretty well known - overloading on `int` and `long`, and passing a
+The fix is pretty well known &emdash; overloading on `int` and `long`, and passing a
 literal `0` as the argument. This is often used when defining a trait's test
 functions:
 
@@ -279,7 +279,7 @@ matching-pit again. If that fails too, the base class' `operator choice_3()` is
 considered, which requires a derived-to-base conversion as the first SCS,
 fulfilling the ordering criteria from before. After that, it's normal ranking as
 we had before. If we throw qualifications back into the mix, we get a grand
-total of **17** overloads.
+total of **seventeen** overloads.
 
 ### But Wait, There's More! 
 
