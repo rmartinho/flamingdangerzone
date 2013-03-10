@@ -194,7 +194,7 @@ they came for free anyways.)
 
 ### Up To <strike>Eleven</strike> Thirteen
 
-So, the obivious question is: Can we extend this even more? Yes, abusing not
+So, the obivious question is: can we extend this even more? Yes, abusing not
 only *standard conversion sequences* (SCS), like we have until now, but also
 involving *user-defined conversion sequences* (UCS). An SCS consists of things
 like integer promotion, cv-qualification conversion, array-to-pointer decay,
