@@ -30,7 +30,7 @@ void print_fizzbuzz(){ std::cout << N << "\n"; }
 {% endhighlight %}
     
 A call to `print_fizzbuzz<15>()` will be ambiguous, since the first three
-overloads are all viable and enabled - after all, 15 is a multiple of 3, 5 and
+overloads are all viable and enabled &emdash; after all, 15 is a multiple of 3, 5 and
 15 itself. So, how do we go about disambiguating these?
 
  [enableif]: /cxx11/2012/06/01/almost-static-if.html
@@ -75,12 +75,12 @@ implicitly convertible to `long`. Perfect.
 
 ... or not, since it only allows to disambiguate two overloads. It also can't be
 used in a binary fashion, as overload resolution will look at each argument in
-isolation to determine ambiguity. It is, however, a good starting point - we can
-impose a total order over an unordered overload set with this. Let's see how we
-can increase the number of overloads.
+isolation to determine ambiguity. It is, however, a good starting point &emdash;
+we can impose a total order over an unordered overload set with this. Let's see
+how we can increase the number of overloads.
 
 There's one type of parameter that, by definition, will be selected as the very
-last choice for implicit conversions - the ellipsis (C-style variadic
+last choice for implicit conversions &emdash; the ellipsis (C-style variadic
 functions). With this, we can now order a total of **three** overloads, enough
 for our original problem:
 
@@ -120,10 +120,10 @@ just a special parameter form.
 
 ### For Great Justice
 
-There's something that still bugs me, though - the need for `DisableIf` to make
-the fourth overload, which is otherwise unrestricted, disjoint from the first
-three. And if we can impose a total order with three overloads, we can surely
-get it to four, right?
+There's something that still bugs me, though &emdash; the need for `DisableIf`
+to make the fourth overload, which is otherwise unrestricted, disjoint from the
+first three. And if we can impose a total order with three overloads, we can
+surely get it to four, right?
 
 Turns out we can go even farther than that. To do that, we have to take a step
 back and not only look at implicit conversions of unqualified types (like `int`
@@ -285,7 +285,7 @@ total of **seventeen** overloads.
 
 Astute readers will have noticed that the final ranking code contains the Secret
 Ingredient to an even more general solution. It just so turns out that C++ has
-another total ordering of conversion built-in - an infinitely extensible one to
+another total ordering of conversion built-in &emdash; an infinitely extensible one to
 boot. I'm talking about the *derived-to-base* conversion of course, which we
 considered a kind of a hinderence last time.
 
