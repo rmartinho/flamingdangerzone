@@ -122,8 +122,8 @@ just a special parameter form.
 
 There's something that still bugs me, though - the need for `DisableIf` to make
 the fourth overload, which is otherwise unrestricted, disjoint from the first
-three. And if we can impose a total order three overloads, we can surely get it
-to four, right?
+three. And if we can impose a total order with three overloads, we can surely
+get it to four, right?
 
 Turns out we can go even farther than that. To do that, we have to take a step
 back and not only look at implicit conversions of unqualified types (like `int`
