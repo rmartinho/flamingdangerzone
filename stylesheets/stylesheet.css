@@ -432,3 +432,6 @@ ul.posts span.description {
     text-decoration: none;
 }
 
+#guest_line {
+  font-style: italic;
+}

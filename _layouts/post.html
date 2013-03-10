@@ -23,6 +23,9 @@ is_post: true
       <article id="main_content" class="inner">
 
         <h2 id="post_title">{{ page.title }}</h2>
+        {% if page.author %}
+        <p id="guest_line">a guest post by <a href="{{ page.author_link }}">{{ page.author }}</a></p>
+        {% endif %}
         {{ content }}
 
       </article>
