@@ -258,7 +258,7 @@ void f(choice_3){}
 void f(choice_4){}
 {% endhighlight %}
 
-And the call being `f(select_rank{})`. Unfortunately, this won't work, because
+And the call being `f(select_overload{})`. Unfortunately, this won't work, because
 of <strike>the standard being a sissy</strike> some arcane rules saying that the first SCS
 doesn't count for the ordering, unless it's a derived-to-base conversion. Well,
 if they say so, we can arrange for that:
