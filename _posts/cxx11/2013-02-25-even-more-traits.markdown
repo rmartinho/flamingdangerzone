@@ -3,6 +3,7 @@ layout: post
 title: Even more type traits
 categories: cxx11
 short: where I showcase more nice traits
+last_edit: 10 March 2013
 ---
 
 I have before talked about [some type traits][previous] I use often. I feel like
@@ -122,7 +123,7 @@ struct unwrap_reference<std::reference_wrapper<T>>
 template <typename T>
 struct decay_reference : unwrap_reference<Decay<T>> {};
 template <typename T>
-using DecayReference = typename decay_reference<T>::type;
+using DecayReference = Invoke<decay_reference<T>>;
 {% endhighlight %}
 
  [tuple iv]: /cxx11/2013/02/18/optimal-tuple-iv.html
