@@ -25,7 +25,7 @@ template<unsigned N, DisableIf<Any<is_multiple_of<N, 3>, is_multiple_of<N, 5>>>.
 void print_fizzbuzz(){ std::cout << N << "\n"; }
 {% endhighlight %}
     
-A call to `print_fizzbuzz<15>()` will be ambiguous, since the first three overloads are all viable and enabled &emdash; after all, 15 is a multiple of 3, 5 and 15 itself. So, how do we go about disambiguating these?
+A call to `print_fizzbuzz<15>()` will be ambiguous, since the first three overloads are all viable and enabled &mdash; after all, 15 is a multiple of 3, 5 and 15 itself. So, how do we go about disambiguating these?
 
  [enableif]: /cxx11/2012/06/01/almost-static-if.html
 
@@ -33,7 +33,7 @@ A call to `print_fizzbuzz<15>()` will be ambiguous, since the first three overlo
 
 Why, by abusing a language feature of course! And one that is in quite a close relationship with overloading, to boot: Implicit conversions. I could bore you with a slew of standardese at this point, but I think I'll just summarize: overloads with the least amount of implicit conversions on each argument, if any, are preferred.
 
-The fix is pretty well known &emdash; overloading on `int` and `long`, and passing a literal `0` as the argument. This is often used when defining a trait's test functions:
+The fix is pretty well known &mdash; overloading on `int` and `long`, and passing a literal `0` as the argument. This is often used when defining a trait's test functions:
 
 {% highlight cpp %}
 template<class T>
@@ -58,9 +58,9 @@ The literal `0` is of type `int`, as such the call `test<T>(0)` will prefer the 
 
 ### Your Princess Is In Another Castle
 
-... or not, since it only allows to disambiguate two overloads. It also can't be used in a binary fashion, as overload resolution will look at each argument in isolation to determine ambiguity. It is, however, a good starting point &emdash; we can impose a total order over an unordered overload set with this. Let's see how we can increase the number of overloads.
+... or not, since it only allows to disambiguate two overloads. It also can't be used in a binary fashion, as overload resolution will look at each argument in isolation to determine ambiguity. It is, however, a good starting point &mdash; we can impose a total order over an unordered overload set with this. Let's see how we can increase the number of overloads.
 
-There's one type of parameter that, by definition, will be selected as the very last choice for implicit conversions &emdash; the ellipsis (C-style variadic functions). With this, we can now order a total of **three** overloads, enough for our original problem:
+There's one type of parameter that, by definition, will be selected as the very last choice for implicit conversions &mdash; the ellipsis (C-style variadic functions). With this, we can now order a total of **three** overloads, enough for our original problem:
 
 {% highlight cpp %}
 template<unsigned N, EnableIf<is_multiple_of<N, 15>>...>
@@ -101,7 +101,7 @@ void print_fizzbuzz(otherwise){ std::cout << N << "\n"; }
 
 ### For Great Justice
 
-There's something that still bugs me, though &emdash; the need for `DisableIf` to make the fourth overload, which is otherwise unrestricted, disjoint from the first three. And if we can impose a total order with three overloads, we can surely get it to four, right?
+There's something that still bugs me, though &mdash; the need for `DisableIf` to make the fourth overload, which is otherwise unrestricted, disjoint from the first three. And if we can impose a total order with three overloads, we can surely get it to four, right?
 
 Turns out we can go even farther than that. To do that, we have to take a step back and not only look at implicit conversions of unqualified types (like `int` and `long`), but also at how qualifications play into this. C++ actually provides us with a total ordering of references to cv-qualified types already, with every "extra" cv-qualification making the overload less preferred. Last but not least, we have any kind of rvalue reference being preferred to an lvalue reference-to-const for rvalue arguments.
 
@@ -218,7 +218,7 @@ With the same overloads and the same invokation, this actually works. If a `choi
 
 ### But Wait, There's More! 
 
-Astute readers will have noticed that the final ranking code contains the Secret Ingredient to an even more general solution. It just so turns out that C++ has another total ordering of conversion built-in &emdash; an infinitely extensible one to boot. I'm talking about the *derived-to-base* conversion of course, which we considered a kind of a hinderence last time.
+Astute readers will have noticed that the final ranking code contains the Secret Ingredient to an even more general solution. It just so turns out that C++ has another total ordering of conversion built-in &mdash; an infinitely extensible one to boot. I'm talking about the *derived-to-base* conversion of course, which we considered a kind of a hinderence last time.
 
 {% highlight cpp %}
 template<unsigned I>
