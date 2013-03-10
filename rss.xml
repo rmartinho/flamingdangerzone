@@ -17,7 +17,7 @@ layout: nil
       <title>{{ post.title }}</title>
       <link>http://flamingdangerzone.com{{ post.url }}</link>
       <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
-      <author>R. Martinho Fernandes</author>
+      <author>{% if post.author %}{{ post.author }}{% else %}R. Martinho Fernandes{% endif %}</author>
       <guid>http://rmartinho.github.com{{ post.id }}</guid>
       <description>{{ post.content | xml_escape }}</description>
     </item>
