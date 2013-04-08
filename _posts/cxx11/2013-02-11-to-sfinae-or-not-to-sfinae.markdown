@@ -57,7 +57,7 @@ int main() {
 `std::is_integral` derives from `std::true_type` or from `std::false_type`
 depending on whether the type is integral or not. The `f_impl` overloads take
 one of those types as argument and that's how overload resolution picks the
-right one. This may appears to do the same one can do with SFINAE, but it
+right one. This may appear to do the same one can do with SFINAE, but it
 doesn't. It does something that is similar but at times not appropriate, as we
 will see later.
 
@@ -298,7 +298,7 @@ template <typename Iterator>
 struct is_random_access_iterator
 : std::is_base_of<std::random_access_iterator_tag, IteratorCategory<Iterator>> {};
 
-// with tag dispatching
+// with SFINAE
 struct foo {
 public:
     foo() {}
@@ -348,7 +348,7 @@ make sure the constructors are removed from the overload candidate set when the
 argument is an input iterator.
 
 {% highlight cpp %}
-// with tag dispatching
+// with SFINAE, fixed
 struct foo {
 public:
     foo() {}
