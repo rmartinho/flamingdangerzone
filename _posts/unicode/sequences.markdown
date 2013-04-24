@@ -25,11 +25,16 @@ blah blah about output iterators blah blah
 
 ### Boost.Range
 
-Boost.Range sucks.
+I sought out ranges, and looked into Boost. Soon I changed my existing
+interfaces to be based on [Boost.Range].
+
+Soon enough I learned that Boost.Range is actually rather poor. It provides a
+nice-looking 
 
 ### Taussig
 
 Taussig is going to be awesome.
 
  [ogonek]: http://github.com/rmartinho/ogonek
+ [Boost.Range]: http://www.boost.org/libs/range/doc/html/index.html
 
