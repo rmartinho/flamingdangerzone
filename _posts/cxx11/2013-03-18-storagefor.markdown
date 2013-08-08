@@ -1,10 +1,12 @@
 ---
 layout: post
-title: Playing with raw storage
+title: Messing around with raw storage
 categories: cxx11
 short: where ?
 published: false
 ---
+
+
 
 {% highlight cpp %}
 template <typename T>
@@ -12,9 +14,12 @@ class uninitialized {
 public:
 
     template <typename... Args>
-    void initialize(Args&&... args) {
-        ::new(&storage) T(std::forward<Args>(args)...);
+    T& initialize(Args&&... args) {
+        return *::new(&storage) T(std::forward<Args>(args)...);
     }
+
+    T& get() { return storage; }
+    T const& get() const { return storage; }
 
     void uninitialize() {
         storage.~T();
