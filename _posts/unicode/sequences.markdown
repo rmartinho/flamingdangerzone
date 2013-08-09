@@ -61,6 +61,14 @@ Returning a pair is still not good because it's not a composable scheme:
 standard algorithms do take pairs of iterators, but as separate arguments, not
 as a single `std::pair` argument.
 
+{% highlight cpp %}
+std::pair<iterator, iterator> f();
+
+//std::copy(f(), std::back_inserter(some_vector)); // nope!
+auto pair = f();
+std::copy(pair.first, pair.second, std::back_inserter(some_vector));
+{% endhighlight %}
+
 ### Boost.Range
 
 So I peered into Boost and Boost peered back with [Boost.Range]. People told me
@@ -71,8 +79,6 @@ After using it for a while I realised that Boost.Range wasn't really helping
 much. It provides a nice-looking interface for some operations, but it falls
 very short as soon as one needs something non-trivial.
 
-#### Iterators all over again
-
 One of the biggest gripes I had with Boost.Range was that when you look at it,
 Boost.Range is just iterators all over again. Boost.Range is easy to use if you
 are merely consuming ranges and range adaptors, but doesn't help at all if you
@@ -81,8 +87,6 @@ want to create some yourself: you have to go back to writing your own iterators.
 [Boost.Iterator] helps a bit in writing your own iterators, mostly because it
 takes all the boilerplate with typedefs and all the various operators away, but
 I think it doesn't help enough.
-
-#### You can never have enough end iterators
 
 One issue I found repeatedly relates to writing iterator adaptors that need to
 read an unknown number of elements from the underlying sequence to produce one
@@ -93,30 +97,53 @@ Since an iterator on its own does not know when the sequence ends, the decoding
 iterator cannot just wrap one iterator from the sequence being decoded. Say,
 when decoding UTF-8, if we find the start of a three-byte sequence, we need to
 read two more bytes, and we need an end iterator to even know if those two other
-bytes actually exist. So such an iterator is forced to carry around not only the
-iterator it is wrapping, but the end iterator as well.
+bytes actually exist.
 
-This gets awkward pretty fast. Think about an end iterator for the adapted
-sequence. Since it has the same type as a regular adapted iterator, it carries
-around two iterators, and they are both the end iterator of the underlying
-sequence.
+{% highlight cpp %}
+decoding_iterator operator++() {
+    // here we know we can advance at least once, because calling op++
+    // on an end iterator has undefined behaviour: we can assume that,
+    // since op++ was called, this is not an end iterator, and therefore
+    // it doesn't wrap an end iterator: wrapped_iterator is dereferenceable.
+    auto first_byte = *wrapped_iterator++; // get a byte and advanced
+
+    // Now that we advanced the wrapped iterator, how do we know if
+    // it reached or not the end? It may or may not be dereferenceable.
+    // To know for sure we would need a wrapped end iterator to test.
+    if(is_multibyte_starter(first_byte)) {
+        auto second_byte = *wrapped_iterator;
+        // ooops, wrapped_iterator may no longer be dereferenceable!
+
+        // ...
+    }
+
+    // ...
+}
+{% endhighlight %}
+
+So such a decoding iterator is forced to carry around not only the iterator it
+is wrapping, but the end iterator as well. This gets awkward pretty fast. Think
+about an end iterator for the adapted sequence. Since it has the same type as a
+regular adapted iterator, it carries around two iterators, and they are both the
+end iterator of the underlying sequence.
 
 Returning such an adapted range looks something like the following:
 
 {% highlight cpp %}
 return boost::make_iterator_range(
-    make_adapted_iterator(s.begin(), s.end()),
-    make_adapted_iterator(s.end(), s.end()));
+    make_adapted_iterator(boost::begin(s), boost::end(s)),
+    make_adapted_iterator(boost::end(s), boost::end(s)));
 {% endhighlight %}
 
-And now consider what happens if you adapt one of those iterators with another
-iterator adaptor that suffers from the same awkwardness. Each of these new
-iterators will hold a pair of the adaptors on the first level, each of which has
-a pair of iterators from the source sequence. All of a sudden you are carrying
-around eight iterators from the source sequence, but you are only actually
-keeping track of two positions in that sequence (seven of those eight iterators
-are end iterators). This exponential increase in size for no gain makes me
-uneasy.
+Now consider what happens if you adapt one of those range adaptors with another
+adaptor that suffers from the same awkwardness.
+
+Each of the iterators for this two-level range adaptor will hold a pair of the
+adaptors on the first level, each of which has a pair of iterators from the
+source sequence. All of a sudden you are carrying around eight iterators from
+the source sequence, but you are only actually keeping track of two positions in
+that sequence (seven of those eight iterators are end iterators!). This is an
+exponential increase in size for no gain that makes me uneasy.
 
 ### The wheel
 
