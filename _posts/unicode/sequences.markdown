@@ -100,19 +100,23 @@ read two more bytes, and we need an end iterator to even know if those two other
 bytes actually exist.
 
 {% highlight cpp %}
-decoding_iterator operator++() {
+utf8_decoding_iterator operator++() {
     // here we know we can advance at least once, because calling op++
     // on an end iterator has undefined behaviour: we can assume that,
     // since op++ was called, this is not an end iterator, and therefore
-    // it doesn't wrap an end iterator: wrapped_iterator is dereferenceable.
-    auto first_byte = *wrapped_iterator++; // get a byte and advanced
+    // it doesn't wrap an end iterator, meaning wrapped_iterator is
+    // dereferenceable.
+    auto first_byte = *wrapped_iterator++; // get a byte and advance
 
     // Now that we advanced the wrapped iterator, how do we know if
     // it reached or not the end? It may or may not be dereferenceable.
     // To know for sure we would need a wrapped end iterator to test.
+
+    // Depending on the value of the first byte, we may need to read
+    // more bytes to decode one code point
     if(is_multibyte_starter(first_byte)) {
+        // wrapped_iterator may no longer be dereferenceable here!
         auto second_byte = *wrapped_iterator;
-        // ooops, wrapped_iterator may no longer be dereferenceable!
 
         // ...
     }
