@@ -3,6 +3,7 @@ layout: post
 title: Sequences
 categories: unicode
 short: where I explain why I don't like iterators
+published: false
 ---
 
 When I started designing [ogonek] I knew that manipulating sequences of things
