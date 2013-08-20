@@ -67,7 +67,7 @@ people making that mistake on Stack Overflow.
 So, obviously, I wrote a template alias to ease this.
 
 {% highlight cpp %}
-template <typename... T>
+template <typename T>
 using StorageFor = Invoke<std::aligned_storage<sizeof(T), alignof(T)>>;
 {% endhighlight %}
 
