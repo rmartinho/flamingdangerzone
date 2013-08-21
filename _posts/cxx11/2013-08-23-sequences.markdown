@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Sequences
-categories: unicode
+categories: cxx11
 short: where I explain why I don't like iterators
 published: false
 ---
