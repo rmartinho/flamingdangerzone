@@ -3,7 +3,7 @@ layout: post
 title: The little tail that could
 categories: unicode
 short: where I expound upon ogonek's design goals
-published: false
+published: true
 ---
 
 For the past year or so, I have been dedicating some of my free time to the
@@ -12,7 +12,7 @@ decided to dub 'ogonek'.
 
 Now, for some background, I have a very poor opinion of many C++ APIs out there.
 Boost is pretty much the only one that I hold in high regard in that
-respect&emdash;even though I do have my complaints about it.
+respect&mdash;even though I do have my complaints about it.
 
 For my own API, the first things I set in stone were the design goals and a few
 golden rules to produce an API "the way I like it". I feel like at least the
@@ -26,7 +26,7 @@ them for their own designs.
 ## The pit of success
 
 I really like the pit of success/pit of despair analogy. Some languages/APIs
-make it really easy for you to mess up&emdash;a small mistake and you fall into
+make it really easy for you to mess up&mdash;a small mistake and you fall into
 the pit of despair. They require a lot of care to do things right. You are
 basically walking on the border of the pit of despair, and once you fall in, it
 takes effort to get out of it.
@@ -41,7 +41,7 @@ and a strong preference for pit of success APIs. Ogonek's API is designed to be
 a pit of success API.
 
 Validity and correctnesss come first; speed is irrelevant in the face of those.
-But don't get me wrong&emdash;none of this means that I am "designing for slow".
+But don't get me wrong&mdash;none of this means that I am "designing for slow".
 Efficiency is still a valid concern, and I have indeed made several design
 decisions that stem from a need for efficiency, but always within the bounds of
 correctness.
@@ -69,8 +69,8 @@ Some people prefer "convenience" APIs that sort of guess what you meant to do
 and if they guess wrong you get to debug that later. Oh, the joy. Needless to
 say, I don't like those.
 
-Ogonek won't be like that&emdash;it will make no guesses as to what you meant.
-Don't expect the library to make any arbitrary decisions in your name&emdash;if
+Ogonek won't be like that&mdash;it will make no guesses as to what you meant.
+Don't expect the library to make any arbitrary decisions in your name&mdash;if
 you don't care about some details important for correctness, ogonek is not
 suited for you.
 
@@ -108,31 +108,31 @@ sometime. There are several possible times for that failure to manifest itself.
 For what concerns API design, the relevant possibilities are, in chronological
 order, as follows.
 
-1. Compilation time&emdash;some mistakes can be detected by the compiler.
-The most common of such mistakes are either syntactic errors or type errors.
+**Compilation time**&mdash;some mistakes can be detected by the compiler.  The
+most common of such mistakes are either syntactic errors or type errors.
 Syntactic errors don't have much influence in API design, but type errors are
 very important. The more information that is encoded in types, the more things
 can be checked automatically by the compiler.
 
-2. Linkage time&emdash;these are either boring or really annoying to fix. There
-used to be a common idiom in C++03&emdash;private copy constructors without a
-definition&emdash;that would cause some rare mistakes to manifest themselves at
+**Linkage time**&mdash;these are either boring or really annoying to fix. There
+used to be a common idiom in C++03&mdash;private copy constructors without a
+definition&mdash;that would cause some rare mistakes to manifest themselves at
 linkage time, but I don't think there is anything useful about this kind of
 errors for driving modern API design or implementation.
 
-3. Testing time&emdash;this is when violated assertions manifest themselves.
-Some assertions will always be hit when wrong code is used, and as usual produce
-a nasty error message in some test log. Those are very useful to have, because
-they point out bad code as soon as it runs, every time it runs. While not
-explicitly part of the language-level interface, those assertions do form part
-of the effective interface of the library, and they serve to enforce it beyond
-what is possible to enforce through type-checking.
+**Testing time**&mdash;this is when violated assertions manifest themselves.
+Some assertions will always be hit when wrong code is used, and as usual
+produce a nasty error message in some test log. Those are very useful to have,
+because they point out bad code as soon as it runs, every time it runs. While
+not explicitly part of the language-level interface, those assertions do form
+part of the effective interface of the library, and they serve to enforce it
+beyond what is possible to enforce through type-checking.
 
-4. Run time&emdash;the difference between this and testing time is subtle. Some
+**Run time**&mdash;the difference between this and testing time is subtle. Some
 mistakes won't manifest at any previous stage, and will manifest under very
 unique or unusual circumstances. Unless you are lucky, these can slip through
-testing and end up in the final product, undetected until some user finds it and
-hopefully files a bug report.
+testing and end up in the final product, undetected until some user finds it
+and hopefully files a bug report.
 
 The longer an error is allowed to remain, the more code will be built around it,
 and that increases the likelihood of a fix affecting a large portion of other
@@ -149,8 +149,8 @@ considered of unknown well-formedness. Some processes, like validating or
 decoding, accept such sequences and return sequences that are thus statically
 known well-formed. Some functions accept only well-formed sequences as input,
 and using them will sequences of types that have not been blessed by the
-well-formedness gods will cause a compiler error&emdash;hopefully I can make it
-a descriptive one&emdash;and force you to think about whether your input is
+well-formedness gods will cause a compiler error&mdash;hopefully I can make it
+a descriptive one&mdash;and force you to think about whether your input is
 known to be valid or not.
 
 As a side effect of this, I can do some efficiency improvements. Some operations
@@ -214,14 +214,14 @@ encoding directly.
 
 In this case, you have two options. If you want the underlying storage merely to
 look at it, you can simply obtain a `const` view of it, but if you want to
-perform some mutation on that storage, you cannot do that in-place&emdash;that
+perform some mutation on that storage, you cannot do that in-place&mdash;that
 would allow you to violate one of the invariants of the string type, namely the
 one that says the storage is always well-formed. In order to achieve such
 direct mutation of the storage without breaking invariants, the only way to get
 a mutable view of the storage is to move it out of the ogonek string object.
 
-That leaves an empty string&emdash;empty strings still hold the
-invariants&emdash; and the old storage moved into an external object. That
+That leaves an empty string&mdash;empty strings still hold the
+invariants&mdash; and the old storage moved into an external object. That
 object can be modified in any way desired, and after that it can be reassigned
 to the old Unicode string that was empty, or used to initialise a new one. This
 reassignment or initialisation is the decontamination procedure. It enforces the
