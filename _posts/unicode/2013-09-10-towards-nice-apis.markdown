@@ -150,7 +150,7 @@ represent a well-formed sequence. All externally provided sequences are
 considered of unknown well-formedness. Some processes, like validating or
 decoding, accept such sequences and return sequences that are thus statically
 known well-formed. Some functions accept only well-formed sequences as input,
-and using them will sequences of types that have not been blessed by the
+and using them with sequences of types that have not been blessed by the
 well-formedness gods will cause a compiler error&mdash;hopefully I can make it
 a descriptive one&mdash;and force you to think about whether your input is
 known to be valid or not.
@@ -195,7 +195,7 @@ be your last words.
 Well, if you want to walk on the edge, I can allow that. The C++ ecosystem has
 been around for a long time before ogonek, and sometimes you really need to get
 out of the sweet and cozy safety bubble to interoperate with some old code, or
-to implement some algorithm in the most performant manner. Ogonek catters for
+to implement some algorithm in the most performant manner. Ogonek caters for
 this by providing escape hatches for most safety mechanisms.
 
 If you have a sequence that you know is well-formed because, say, it was
