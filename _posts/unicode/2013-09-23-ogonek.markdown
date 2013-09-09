@@ -1,0 +1,50 @@
+---
+layout: post
+title: The little tail that could
+categories: unicode
+short: where I expound upon ogonek's design goals
+---
+
+For the past year or so, I have been dedicating some of my free time to the
+design and implementation of a C++11 library for dealing with Unicode, that I
+decided to dub 'ogonek'.
+
+Now, for some background, I have a very poor opinion of many C++ APIs out there.
+Boost is pretty much the only one that I hold in high regard in that
+respect&emdash;even though I do have my complaints about it.
+
+For my own API, the first things I set in stone were the design goals and a few
+golden rules to produce an API "the way I like it". I feel like some of these
+should be the rule everywhere, but as I learned after all this time, they are
+not. Still, since I think they are important rules, I am following them in my
+interface design, and listing them here for others to get an understanding of
+why some things are the way they are.
+
+## The pit of success
+
+I really like the pit of success/pit of despair analogy. Some languages/APIs
+make it really easy for you to mess up&emdash;a small mistake and you fall into
+the pit of despair. They require a lot of care to do things right. You are
+basically walking on the border of the pit of despair, and once you fall in, it
+takes effort to get out of it.
+
+Some other languages/APIs make it hard to mess up and instead lead you naturally
+to good solutions. This is called "pushing you into the pit of success".  If you
+want to do something that is questionable and dangerous with one of these
+languages/APIs, you need to work for and climb out of the pit of success.
+
+As should be obvious by now, I have a strong dislike for pit of despair APIs,
+and a strong preference for pit of success APIs. Ogonek's API is designed to be
+a pit of success API. Validity and correctnesss come first
+
+## Explicit is better than implicit
+
+## Implicit is better than explicit
+
+## Fail fast, fail loudly
+
+## You are not alone
+
+## Escape hatches
+
+
