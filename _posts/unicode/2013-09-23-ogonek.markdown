@@ -35,11 +35,68 @@ languages/APIs, you need to work for and climb out of the pit of success.
 
 As should be obvious by now, I have a strong dislike for pit of despair APIs,
 and a strong preference for pit of success APIs. Ogonek's API is designed to be
-a pit of success API. Validity and correctnesss come first
+a pit of success API.
+
+Validity and correctnesss come first; speed is irrelevant in the face of those.
+But don't get me wrong&emdash;none of this means that I am "designing for slow".
+Efficiency is still a valid concern, and I have indeed made several design
+decisions that stem from a need for efficiency, but always within the bounds of
+correctness.
+
+In the end, I am striving for having my cake and eating it too: I want a design
+that favours correctness and is efficient. That may be a lot to ask for, but I
+believe I can achieve a design that enforces correctness and is efficient enough
+for many tasks.
+
+In few words, whenever the choice between a correct design and an efficient
+design must be made, I pick the correct design. Whenever I can pick both, I pick
+both.
+
+As you will see from the rest of this article, this pit of success idea is the
+overarching theme of most decisions I made in the API and is highly pervasive
+throughout it.
 
 ## Explicit is better than implicit
 
+If you care about correctness, you don't want all kinds of stuff happening
+behind your back as that makes it harder to keep track of what is happening and
+makes it easier for mistakes to go unnoticed.
+
+Some people prefer "convenience" APIs that sort of guess what you meant to do
+and if they guess wrong you get to debug that later. Oh, the joy. Needless to
+say, I don't like those.
+
+Ogonek won't be like that&emdash;it will make no guesses as to what you meant.
+Don't expect the library to make any arbitrary decisions in your name&emdash;if
+you don't care about some details important for correctness, ogonek is not
+suited for you.
+
+I know this might make the API harder to learn, because it will require some
+people to be aware of certain things that they never came across before. I think
+this is a good thing. It means that if you try to do something without a minimal
+understanding of it, the code will likely not compile and you will be forced to
+go and grab some fundamental domain knowledge. Once again, it's the pit of
+success idea at work.
+
 ## Implicit is better than explicit
+
+At this point you may be thinking if this heading is an editorial mistake. It
+isn't. While I argued for making some operations explicit, I don't have a fetish
+for unnecessarily verbose code. There are many operations that can be performed
+implicitly because they aren't lossy, surprising, dangerous, or excessively
+inefficient.
+
+These operations that can be implicit are especially common if you follow the
+pit of success rule in designing the API as there will be less ways of truly
+messing up. And with this the API ends pushing you even harder into the pit of
+success, since it gives you less surface area to make mistakes.
+
+In those operations there is usually no choice to be made by the user, and
+forcing them to explicitly choose the single alternative available is annoying
+and only adds clutter to the code.
+
+In short, operations on ogonek are automated whenever that does not reduce
+flexibility or functionality, and require explicit intervention otherwise.
 
 ## Fail fast, fail loudly
 
