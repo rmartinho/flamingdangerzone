@@ -101,6 +101,63 @@ flexibility or functionality, and require explicit intervention otherwise.
 
 ## Fail fast, fail loudly
 
+So what happens whenever the user makes a mistake? Well, something will fail,
+sometime. There are several possible times for that failure to manifest itself.
+For what concerns API design, the relevant possibilities are, in chronological
+order, as follows.
+
+1. Compilation time&emdash;some mistakes can be detected by the compiler.
+The most common of such mistakes are either syntactic errors or type errors.
+Syntactic errors don't have much influence in API design, but type errors are
+very important. The more information that is encoded in types, the more things
+can be checked automatically by the compiler.
+
+2. Linkage time&emdash;these are either boring or really annoying to fix. There
+used to be a common idiom in C++03&emdash;private copy constructors without a
+definition&emdash;that would cause some rare mistakes to manifest themselves at
+linkage time, but I don't think there is anything useful about this kind of
+errors for driving modern API design or implementation.
+
+3. Testing time&emdash;this is when violated assertions manifest themselves.
+Some assertions will always be hit when wrong code is used, and as usual produce
+a nasty error message in some test log. Those are very useful to have, because
+they point out bad code as soon as it runs, every time it runs. While not
+explicitly part of the language-level interface, those assertions do form part
+of the effective interface of the library, and they serve to enforce it beyond
+what is possible to enforce through type-checking.
+
+4. Run time&emdash;the difference between this and testing time is subtle. Some
+mistakes won't manifest at any previous stage, and will manifest under very
+unique or unusual circumstances. Unless you are lucky, these can slip through
+testing and end up in the final product, undetected until some user finds it and
+hopefully files a bug report.
+
+The longer an error is allowed to remain, the more code will be built around it,
+and that increases the likelihood of a fix affecting a large portion of other
+code.
+
+In ogonek I strive to have as many errors as possible manifest themselves upon
+compilation. This means encoding more and more information in types. This
+certainly involves some template meta-programming, but so far always in healthy
+doses.
+
+A very important property that is encoded in some ogonek types is whether they
+represent a well-formed sequence. All externally provided sequences are
+considered of unknown well-formedness. Some processes, like validating or
+decoding, accept such sequences and return sequences that are thus statically
+known well-formed. Some functions accept only well-formed sequences as input,
+and using them will sequences of types that have not been blessed by the
+well-formedness gods will cause a compiler error&emdash;hopefully I can make it
+a descriptive one&emdash;and force you to think about whether your input is
+known to be valid or not.
+
+As a side effect of this, I can do some efficiency improvements. Some operations
+accept sequences regardless of their well-formedness, like initialising an
+instance of ogonek's core string type. Having information about well-formedness
+available statically, I can make a validation function that is a no-op when the
+input is known well-formed, and performs regular validation otherwise. I really
+like this because I get both correctness and efficiency from this design.
+
 ## You are not alone
 
 ## Escape hatches
