@@ -3,6 +3,7 @@ layout: post
 title: The little tail that could
 categories: unicode
 short: where I expound upon ogonek's design goals
+published: false
 ---
 
 For the past year or so, I have been dedicating some of my free time to the
