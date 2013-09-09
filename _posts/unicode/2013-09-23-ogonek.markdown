@@ -15,11 +15,13 @@ Boost is pretty much the only one that I hold in high regard in that
 respect&emdash;even though I do have my complaints about it.
 
 For my own API, the first things I set in stone were the design goals and a few
-golden rules to produce an API "the way I like it". I feel like some of these
-should be the rule everywhere, but as I learned after all this time, they are
-not. Still, since I think they are important rules, I am following them in my
-interface design, and listing them here for others to get an understanding of
-why some things are the way they are.
+golden rules to produce an API "the way I like it". I feel like at least the
+first one should be the rule everywhere, but as I learned after all this time,
+it is not.
+
+I am following them in my interface design, and listing them here for others to
+get an understanding of why some things are the way they are, and maybe to adapt
+them for their own designs.
 
 ## The pit of success
 
@@ -158,8 +160,80 @@ available statically, I can make a validation function that is a no-op when the
 input is known well-formed, and performs regular validation otherwise. I really
 like this because I get both correctness and efficiency from this design.
 
+I also keep track of other properties statically in a similar manner, in order
+to enforce some other invariants and enable some other optimisations, but
+well-formedness is the most important one.
+
 ## You are not alone
+
+One thing that really annoys me when I look at a C++ API is seeing a complete
+disregard for interoperation with the standard library. An API designed in a
+vacuum will cause you pain when you need to use it with other code. If it cannot
+work with the standard library that is really annoying, because the standard
+library is used everywhere (it is, isn't it?).
+
+I want ogonek to integrate nice with the existing language features and with the
+existing standard library. That means supporting the use with standard
+algorithms and containers by providing and consuming iterators, and supporting
+the use of iostreams.
 
 ## Escape hatches
 
+So, ogonek will toss you into this sanitised world where you can only do things
+that won't hurt you. However, sometimes you really want to walk on the edge of
+the pit, instead of jumping straight into it.
+
+Maybe you don't want to validate that string you obtained from that library that
+you are sure is well-formed, even though the library provided it as some old
+dusty type that won't be considered well-formed by ogonek. Maybe you want to
+access the underlying storage of that string and mess directly with the bytes
+and not the code points. *"I know what I am doing."* you say, hoping those won't
+be your last words.
+
+Well, if you want to walk on the edge, I can allow that. The C++ ecosystem has
+been around for a long time before ogonek, and sometimes you really need to get
+out of the sweet and cozy safety bubble to interoperate with some old code, or
+to implement some algorithm in the most performant manner. Ogonek catters for
+this by providing escape hatches for most safety mechanisms.
+
+If you have a sequence that you know is well-formed because, say, it was
+returned by a library that never produces ill-formed sequences, you can simply
+mark it as well-formed without actually performing the validation. Remember
+though, that you are walking on the edge here. This is functionality that can be
+misused, and when that happens, there is nothing the library can do to help.
+
+Some other escape hatches are more like airlocks, though. You can get out of the
+safety bubble, but if you want back in, you need to go through decontamination
+in the airlock.
+
+As an example of such a mechanism, imagine you want to access the underlying
+storage of the Unicode string type in ogonek, in order to, for example pass some
+bytes directly to a legacy function. The normal interface for the string exposes
+code points, but many legacy functions out there take bytes in some known
+encoding directly.
+
+In this case, you have two options. If you want the underlying storage merely to
+look at it, you can simply obtain a `const` view of it, but if you want to
+perform some mutation on that storage, you cannot do that in-place&emdash;that
+would allow you to violate one of the invariants of the string type, namely the
+one that says the storage is always well-formed. In order to achieve such
+direct mutation of the storage without breaking invariants, the only way to get
+a mutable view of the storage is to move it out of the ogonek string object.
+
+That leaves an empty string&emdash;empty strings still hold the
+invariants&emdash; and the old storage moved into an external object. That
+object can be modified in any way desired, and after that it can be reassigned
+to the old Unicode string that was empty, or used to initialise a new one. This
+reassignment or initialisation is the decontamination procedure. It enforces the
+string invariants by validating the storage again for well-formedness. As you
+may have guessed, you can also escape this validation if you are sure the
+mutation didn't produce an ill-formed sequence by using the aforementioned
+validation escape hatch.
+
+Altogether, I really like the direction that these few rules drove the API to.
+It takes some extra effort to implement, but in the end I get an API that has
+many. many correctness checks made by the compiler, and still keeps reasonable
+efficiency.
+
+I can have my cake and eat a significant portion of it.
 
