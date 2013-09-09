@@ -158,7 +158,7 @@ the [D standard library][phobos], from .NET's [IEnumerable] interface, from my
 experience with [Haskell][Data.List], and from Bart de Smet's [MinLINQ]
 experiment.
 
-The result of this will be the subject of my next post.
+I will go over that exploration in a future post.
 
  [ogonek]: http://github.com/rmartinho/ogonek
  [Boost.Range]: http://www.boost.org/libs/range/doc/html/index.html
