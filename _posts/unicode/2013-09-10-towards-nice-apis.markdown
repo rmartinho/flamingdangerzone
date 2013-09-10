@@ -166,10 +166,11 @@ auto z = ogonek::titlecase(ogonek::decode<utf16>(not_known_wellformed)); // fine
 
 As a side effect of this, I can do some efficiency improvements. Some operations
 accept sequences regardless of their well-formedness, like initialising an
-instance of ogonek's core string type. Having information about well-formedness
-available statically, I can make a validation function that is a no-op when the
-input is known well-formed, and performs regular validation otherwise. I really
-like this because I get both correctness and efficiency from this design.
+instance of ogonek's core string type (named `text`). Having information about
+well-formedness available statically, I can make a validation function that is a
+no-op when the input is known well-formed, and performs regular validation
+otherwise. I really like this because I get both correctness and efficiency from
+this design.
 
 I also keep track of other properties statically in a similar manner, in order
 to enforce some other invariants and enable some other optimisations, but
@@ -220,7 +221,7 @@ std::string legacy_well_formed = some_well_behaved_function();
 auto decoded = ogonek::decode<utf8>(legacy_well_formed, ogonek::assume_valid);
 
 std::string not_always_well_formed = some_ill_behaved_function();
-// This is and advanced dangerous feature; the following would result in
+// This is an advanced dangerous feature; the following would result in
 // undefined behaviour
 //auto decoded = ogonek::decode<utf8>(not_always_well_formed, ogonek::assume_valid);
 // The simplest solution is still safe because it validates the input:
@@ -232,7 +233,7 @@ safety bubble, but if you want back in, you need to go through decontamination
 in the airlock.
 
 As an example of such a mechanism, imagine you want to access the underlying
-storage of the Unicode string type in ogonek (named `text`), in order to, for
+storage of the Unicode string type in ogonek, in order to, for
 example pass some bytes directly to a legacy function. The normal interface for
 the string exposes code points, but many legacy functions out there take bytes
 in some known encoding directly.
