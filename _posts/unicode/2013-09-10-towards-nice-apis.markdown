@@ -275,10 +275,10 @@ t = std::move(s); // move storage back in, validation performed
 //t.assign(std::move(s), ogonek::assume_valid); // just a move, no validation
 {% endhighlight %}
 
-Altogether, I really like the direction that these few rules drove the API to.
-It takes some extra effort to implement, but in the end I get an API that has
-many, many correctness checks made by the compiler, and still keeps reasonable
-efficiency.
+Altogether, I really like the direction that these few rules drove the API
+towards.  It takes some extra effort to implement, but in the end I get an API
+that has many, many correctness checks made by the compiler, and still keeps
+reasonable efficiency.
 
 I can have my cake and eat a significant portion of it.
 
