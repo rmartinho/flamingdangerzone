@@ -233,10 +233,10 @@ safety bubble, but if you want back in, you need to go through decontamination
 in the airlock.
 
 As an example of such a mechanism, imagine you want to access the underlying
-storage of the Unicode string type in ogonek, in order to, for
-example pass some bytes directly to a legacy function. The normal interface for
-the string exposes code points, but many legacy functions out there take bytes
-in some known encoding directly.
+storage of the `text` type in ogonek, in order to, for example pass some bytes
+directly to a legacy function. The normal interface for the string exposes code
+points, but many legacy functions out there take bytes in some known encoding
+directly.
 
 {% highlight cpp %}
 void legacy_function(std::string const& utf8_bytes);
@@ -257,9 +257,9 @@ legacy_function(t.storage()); // const view
 
 In order to achieve such direct mutation of the storage without breaking
 invariants, the only way to get a mutable view of the storage is to move it out
-of the ogonek string object.  That leaves an empty string&mdash;empty strings
-still hold the invariants&mdash;and the old storage moved into an external
-object. That object can be modified in any way desired, and after that it can be
+of the `text` object.  That leaves an empty text&mdash;empty text still
+holds the invariants&mdash;and the old storage moved into an external object.
+That object can be modified in any way desired, and after that it can be
 reassigned to the old Unicode string that was empty, or used to initialise a new
 one. This reassignment or initialisation is the decontamination procedure. It
 enforces the string invariants by validating the storage again for
@@ -271,7 +271,7 @@ aforementioned validation escape hatch.
 std::string s { t.extract_storage(); }; // take storage out
 assert(t.empty()); // storage was moved out
 legacy_mutating_function(s); // mutate the storage
-t = s; // assign storage back in, validation performed
+t = std::move(s); // move storage back in, validation performed
 {% endhighlight %}
 
 Altogether, I really like the direction that these few rules drove the API to.
