@@ -49,9 +49,9 @@ decisions that stem from a need for efficiency, but always within the bounds of
 correctness.
 
 In the end, I am striving for having my cake and eating it too: I want a design
-that favours correctness and is efficient. That may be a lot to ask for, but I
-believe I can achieve a design that enforces correctness and is efficient enough
-for many tasks.
+that favours correctness and allows efficient implementations. That may be a lot
+to ask for, but I believe I can achieve such a design that enforces correctness
+and allows efficiency enough for many tasks.
 
 In few words, whenever the choice between a correct design and an efficient
 design must be made, I pick the correct design. Whenever I can pick both, I pick
@@ -88,7 +88,7 @@ success idea at work.
 At this point you may be thinking if this heading is an editorial mistake. It
 isn't. While I argued for making some operations explicit, I don't have a fetish
 for unnecessarily verbose code. There are many operations that can be performed
-implicitly because they aren't lossy, surprising, dangerous, or excessively
+implicitly because they aren't lossy, surprising, dangerous, or unreasonably
 inefficient.
 
 These operations that can be implicit are especially common if you follow the
@@ -155,6 +155,15 @@ well-formedness gods will cause a compiler error&mdash;hopefully I can make it
 a descriptive one&mdash;and force you to think about whether your input is
 known to be valid or not.
 
+{% highlight cpp %}
+std::u16string not_known_wellformed = f(); // u16string could come from anywhere
+ogonek::text<utf8> known_wellformed = g(); // text has well-formedness invariant
+
+auto x = ogonek::titlecase(not_known_wellformed); // error
+auto y = ogonek::titlecase(known_wellformed); // fine
+auto z = ogonek::titlecase(ogonek::decode<utf16>(not_known_wellformed)); // fine
+{% endhighlight %}
+
 As a side effect of this, I can do some efficiency improvements. Some operations
 accept sequences regardless of their well-formedness, like initialising an
 instance of ogonek's core string type. Having information about well-formedness
@@ -174,8 +183,8 @@ vacuum will cause you pain when you need to use it with other code. If it cannot
 work with the standard library that is really annoying, because the standard
 library is used everywhere (it is, isn't it?).
 
-I want ogonek to integrate nice with the existing language features and with the
-existing standard library. That means supporting the use with standard
+I want ogonek to integrate nicely with the existing language features and with
+the existing standard library. That means supporting the use with standard
 algorithms and containers by providing and consuming iterators, and supporting
 the use of iostreams.
 
@@ -185,7 +194,7 @@ So, ogonek will toss you into this sanitised world where you can only do things
 that won't hurt you. However, sometimes you really want to walk on the edge of
 the pit, instead of jumping straight into it.
 
-Maybe you don't want to validate that string you obtained from that library that
+Maybe you don't want to validate that string you obtained from that library as
 you are sure is well-formed, even though the library provided it as some old
 dusty type that won't be considered well-formed by ogonek. Maybe you want to
 access the underlying storage of that string and mess directly with the bytes
@@ -204,15 +213,34 @@ mark it as well-formed without actually performing the validation. Remember
 though, that you are walking on the edge here. This is functionality that can be
 misused, and when that happens, there is nothing the library can do to help.
 
+{% highlight cpp %}
+std::string legacy_well_formed = some_well_behaved_function();
+// This is cheaper than validating, but dangerous; only safe because our data
+// came from a function that only produces well-formed data (let's hope it's not buggy)
+auto decoded = ogonek::decode<utf8>(legacy_well_formed, ogonek::assume_valid);
+
+std::string not_always_well_formed = some_ill_behaved_function();
+// This is and advanced dangerous feature; the following would result in
+// undefined behaviour
+//auto decoded = ogonek::decode<utf8>(not_always_well_formed, ogonek::assume_valid);
+// The simplest solution is still safe because it validates the input:
+auto decoded = ogonek::decode<utf8>(not_always_well_formed);
+{% endhighlight %}
+
 Some other escape hatches are more like airlocks, though. You can get out of the
 safety bubble, but if you want back in, you need to go through decontamination
 in the airlock.
 
 As an example of such a mechanism, imagine you want to access the underlying
-storage of the Unicode string type in ogonek, in order to, for example pass some
-bytes directly to a legacy function. The normal interface for the string exposes
-code points, but many legacy functions out there take bytes in some known
-encoding directly.
+storage of the Unicode string type in ogonek (named `text`), in order to, for
+example pass some bytes directly to a legacy function. The normal interface for
+the string exposes code points, but many legacy functions out there take bytes
+in some known encoding directly.
+
+{% highlight cpp %}
+void legacy_function(std::string const& utf8_bytes);
+void legacy_mutating_function(std::string& utf8_bytes);
+{% endhighlight %}
 
 In this case, you have two options. If you want the underlying storage merely to
 look at it, you can simply obtain a `const` view of it, but if you want to
@@ -222,8 +250,14 @@ one that says the storage is always well-formed. In order to achieve such
 direct mutation of the storage without breaking invariants, the only way to get
 a mutable view of the storage is to move it out of the ogonek string object.
 
+{% highlight cpp %}
+ogonek::text<utf8> t = g();
+legacy_function(t.storage()); // const view
+//legacy_mutating_function(t.storage()); // error: it's const
+{% endhighlight %}
+
 That leaves an empty string&mdash;empty strings still hold the
-invariants&mdash; and the old storage moved into an external object. That
+invariants&mdash;and the old storage moved into an external object. That
 object can be modified in any way desired, and after that it can be reassigned
 to the old Unicode string that was empty, or used to initialise a new one. This
 reassignment or initialisation is the decontamination procedure. It enforces the
@@ -232,9 +266,16 @@ may have guessed, you can also escape this validation if you are sure the
 mutation didn't produce an ill-formed sequence by using the aforementioned
 validation escape hatch.
 
+{% highlight cpp %}
+std::string s { t.extract_storage(); }; // take storage out
+assert(t.empty()); // storage was moved out
+legacy_mutating_function(s); // mutate the storage
+t = s; // assign storage back in, validation performed
+{% endhighlight %}
+
 Altogether, I really like the direction that these few rules drove the API to.
 It takes some extra effort to implement, but in the end I get an API that has
-many. many correctness checks made by the compiler, and still keeps reasonable
+many, many correctness checks made by the compiler, and still keeps reasonable
 efficiency.
 
 I can have my cake and eat a significant portion of it.
