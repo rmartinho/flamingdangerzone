@@ -247,9 +247,7 @@ In this case, you have two options. If you want the underlying storage merely to
 look at it, you can simply obtain a `const` view of it, but if you want to
 perform some mutation on that storage, you cannot do that in-place&mdash;that
 would allow you to violate one of the invariants of the string type, namely the
-one that says the storage is always well-formed. In order to achieve such
-direct mutation of the storage without breaking invariants, the only way to get
-a mutable view of the storage is to move it out of the ogonek string object.
+one that says the storage is always well-formed.
 
 {% highlight cpp %}
 ogonek::text<utf8> t = g();
@@ -257,15 +255,17 @@ legacy_function(t.storage()); // const view
 //legacy_mutating_function(t.storage()); // error: it's const
 {% endhighlight %}
 
-That leaves an empty string&mdash;empty strings still hold the
-invariants&mdash;and the old storage moved into an external object. That
-object can be modified in any way desired, and after that it can be reassigned
-to the old Unicode string that was empty, or used to initialise a new one. This
-reassignment or initialisation is the decontamination procedure. It enforces the
-string invariants by validating the storage again for well-formedness. As you
-may have guessed, you can also escape this validation if you are sure the
-mutation didn't produce an ill-formed sequence by using the aforementioned
-validation escape hatch.
+In order to achieve such direct mutation of the storage without breaking
+invariants, the only way to get a mutable view of the storage is to move it out
+of the ogonek string object.  That leaves an empty string&mdash;empty strings
+still hold the invariants&mdash;and the old storage moved into an external
+object. That object can be modified in any way desired, and after that it can be
+reassigned to the old Unicode string that was empty, or used to initialise a new
+one. This reassignment or initialisation is the decontamination procedure. It
+enforces the string invariants by validating the storage again for
+well-formedness. As you may have guessed, you can also escape this validation if
+you are sure the mutation didn't produce an ill-formed sequence by using the
+aforementioned validation escape hatch.
 
 {% highlight cpp %}
 std::string s { t.extract_storage(); }; // take storage out
