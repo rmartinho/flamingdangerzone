@@ -260,18 +260,19 @@ invariants, the only way to get a mutable view of the storage is to move it out
 of the `text` object.  That leaves an empty text&mdash;empty text still
 holds the invariants&mdash;and the old storage moved into an external object.
 That object can be modified in any way desired, and after that it can be
-reassigned to the old Unicode string that was empty, or used to initialise a new
-one. This reassignment or initialisation is the decontamination procedure. It
-enforces the string invariants by validating the storage again for
-well-formedness. As you may have guessed, you can also escape this validation if
-you are sure the mutation didn't produce an ill-formed sequence by using the
-aforementioned validation escape hatch.
+reassigned to the old text that was empty, or used to initialise a new one. This
+reassignment or initialisation is the decontamination procedure. It enforces the
+`text` invariants by validating the storage again for well-formedness. As you
+may have guessed, you can also escape this validation if you are sure the
+mutation didn't produce an ill-formed sequence by using the aforementioned
+validation escape hatch.
 
 {% highlight cpp %}
 std::string s { t.extract_storage(); }; // take storage out
 assert(t.empty()); // storage was moved out
 legacy_mutating_function(s); // mutate the storage
 t = std::move(s); // move storage back in, validation performed
+//t.assign(std::move(s), ogonek::assume_valid); // just a move, no validation
 {% endhighlight %}
 
 Altogether, I really like the direction that these few rules drove the API to.
