@@ -28,10 +28,8 @@ is no comment functionality at the moment.
 ### Intellectual property
 
 Except where otherwise noted, content on this site is licensed under a
-[Creative Commons Attribution 3.0 Unported License][cc-by].
-
-Code samples are licensed under the [CC0 1.0 Universal Public Domain
-Dedication][cc0].
+[Creative Commons Attribution 3.0 Unported License][cc-by]. Code samples are
+under the [CC0 1.0 Universal Public Domain Dedication][cc0].
 
 The favicon image is in the public domain.
 
