@@ -3,7 +3,7 @@ layout: post
 title: Rule of Zero
 categories: cxx11
 short: where I rediscover the Single Responsibility Principle
-last_edit: 20 September 2012
+last_edit: 20 November 2013
 ---
 
 ### Ownership
@@ -240,10 +240,17 @@ instance of the *Single Responsibility Principle*):
 *Special thanks to [sehe][sehe] for taking the time for a thorough review of
 this post and several suggestions*
 
+---
+
+*I gave a talk for the C++ User Group Berlin on 19th November 2013.
+Unfortunately there is no video available, but you can have a look at the
+[slides] I used.*
+
  [rule of three]: http://stackoverflow.com/q/4172722/46642 "What is the Rule of Three?"
  [scoped_ptr]: http://www.boost.org/libs/smart_ptr/scoped_ptr.htm
  [auto_ptr]: http://en.cppreference.com/w/cpp/memory/auto_ptr
  [shared_ptr]: http://en.cppreference.com/w/cpp/memory/shared_ptr
  [unique_ptr]: http://en.cppreference.com/w/cpp/memory/unique_ptr
  [sehe]: http://stackoverflow.com/u/85371
+ [slides]: /resources/r0.pdf
 
