@@ -53,7 +53,7 @@ being my chosen name. Lacking any information about how to deal with multiple
 given names or multiple family names in Culture names I chose to join them with
 hyphens. The hyphens have no effect on pronounciation.
 
- [Culture]: http://en.wikipedia.org/The_Culture
+ [Culture]: http://en.wikipedia.org/wiki/The_Culture
 
 In cyberspace I go by a name constructed by adding the prefix "R." to my
 shortened meatspace name with one given name and one family name as described
