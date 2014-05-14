@@ -27,12 +27,19 @@ is no comment functionality at the moment.
 
 ### Intellectual property
 
-Except where otherwise noted, content on this site is licensed under a
-[Creative Commons Attribution 3.0 Unported License][cc-by]. Code samples are
-under the [CC0 1.0 Universal Public Domain Dedication][cc0].
+<a rel="license"
+href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License"
+style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />
+Except where otherwise noted, content on <span
+xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+property="dct:title" rel="dct:type">Flaming Dangerzone</span> is licensed under
+a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative
+Commons Attribution 4.0 International License</a>.
 
-The favicon image is in the public domain.
-
- [cc-by]: http://creativecommons.org/licenses/by/3.0/
- [cc0]: http://creativecommons.org/publicdomain/zero/1.0/
-
+<p xmlns:dct="http://purl.org/dc/terms/"> <a rel="license"
+href="http://creativecommons.org/publicdomain/mark/1.0/"> <img
+src="http://i.creativecommons.org/p/mark/1.0/88x31.png" style="border-style:
+none;" alt="Public Domain Mark" /> </a> <br /> Code samples are provided under
+the <a rel="license"
+href="http://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal
+Public Domain Dedication</a>.</p>
