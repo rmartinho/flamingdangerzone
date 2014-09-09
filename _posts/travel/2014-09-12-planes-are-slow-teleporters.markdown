@@ -3,11 +3,11 @@ layout: post
 title: The Intervening Space
 categories: travel
 short: why I went away on a bicycle for a week
-published: false
+published: true
 ---
 
 > The traveler sees what he sees; the tourist sees what he has come to see.  
-> &mdash; Gilbert K. Chesterton
+> &mdash; G. K. Chesterton
 
 I like to travel.
 
@@ -38,7 +38,7 @@ are something between two and three hours apart, not two thousand kilometres.
 In this context, their distance can only be meaningfully expressed in hours, not
 kilometres. The engineer in me wants to punch myself for those last two
 sentences, but the me that actually traveled between those points wants to slap
-the engineer for not getting the point.
+the engineer for trying to reduce everything to numbers.
 
 On a plane, the intervening space becomes the intervening time; the space is
 reduced to the plane itself.
