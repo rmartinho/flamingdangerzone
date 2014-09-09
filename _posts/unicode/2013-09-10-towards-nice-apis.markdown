@@ -1,8 +1,9 @@
 ---
 layout: post
 title: The little tail that could
-categories: unicode
-short: where I expound upon ogonek's design goals
+categories: [unicode, cxx11]
+short: where I go over ogonek's API design
+last_edit: 9 September 2014
 published: true
 ---
 
