@@ -3,7 +3,7 @@ layout: post
 title: Who needs a plan?
 categories: travel
 short: before I left Berlin for a week on a bicycle
-published: false
+published: true
 ---
 
 > Thus, as I speak here, I may look ahead *or* to the right *or* to the left,
