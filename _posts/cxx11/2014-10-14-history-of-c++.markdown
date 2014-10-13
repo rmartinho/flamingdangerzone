@@ -1,0 +1,102 @@
+---
+layout: post
+title: History of C++
+categories: cxx11
+short: where I draws parallels between the history of Europe and C++
+published: false
+---
+
+### Prehistorical C++
+
+History begins with the invention of writing. That crucial event defines the
+point in time when history started being recorded. Before that lie prehistorical
+times.
+
+Which crucial event in the evolution of C++ could mark a separation akin to the
+one between prehistory and history? I'd say that the creation of the first
+self-hosting compiler, Cfront, which coincides with the renaming of the language
+to from "C with classes" to "C++" is a good choice for this.
+
+Prehistorical C++ is the C++ from before the creation of Cfront. It extends from
+the beginning of time to around 1983. At this time C++ was merely a series of
+preprocessor macros and had no virtual functions, no overloading, no references,
+no single-line comments, no `const`, no exceptions, no templates, no namespaces,
+and not even a `bool` type.
+
+### Bronze Age C++
+
+The first records in writing are dated from around 3600 BCE. This marks the
+start of the period known as ancient history.
+
+Ancient history starts with the Bronze Age, when bronze was a major tool
+material. These are the times of the ancient civilisations of the Fertile
+Crescent; the times of Babylonia, Phoenicia, and ancient Egypt. This age ends
+around the time when usage of iron in tools became widespread, the beginning of
+the Iron Age.
+
+C++'s Bronze Age starts with Cfront and ends with the STL. This period saw
+several new features and the publication of two editions of *The C++ Programming
+Language*, and later on of *The Annotated C++ Reference Manual*, in 1990.
+
+### Classical C++
+
+The Iron Age starts around 1000 BCE. During this period, the Mediterranean saw
+the peak of Ancient Egypt, the rise and fall of Ancient Greece, and the rise and
+decline of Ancient Rome. The period ends with the fall of the Western Roman
+Empire, around 500 CE.
+
+For Classical C++ I chose the period that begins with the rise of the STL and
+ends with the first standard in 1998. The introduction of templates and the
+concepts from STL parallel nicely with the cultural advancements of the
+classical civilisations.
+
+It might seem weird that standardization is paralleled with the fall of the
+Western Roman Empire, though. This choice is made primarily because it fits
+nicely with the idea of the C++ Middle Ages.
+
+### Medieval C++
+
+With the fall of the Western Roman Empire ends Ancient history and begins the
+Medieval period, also known as the Middle Ages. This are the times of the
+Carolingian Empire, of the Crusades, and of the Black Death.
+
+The C++ Middle Ages start with the first standard and end with C++11.  C++
+evolution saw some stagnation during this period. The language saw minimal
+changes in 2003, and stayed more or less unchanged until 2011.
+
+### C++ Renaissance
+
+The fall of Constantinople, the discovery of the Americas by Europeans, and the
+invention of moveable-type printing mark the end of the Medieval period and the
+beginning of the Modern history, around 1500 BCE.
+
+In Europe, Modern history starts with the Renaissance, a period marked by
+cultural and intellectual transformation. This period also coincides with the
+Age of Exploration, when Europeans set forth to explore and discover new land.
+
+The C++ Renaissance was an idea popularised by Herb Sutter around the the
+release of C++11. My idea of this C++ Renaissance is not quite the same.
+
+I see the C++ Renaissance as period marked by cultural and intellectual
+transformation within the C++ community. Similar to the Renaissance from human
+history, which was in part fueled by looking back to the Classical period, the
+C++ Renaissance is also marked by a similar look back to Classical C++. The
+[Rule of Zero] is one such example. RAII is not a new idea in any shape or form,
+but C++11 triggered a wave of rediscovery. The recent infatuation with smart
+pointers is another symptom of that rediscovery.
+
+ [Rule of Zero]: /cxx11/2012/08/15/rule-of-zero.html
+
+There is also a parallel to be drawn with the Age of Exploration. C++11 brought
+a wealth of new features, and with them lots of new ground to be explored with
+the use of those features.
+
+### A C++ Revolution?
+
+The Renaissance ends with the profound changes brought about by the Industrial
+Revolution and the French Revolution around 1800 BCE.
+
+I don't know if we will be able to draw parallels between this period and a
+future period of C++ history. Will C++17 finally include concepts? Will concepts
+revolutionize C++?
+
