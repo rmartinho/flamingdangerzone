@@ -65,7 +65,7 @@ changes in 2003, and stayed more or less unchanged until 2011.
 
 The Middle Ages in human history were not devoid of progress, though. And
 neither were the Middle Ages of C++, despite the language undergoing no
-changes. Projects like Boost kept trying new things, pushing the way of
+changes. Projects like Boost and TR1 kept trying new things, pushing the way of
 thinking in C++ forward, and working as an incubator for future C++ features. I
 guess we can draw parallels here between Boost and the scholastic traditions of
 Western Europe in the Middle Ages.
