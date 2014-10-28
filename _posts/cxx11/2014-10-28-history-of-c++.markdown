@@ -63,6 +63,13 @@ The C++ Middle Ages start with the first standard and end with C++11.  C++
 evolution saw some stagnation during this period. The language saw minimal
 changes in 2003, and stayed more or less unchanged until 2011.
 
+The Middle Ages in human history were not devoid of progress, though. And
+neither were the Middle Ages of C++, despite the language undergoing no
+changes. Projects like Boost kept trying new things, pushing the way of
+thinking in C++ forward, and working as an incubator for future C++ features. I
+guess we can draw parallels here between Boost and the scholastic traditions of
+Western Europe in the Middle Ages.
+
 ### C++ Renaissance
 
 The fall of Constantinople, the discovery of the Americas by Europeans, and the
@@ -98,6 +105,7 @@ The Renaissance ends with the profound changes brought about by the Industrial
 Revolution and the French Revolution around 1800 CE.
 
 I don't know if we will be able to draw parallels between this period and a
-future period of C++ history. Will C++17 finally include concepts? Will concepts
-revolutionize C++? Or maybe modules will?
+future period of C++ history. Maybe C++17 will finally include concepts and/or
+modules. Either of those features has the potential to bring profound changes.
+We'll see.
 
