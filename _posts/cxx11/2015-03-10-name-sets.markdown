@@ -13,8 +13,8 @@ a big nuissance.
 
 In order to prevent name collisions, each library should pick its own set of
 names in a way that they don't happen to be used by other libraries as well.
-There are few rules that can be followed by a library writer in order to ensure
-this.
+There are a few rules that can be followed by a library writer in order to
+ensure this.
 
 ### Name sets
 
