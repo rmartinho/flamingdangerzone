@@ -1,0 +1,59 @@
+---
+layout: post
+title: Names in C++ libraries
+categories: cxx11
+short: where I set out the rules for names for library writers
+---
+
+Any library will have various code entities that will be exposed to clients.
+Those entities will have names that the clients will use to refer to them. When
+a client makes uses of several different libraries, it is important that those
+libraries don't make use of the same names as the others. Name collisions can be
+a big nuissance.
+
+In order to prevent name collisions, each library should pick its own set of
+names in a way that they don't happen to be used by other libraries as well.
+There are few rules that can be followed by a library writer in order to ensure
+this.
+
+### Name sets
+
+First, let us introduce the notion of *name set*. A name set is a set of names
+that can uniquely identify entities. The C++ `namespace` keyword defines name
+sets: `namespace foo` is the name set that contains all names qualified with
+`foo::`. That is effectively a formal way to define name sets, but there are
+other, informal, ways of defining name sets. In C, for example, there is a
+tradition of using name prefixes to emulate namespaces: one can say that all
+functions whose names start with `foo_` belong to library `foo`. This tradition
+is useful in C++ too because C++ namespaces cannot encompass all the entities in
+the language we might want; macros are the usual suspect, and their names are
+always in the global namespace.
+
+In short, a name set can be defined as a C++ namespace, or it can be defined
+with a predicate that describes which names are part of it. Usually such
+predicates are not more complicated than just sharing a common prefix.
+
+It is by sticking to well-defined name sets that a library can avoid name
+collisions when used alongside other libraries. These name sets must be as
+unique as possible. They must also be small enough that they don't take names
+other libraries might want, and they must be large enough that the library has
+enough names to choose from. This is easily achieved by reserving a whole namespace
+for non-macro entities, and a specific prefix for macros.
+
+### The Rules
+
+Each library has absolute control over exactly two top-level name sets. One is
+used for macros, the other for non-macro entities. These name sets should be
+named after the library itself, which hopefully has a unique enough name. Within
+these name sets a library can use any name in any way it sees fit.
+
+> **Example**: In libfoo, all the macros start with `FOO_` and all non-macro
+> entities live within `namespace foo`.
+
+Libraries should not take names from the global namespace. The only names from
+the global namespace that a library can take are the names in its macro name set
+and the name of the root namespace for non-macros.
+
+> **Example**: In libfoo, nothing is in the global namespace except for the
+> macros `FOO_BAR` and `FOO_QUX`, and for `namespace foo`.
+
