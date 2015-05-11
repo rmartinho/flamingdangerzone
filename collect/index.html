@@ -1,0 +1,21 @@
+---
+layout: default
+title: A thing about things
+---
+
+<section id="collect">
+
+  <h3>{{ page.title }}</h3>
+
+  <p>
+  I collect things. Things like translations of <em>Le Petit Prince</em>, or twisty
+  puzzles, or dice.
+  </p>
+
+  <ul class="posts">
+    {% for post in site.categories.collect %}
+      {% include post-entry.html %}
+    {% endfor %}
+  </ul>
+
+</section>

@@ -1,0 +1,35 @@
+---
+layout: default
+title: Have Bicycle—Will Travel
+---
+
+<section id="travel">
+
+  <h3>
+    {{ page.title }}
+    <a href="/rss-travel.xml"><img class="rss" src="/images/rss.png" /></a>
+  </h3>
+
+  <p>
+  I learned to ride a bicycle when I was more than twelve years old. Some years
+  later I moved to the city and kind of forgot about my bicycle. Even more years
+  later I moved to Berlin and&mdash;oh my, bicycles everywhere.
+  </p>
+
+  <p>
+  Eventually I acquired a bicycle to displace myself across Berlin and with that
+  came a new-found liking for cycling.
+  </p>
+
+  <p>
+  And then I decided to experiment a bit with writing about my cycling
+  expeditions.
+  </p>
+
+  <ul class="posts">
+    {% for post in site.categories.travel %}
+      {% include post-entry.html %}
+    {% endfor %}
+  </ul>
+
+</section>

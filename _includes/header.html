@@ -1,9 +1,22 @@
     <div id="header_wrap" class="outer">
       <header class="inner">
+
         {% if page.section_title %}
         <h1 id="project_title"><a href="{{ page.section_root }}">{{ page.section_title }}</a></h1>
         {% else %}
         <h1 id="project_title"><a href="/">Flaming Dangerzone</a></h1>
         {% endif %}
+
+        <nav>
+            <ul>
+                <li><a href="/cxx11"  >C++</a></li>
+                <li><a href="/unicode">Unicode</a></li>
+                <li><a href="/travel" >Travel</a></li>
+                <li><a href="/libs"   >Libraries</a></li>
+                <li><a href="/collect">Collections</a></li>
+                <li><a href="/misc"   >Miscellanea</a></li>
+            </ul>
+        </nav>
+
       </header>
     </div>

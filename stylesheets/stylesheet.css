@@ -320,6 +320,7 @@ Full-Width Styles
 
 #project_title {
   margin: 0;
+  margin-bottom: 1em;
   color: #fff;
   font-size: 42px;
   font-weight: 700;
@@ -434,4 +435,24 @@ ul.posts span.description {
 
 #guest_line {
   font-style: italic;
+}
+
+.post-entry {
+  list-style-type: none;
+}
+
+nav {
+  position: absolute;
+  bottom: 0;
+}
+
+nav ul li {
+  display: inline-block;
+  list-style-type: none;
+}
+
+nav > ul > li > a {
+  color: #eee;
+  display: block;
+  text-decoration: none;
 }
