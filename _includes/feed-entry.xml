@@ -1,0 +1,15 @@
+    <item>
+      <title>{{ post.title }}</title>
+      <link>http://flamingdangerzone.com{{ post.url }}</link>
+      <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
+      {% if post.author_email %}
+      <author>{{ post.author_email }}</author>
+      {% elsif post.author %}
+      <dc:creator>{{ post.author }}</dc:creator>
+      {% else %}
+      <author>R. Martinho Fernandes &lt;rmf@rmf.io&gt;</author>
+      {% endif %}
+      <guid>http://flamingdangerzone.com{{ post.url }}</guid>
+      <description>{{ post.content | xml_escape }}</description>
+    </item>
+
