@@ -3,11 +3,11 @@
       <link>http://flamingdangerzone.com{{ post.url }}</link>
       <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
       {% if post.author_email %}
-      <author>{{ post.author_email }}</author>
+      <author>{{ post.author_email }} ({{ post.author }})</author>
       {% elsif post.author %}
       <dc:creator>{{ post.author }}</dc:creator>
       {% else %}
-      <author>R. Martinho Fernandes &lt;rmf@rmf.io&gt;</author>
+      <author>rmf@rmf.io (R. Martinho Fernandes)</author>
       {% endif %}
       <guid>http://flamingdangerzone.com{{ post.url }}</guid>
       <description>{{ post.content | xml_escape }}</description>
