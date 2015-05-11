@@ -4,7 +4,7 @@ layout: null
 <?xml version="1.0"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Flaming Dangerzone (Have Bicycle&mdash;Will Travel)</title>
+    <title>Flaming Dangerzone (Have Bicycle—Will Travel)</title>
     <link>http://flamingdangerzone.com/</link>
     <atom:link href="http://flamingdangerzone.com/travel/rss.xml" rel="self" type="application/rss+xml" />
     <description>R. Martinho's travels</description>
