@@ -3,7 +3,7 @@ layout: default
 title: A thing about things
 ---
 
-<section id="collect">
+<section id="things">
 
   <h3>{{ page.title }}</h3>
 
@@ -13,7 +13,7 @@ title: A thing about things
   </p>
 
   <ul class="posts">
-    {% for post in site.categories.collect %}
+    {% for post in site.categories.things %}
       {% include post-entry.html %}
     {% endfor %}
   </ul>
