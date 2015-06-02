@@ -9,8 +9,8 @@ I am a young man from Portugal who chose to make a living writing software. I
 currently live and work in Berlin.
 
 I divide my free time between blogging, hobby programming projects, reading
-science fiction books, hanging out with friends, playing boardgames, and
-walking and cycling around Berlin.
+science fiction books, hanging out with friends, playing boardgames, speedcubing,
+exploring interesting places, and cycling around Berlin.
 
 ### In cyberspace
 
