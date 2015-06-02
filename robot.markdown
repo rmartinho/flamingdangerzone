@@ -9,15 +9,15 @@ I am a young man from Portugal who chose to make a living writing software. I
 currently live and work in Berlin.
 
 I divide my free time between blogging, hobby programming projects, reading
-science fiction books, hanging out with friends, playing boardgames, and
-walking and cycling around Berlin.
+science fiction books, hanging out with friends, playing boardgames, speedcubing,
+exploring interesting places, and cycling around Berlin.
 
 ### In cyberspace
 
 I am a carnivore programming robot.
 
-As most denizens of the Internet, I can be reached via email, at the address
-[rmf@rmf.io][email]. I am usually happy to reply to e-mail messages that look
+As most denizens of the Internet, I can be reached via email; the address [random@rmf.io][email]
+can be used for that. I am usually happy to reply to e-mail messages that look
 like they were crafted specifically to be sent to me. Anything that looks like
 a template that is sent to several people, I tend to dismiss.
 
@@ -40,7 +40,7 @@ someone in possession on that key.
  [so]: http://stackoverflow.com/u/46642
  [twitter]: http://twitter.com/rmartinhof
  [github]: https://github.com/rmartinho
- [email]: mailto:rmf@rmf.io
+ [email]: mailto:random@rmf.io
  [keybase]: https://keybase.io/rmf
 
 ### What's in a name?
