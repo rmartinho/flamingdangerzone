@@ -40,7 +40,7 @@ someone in possession on that key.
  [so]: http://stackoverflow.com/u/46642
  [twitter]: http://twitter.com/rmartinhof
  [github]: https://github.com/rmartinho
- [email]: mailto:rmf@rmf.io
+ [email]: mailto:random@rmf.io
  [keybase]: https://keybase.io/rmf
 
 ### What's in a name?
