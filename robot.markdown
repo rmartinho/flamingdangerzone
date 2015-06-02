@@ -16,8 +16,8 @@ walking and cycling around Berlin.
 
 I am a carnivore programming robot.
 
-As most denizens of the Internet, I can be reached via email, at the address
-[rmf@rmf.io][email]. I am usually happy to reply to e-mail messages that look
+As most denizens of the Internet, I can be reached via email; the address [random@rmf.io][email]
+can be used for that. I am usually happy to reply to e-mail messages that look
 like they were crafted specifically to be sent to me. Anything that looks like
 a template that is sent to several people, I tend to dismiss.
 
