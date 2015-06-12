@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Thumbing to Amsterdam
+title: Thumbing to Amsterdam, part 1
 categories: travel
-short: where I tell the tale of my first hitchhiking adventure
+short: where I tell some bits of my first hitchhiking adventure
 published: false
 ---
 
