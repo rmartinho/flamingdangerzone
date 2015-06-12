@@ -146,7 +146,7 @@ around seven o'clock, and after using the bathroom there, we went back to
 thumbing, hoping to get a ride to Amsterdam.
 
 After a fruitless hour and a half of that, we decided it was time to change
-plans. Amsterdam was some two hours away, and were not expecting much luck
+plans. Amsterdam was some two hours away, and we were not expecting much luck
 getting a ride there after eight-thirty. The chances of finding someone headed
 fifteen minutes away willing to give us a ride seemed much better. Once in
 Nijmegen we could find a hostel to spend the night and resume our journey the
