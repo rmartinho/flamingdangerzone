@@ -3,7 +3,7 @@ layout: post
 title: Thumbing to Amsterdam
 categories: travel
 short: where I tell the tale of my first hitchhiking adventure
-published: false
+published: true
 ---
 
 > *"Into the middle of things"* &mdash; taken from the poet Horace, this refers to
