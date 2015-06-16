@@ -33,7 +33,7 @@ A call to `print_fizzbuzz<15>()` will be ambiguous, since the first three
 overloads are all viable and enabled &mdash; after all, 15 is a multiple of 3, 5
 and 15 itself. So, how do we go about disambiguating these?
 
- [enableif]: /cxx11/2012/06/01/almost-static-if.html
+ [enableif]: /cxx11/almost-static-if "Remastered enable_if"
 
 ### Domestic Abuse
 
@@ -69,7 +69,7 @@ first overload, if it's viable (e.g. not disabled via SFINAE). If that one is
 not viable, the second overload will provide a fallback because `int` is
 implicitly convertible to `long`. Perfect.
 
- [explanation]: http://stackoverflow.com/a/9154394/500104
+ [explanation]: http://stackoverflow.com/a/9154394/500104 "Is it possible to write a C++ template to check for a function's existence?"
 
 ### Your Princess Is In Another Castle
 

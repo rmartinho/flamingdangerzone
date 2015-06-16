@@ -186,6 +186,6 @@ So far everything was done on the metaprogramming level, but
  [mapping1]: /images/2012-12-09-optimal-tuple-iii-01.png 
  [mapping2]: /images/2012-12-09-optimal-tuple-iii-02.png 
 
- [previous]: /cxx11/2012/12/02/optimal-tuple-ii.html "Previously..."
- [next]: /cxx11/2013/02/18/optimal-tuple-iv.html "To be continued..."
+ [previous]: /cxx11/optimal-tuple-ii "Size matters, part 2"
+ [next]: /cxx11/optimal-tuple-iv "Size matters, part 4"
 

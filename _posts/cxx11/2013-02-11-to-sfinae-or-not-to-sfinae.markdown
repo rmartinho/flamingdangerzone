@@ -18,7 +18,7 @@ dispatching and static assertions.
 
 **Can these alternatives fully replace things like `enable_if`?**
 
- [shown before]: /cxx11/2012/06/01/almost-static-if.html 
+ [shown before]: /cxx11/almost-static-if "Remastered enable_if"
 
 ### Tag dispatching
 

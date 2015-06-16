@@ -123,6 +123,6 @@ Does this magical interface exist? Am I the only one that is fed up with the
 Jabberwocks that go by the names "UTF-8 text" and "UTF-16 text"? Can haz vorpal
 sword?
 
-  [manifesto]: http://utf8everywhere.org
+  [manifesto]: http://utf8everywhere.org "UTF-8 Everywhere"
 
 

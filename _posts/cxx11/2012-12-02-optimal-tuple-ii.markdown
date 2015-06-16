@@ -229,6 +229,6 @@ series.
 
  [mappings]: /images/2012-10-20-optimal-tuple-ii-01.png 
 
- [previous]: /cxx11/2012/07/06/optimal-tuple-i.html "Previously..."
- [next]: /cxx11/2012/12/09/optimal-tuple-iii.html "To be continued..."
+ [previous]: /cxx11/optimal-tuple-i "Size matters, part 1"
+ [next]: /cxx11/optimal-tuple-iii "Size matters, part 3"
 

@@ -117,6 +117,6 @@ And now the forwarding constructor can be written as follows:
     optional(U&&... u);
 {% endhighlight %}
 
- [boost-optional]: http://www.boost.org/libs/optional/index.html 
- [bare types]: /cxx11/2012/05/29/type-traits-galore.html "More type traits"
+ [boost-optional]: http://www.boost.org/libs/optional/index.html "boost::optional"
+ [bare types]: /cxx11/type-traits-galore#bare_types "More type traits"
 

@@ -290,6 +290,6 @@ bugs in the implementations of variadic templates.
 The only function worth of mention now is `tuple_cat`. This one is quite tricky,
 so I will leave it for [the next installment][next].
 
- [previous]: /cxx11/2012/12/09/optimal-tuple-iii.html "Previously..."
- [next]: /cxx11/2013/03/25/optimal-tuple-v.html "To be continued..."
+ [previous]: /cxx11/optimal-tuple-iii "Size matters, part 3"
+ [next]: /cxx11/optimal-tuple-v "To be continued..."
 

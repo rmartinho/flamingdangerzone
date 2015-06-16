@@ -96,8 +96,8 @@ There is also a parallel to be drawn with the Age of Exploration. C++11 brought
 a wealth of new features, and with them lots of new ground to be explored with
 the use of those features.
 
- [C++ Renaissance]: http://channel9.msdn.com/posts/C-and-Beyond-2011-Herb-Sutter-Why-C
- [Rule of Zero]: /cxx11/2012/08/15/rule-of-zero.html
+ [C++ Renaissance]: http://channel9.msdn.com/posts/C-and-Beyond-2011-Herb-Sutter-Why-C "Herb Sutter - Why C++?"
+ [Rule of Zero]: /cxx11/2012/08/15/rule-of-zero.html "Rule of Zero"
 
 ### A C++ Revolution?
 
