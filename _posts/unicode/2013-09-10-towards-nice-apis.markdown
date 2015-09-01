@@ -11,7 +11,7 @@ For the past year or so, I have been dedicating some of my free time to the
 design and implementation of a C++11 library for dealing with Unicode, that I
 decided to dub ['ogonek'][ogonek].
 
- [ogonek]: http://github.com/rmartinho/ogonek
+ [ogonek]: http://github.com/rmartinho/ogonek "ogonek repository"
 
 Now, for some background, I have a very poor opinion of many C++ APIs out there.
 Boost is pretty much the only one that I hold in high regard in that

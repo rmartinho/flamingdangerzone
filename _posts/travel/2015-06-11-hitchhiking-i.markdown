@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Thumbing to Amsterdam, part 1
+title: Thumbing to Amsterdam
 categories: travel
-short: where I tell some bits of my first hitchhiking adventure
-published: false
+short: where I tell the tale of my first hitchhiking adventure
+published: true
 ---
 
 > *"Into the middle of things"* &mdash; taken from the poet Horace, this refers to

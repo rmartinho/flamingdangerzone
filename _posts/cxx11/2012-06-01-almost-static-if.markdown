@@ -310,5 +310,5 @@ template <typename T,
 T twice(T t) { return 2*t; }
 {% endhighlight %}
 
- [dependent-names-bliss]: /cxx11/2012/05/27/dependent-names-bliss.html "Handling dependent names"
+ [dependent-names-bliss]: /cxx11/dependent-names-bliss "Handling dependent names"
 

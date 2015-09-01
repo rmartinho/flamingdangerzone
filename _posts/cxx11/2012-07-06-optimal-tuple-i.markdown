@@ -109,5 +109,5 @@ day][next].
  [tuple2 optimal layout]: /images/2012-07-06-optimal-tuple-i-03.png "Optimal layout for tuple2"
 
  [singleton]: http://en.wikipedia.org/wiki/Singleton_(mathematics) "A singleton is a 1-tuple"
- [next]: /cxx11/2012/12/02/optimal-tuple-ii.html "To be continued..."
+ [next]: /cxx11/optimal-tuple-ii "Size matters, part 2"
 

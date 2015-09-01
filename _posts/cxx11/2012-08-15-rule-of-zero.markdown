@@ -247,10 +247,10 @@ Unfortunately there is no video available, but you can have a look at the
 [slides] I used.*
 
  [rule of three]: http://stackoverflow.com/q/4172722/46642 "What is the Rule of Three?"
- [scoped_ptr]: http://www.boost.org/libs/smart_ptr/scoped_ptr.htm
- [auto_ptr]: http://en.cppreference.com/w/cpp/memory/auto_ptr
- [shared_ptr]: http://en.cppreference.com/w/cpp/memory/shared_ptr
- [unique_ptr]: http://en.cppreference.com/w/cpp/memory/unique_ptr
+ [scoped_ptr]: http://www.boost.org/libs/smart_ptr/scoped_ptr.htm "boost::scoped_ptr"
+ [auto_ptr]: http://en.cppreference.com/w/cpp/memory/auto_ptr "std::auto_ptr"
+ [shared_ptr]: http://en.cppreference.com/w/cpp/memory/shared_ptr "std::shared_ptr"
+ [unique_ptr]: http://en.cppreference.com/w/cpp/memory/unique_ptr "std::unique_ptr"
  [sehe]: http://stackoverflow.com/u/85371
- [slides]: /resources/r0.pdf
+ [slides]: /resources/r0.pdf "Rule of Zero slides"
 

@@ -9,7 +9,7 @@ last_edit: 10 March 2013
 I have before talked about [some type traits][previous] I use often. I feel like
 there are more type manipulations that I want to share.
 
- [previous]: /cxx11/2012/05/29/type-traits-galore.html#bare_types "Previously..."
+ [previous]: /cxx11/type-traits-galore "More type traits"
 
 ### Metafunction invocation
 
@@ -29,7 +29,7 @@ using UnderlyingType = Invoke<std::underlying_type<T>>;
 I find that more convenient to both write and read even though it does very
 little.
 
- [handling dependent names]: /cxx11/2012/05/27/dependent-names-bliss.html
+ [handling dependent names]: /cxx11/dependent-names-bliss "Handling dependent names"
 
 ### Unqualified types
 
@@ -44,7 +44,7 @@ template <typename T>
 using Unqualified = RemoveCv<RemoveReference<T>>;
 {% endhighlight %}
 
- [bare types]: /cxx11/2012/05/29/type-traits-galore.html#bare_types
+ [bare types]: /cxx11/type-traits-galore#bare_types "Bare types"
 
 ### Raw storage
 
@@ -126,5 +126,5 @@ template <typename T>
 using DecayReference = Invoke<decay_reference<T>>;
 {% endhighlight %}
 
- [tuple iv]: /cxx11/2013/02/18/optimal-tuple-iv.html
+ [tuple iv]: /cxx11/optimal-tuple-iv "Size matters, part 4"
 

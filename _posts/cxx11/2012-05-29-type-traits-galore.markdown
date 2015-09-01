@@ -266,7 +266,7 @@ using WithValueCategoryOf = Conditional<std::is_lvalue_reference<Source>,
 *See the follow-up article for [even more traits].*
 
  [mpl-identity]: http://www.boost.org/doc/libs/release/libs/mpl/doc/refmanual/identity.html "boost::mpl::identity"
- [temporary-array]: http://stackoverflow.com/a/10624677/46642
- [even more traits]: /cxx11/2013/02/25/even-more-traits.html
- [unqualified types]: /cxx11/2013/02/25/even-more-traits.html#unqualified_types
+ [temporary-array]: http://stackoverflow.com/a/10624677/46642 "Arrays and rvalues (as parameters)"
+ [even more traits]: /cxx11/even-more-traits "Even more type traits"
+ [unqualified types]: /cxx11/even-more-traits#unqualified_types "Unqualified types"
 
