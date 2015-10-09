@@ -6,12 +6,17 @@ short: where I examine some of the open questions in The City & The City
 spoilers: true
 published: true
 ---
+*I read [*The City & The City*][tc&tc] a while back, and I think I have finally
+arranged some thoughts about it into a shape that can made into writing. This is
+it.*
 
 As the plot of *The City & The City* unravels, we get to see how people, Borlú
 in particular, describe how Breach appears and operates. We are told that they
 show up out of nowhere, are somewhat indistinct shapes or something in that
 ballpark. There's a pervasive feeling that Breach is close to omniscient and
 omnipresent. Not something that is easy to justify physically.
+
+ [tc&tc]: https://en.wikipedia.org/wiki/The_City_%26_the_City
 
 However, Borlú later realises how very few make up Breach, and gets a glimpse
 of how they operate. Pretty much everything he witnesses is somewhat "normal".
