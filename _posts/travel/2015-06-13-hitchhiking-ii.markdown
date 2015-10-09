@@ -33,11 +33,11 @@ Empty. It was about twenty past ten, and the hostel closed at ten. We had been
 lucky to have gotten in because those guests we followed had a key to unlock the
 front door.
 
-We didn't give up. Joep, the person running the hostel, had left his phone
-number by the reception desk for guests to call if they needed to; we saw that
-and decided to ring him. He was not annoyed at all by our late call asking for a
-room. Five minutes later he was in the hostel, booked our rooms, gave us a map
-of town, and told us about all the interesting places around, including the
+We didn't give up, though. Joep, the person running the hostel, had left his
+phone number by the reception desk for guests to call if they needed to; we saw
+that and decided to ring him. He was not annoyed at all by our late call asking
+for a room. Five minutes later he was in the hostel, booked our rooms, gave us a
+map of town, and told us about all the interesting places around, including the
 official hitchhiking spot. We dropped our bags in our room and went out to
 explore Nijmegen.
 
@@ -46,4 +46,13 @@ explore Nijmegen.
 Sometime around eleven the morning after we went to the hitchhiking spot and
 got our thumbs out again. The spot was right before the bridge leading out of
 town and had ample space for cars to stop and pick us up.
+
+We got a ride in about half an hour. The driver stopped by the wayside some
+hundred metres past us, and we didn't notice until some gardeners nearby called
+us out and pointed at the stopped car.
+
+---
+
+*This guy has been silent for the whole ride. If he doesn't want to talk, I
+guess I'll 
 

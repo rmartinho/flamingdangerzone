@@ -1,0 +1,53 @@
+---
+layout: default
+title: Pages bound together to hinge on one side
+---
+
+<section id="cxx11">
+
+  <h3>
+    {{ page.title }}
+    <a href="rss.xml"><img class="rss" src="/images/rss.png" /></a>
+  </h3>
+
+  <p>
+  When I was four years old, my father tried to start teaching me to read. I
+  didn't like it and more or less refused to learn it. Until I started watching
+  movies on television, also with my father. Not understanding English at the
+  time meant that I had to rely on the subtitles to understand what was going
+  on; that was what drove me to learn to read.
+  </p>
+
+  <p>
+  I've liked books ever since I learned to read. My father's library was small
+  but respectable and I had already consumed most of it by the time I was ten.
+  The first book I called *mine* was a Portuguese edition of the Odyssey that my
+  mother found by the wayside. The hardcover book was badly damaged. The back
+  cover was missing, the colours in the front cover were washed out, the edges
+  worn out, and the whole thing was a bit wet from the rain. I brought it to
+  school to read once and one of my teachers offered to fix it for me. She
+  cleaned it up, reinforced the bindings and replaced the back cover in a
+  matching colour. This episode changed how I thought about books in a way that
+  most people describe as a "problem".
+  </p>
+
+  <p>
+  I kept reading books; for a long time I had more time to read than I had money
+  to buy books. Libraries didn't appeal to me: I wanted to own the books I read.
+  I wanted to own them and read them and keep them in pristine condition. I
+  still do that to this day.
+  </p>
+
+  <p>
+  Here I will try to talk about my reading experiences, sometimes in a
+  review-like manner, sometimes in a very spoiler-like manner.
+  </p>
+
+  <ul class="posts">
+    {% for post in site.categories.books %}
+      {% include post-entry.html %}
+    {% endfor %}
+  </ul>
+
+</section>
+

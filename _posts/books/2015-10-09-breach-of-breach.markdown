@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Thoughts on Besźel and Ul Qoma
+title: Breach and the Breach
 categories: books
 short: where I examine some of the open questions in The City & The City
 spoilers: true
-published: false
+published: true
 ---
 
 As the plot of *The City & The City* unravels, we get to see how people, Borlú
