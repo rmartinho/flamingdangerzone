@@ -3,3 +3,4 @@ lsi: false
 highlighter: pygments
 markdown: rdiscount
 permalink: /:categories/:title
+future: false
