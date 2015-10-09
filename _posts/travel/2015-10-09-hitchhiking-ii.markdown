@@ -5,7 +5,7 @@ categories: travel
 short: where I tell the rest of my first hitchhiking adventure
 ---
 
-*It's getting cold here. I hope we get a ride soon.*
+> *It's getting cold here. I hope we get a ride soon.*&mdash;Martinho
 
 Hondsiep was the name of the place; a small Shell station near the Dutch-German
 border. We were there for almost three hours unsuccessfully trying to get a
@@ -26,10 +26,8 @@ about Amsterdam. They even dropped us off by a nice hostel in Nijmegen. Despite
 the golf clubs sharing the backseat with us, that was a rather pleasant
 15-minute trip.
 
----
-
-*Phew, we're back on the road. I thought we'd be stuck here till the morning
-like that other guy we met.*
+> *Phew, we're back on the road. I thought we'd be stuck here till the morning
+like that other guy we met.*&mdash;Martinho
 
 And there we were, standing in front of a hostel in Nijmegen. Two guests were
 just getting in as we stood there; we followed them in and found the reception.
@@ -45,9 +43,8 @@ map of town, and told us about all the interesting places around, including the
 official hitchhiking spot. We dropped our bags in our room and went out to
 explore Nijmegen.
 
----
-
-*Time to find the spot Joep told us and bring out the sign for Amsterdam.*
+> *Let's find the spot the guy told us and bring out the sign for
+Amsterdam.*&mdash;Martinho
 
 Sometime around eleven the morning after we went to the hitchhiking spot and
 got our thumbs out again. The spot was right before the bridge leading out of
@@ -57,10 +54,9 @@ We got a ride in about half an hour. The driver stopped by the wayside some
 hundred metres past us, and we didn't notice until some gardeners nearby called
 us out and pointed at the stopped car.
 
----
-
-*This guy has been silent for the whole ride. If he doesn't want to talk, I
-won't talk; we're strangers taking a free ride in his car after all.*
+> *This guy has been silent for the whole ride. If he doesn't want to talk, I
+won't talk; we're strangers taking a free ride in his car after
+all.*&mdash;Martinho, thinking to himself
 
 That driver didn't say a word until he had to drop us off. It was rather weird
 and not in a good way. However, he had his reasons: he say he had drop us off a
@@ -74,11 +70,9 @@ hitchhikers, and that this was her first time doing so. We chatted a bit about
 life in the Netherlands, but the way to Utretcht was short, and that was their
 destination.
 
----
-
-*How in hell will anyone pick us up here? There's nowhere to stop. We should
+> *How in hell will anyone pick us up here? There's nowhere to stop. We should
 move to a better location. Let's find another way out of the city and onto the
-highway.*
+highway.*&mdash;Martinho
 
 We were stuck in Utretcht for a while. The first spot we tried thumbing at was
 the one recommended by the HitchWiki, but we couldn't figure out exactly where
@@ -98,9 +92,7 @@ exit leading to the highway. Cars need to slow down there and stop to give way
 to pedestrians anyway, so we thought it wouldn't be an inconvenience to traffic
 for someone to stop and give us a ride.
 
----
-
-*Wait, is this a Tesla?*
+> *Wait, is this a Tesla?*&mdash;Yimu
 
 The black car stopped just ten metres from us.  When it stopped, for us it was
 "a car"; it had wheels and moved.  We ran towards it, and Yimu tried to open the
@@ -113,7 +105,5 @@ The driver turned out to be a programmer that was on his way to Amsterdam! Our
 last ride!, we cheered. We chatted a bit about being a programmer, about Tesla
 Motors, and about Amsterdam.
 
----
-
-*I can't believe we're here, Martinho!*
+> *I can't believe we're here, Martinho!*&mdash;Yimu
 
