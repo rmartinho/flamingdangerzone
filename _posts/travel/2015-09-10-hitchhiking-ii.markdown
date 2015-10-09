@@ -3,7 +3,6 @@ layout: post
 title: Thumbing to Amsterdam, part 2
 categories: travel
 short: where I tell the rest of my first hitchhiking adventure
-published: false
 ---
 
 *It's getting cold here. I hope we get a ride soon.*
