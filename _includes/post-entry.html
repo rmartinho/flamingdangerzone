@@ -4,5 +4,6 @@
         <a href="{{ post.url }}">{{ post.title }}</a>
         {% if post.author %}<span class="extra">(by <a href="{{ post.author_link }}">{{ post.author }}</a>)</span>{% endif %}
         <br>&nbsp;
+        {% if post.spoilers %}<span class="extra">[SPOILERS]</span>{% endif %}
         <span class="description extra">{{ post.short }}</span>
       </li>
