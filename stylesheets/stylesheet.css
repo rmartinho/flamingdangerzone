@@ -177,7 +177,7 @@ pre, code {
   color: #222;
   background-color: #fff;
 
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-family: Consolas, Monaco, "Bitstream Vera Sans Mono", monospace;
   font-size: 14px;
 
   border-radius: 2px;
@@ -421,7 +421,7 @@ ul.posts span.extra {
 
 ul.posts span.date {
   color: #aaa;
-  font-family: Monaco, Consolas, monospace;
+  font-family: Consolas, Monaco, "Bitstream Vera Sans Mono", monospace;
 }
 
 ul.posts span.description {
