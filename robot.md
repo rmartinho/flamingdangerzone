@@ -35,7 +35,7 @@ C++11 tags, and later my activity gradually declined over the years.
 On Keybase, I am [rmf][keybase]. There you can find a cryptographic public key
 for which I possess the corresponding private key. I have used that key to prove
 that this website, my GitHub account, and my Twitter account all belong to
-someone in possession on that key.
+someone in possession on that key. I also keep a copy of that public key at https://rmf.io/rmf.key.
 
  [so]: http://stackoverflow.com/u/46642
  [twitter]: http://twitter.com/rmartinhof
