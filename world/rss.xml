@@ -1,0 +1,10 @@
+---
+layout: feed
+title: Me and The World
+home_url: /world
+description: R. Martinho's view of the world
+---
+
+{% for post in site.categories.world %}
+    {% include feed-entry.xml %}
+{% endfor %}

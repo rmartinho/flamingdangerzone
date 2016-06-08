@@ -1,0 +1,22 @@
+---
+layout: default
+title: Me and The World
+---
+
+<section id="world">
+
+  <h3>
+    {{ page.title }}
+    <a href="rss.xml"><img class="rss" src="/images/rss.png" /></a>
+  </h3>
+
+  <p>
+  </p>
+
+  <ul class="posts">
+    {% for post in site.categories.world %}
+      {% include post-entry.html %}
+    {% endfor %}
+  </ul>
+
+</section>
